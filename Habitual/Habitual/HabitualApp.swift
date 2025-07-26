@@ -7,6 +7,9 @@ struct HabitualApp: App {
     init() {
         // Apply initial appearance
         AppSettings.shared.applyAppearance()
+        
+        // Track app launch
+        AppSettings.shared.incrementAppLaunches()
     }
     
     var body: some Scene {

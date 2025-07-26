@@ -28,6 +28,7 @@
 		430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E62E35996B0085D398 /* AppSettingsManager.swift */; };
 		430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E72E35996B0085D398 /* NotificationPermissionManager.swift */; };
 		430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EA2E3599C10085D398 /* SettingsSelectionView.swift */; };
+		430210EC2E3599C20085D398 /* ReviewRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210ED2E3599C20085D398 /* ReviewRequestManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		430210E62E35996B0085D398 /* AppSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsManager.swift; sourceTree = "<group>"; };
 		430210E72E35996B0085D398 /* NotificationPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionManager.swift; sourceTree = "<group>"; };
 		430210EA2E3599C10085D398 /* SettingsSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSelectionView.swift; sourceTree = "<group>"; };
+		430210ED2E3599C20085D398 /* ReviewRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			children = (
 				430210E62E35996B0085D398 /* AppSettingsManager.swift */,
 				430210E72E35996B0085D398 /* NotificationPermissionManager.swift */,
+				430210ED2E3599C20085D398 /* ReviewRequestManager.swift */,
 				2B1234801234567890ABCDEF /* HabitStatistics.swift */,
 			);
 			path = Utilities;
@@ -235,6 +238,7 @@
 				2B1234671234567890ABCDEF /* Habitual.xcdatamodeld in Sources */,
 				430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */,
 				430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */,
+				430210EC2E3599C20085D398 /* ReviewRequestManager.swift in Sources */,
 				2B1234561234567890ABCDEF /* HabitualApp.swift in Sources */,
 				2B1234691234567890ABCDEF /* HabitModels.swift in Sources */,
 				2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */,

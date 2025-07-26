@@ -77,6 +77,10 @@ class AppSettings: ObservableObject {
     private let appearanceModeKey = "appearance_mode"
     private let timeDisplayModeKey = "time_display_mode"
     private let weightUnitsDisplayModeKey = "weight_units_mode"
+    private let appLaunchesKey = "app_launches"
+    private let totalCompletedHabitsKey = "total_completed_habits"
+    private let lastReviewRequestDateKey = "last_review_request_date"
+    private let completedHabitsAtLastReviewKey = "completed_habits_at_last_review"
     
     @Published var appearanceMode: AppearanceMode {
         didSet {
@@ -98,6 +102,26 @@ class AppSettings: ObservableObject {
             userDefaults.set(weightUnitsMode.rawValue, forKey: weightUnitsDisplayModeKey)
             NotificationCenter.default.post(name: .weightDisplayModeChanged, object: nil)
         }
+    }
+    
+    var appLaunches: Int {
+        get { userDefaults.integer(forKey: appLaunchesKey) }
+        set { userDefaults.set(newValue, forKey: appLaunchesKey) }
+    }
+    
+    var totalCompletedHabits: Int {
+        get { userDefaults.integer(forKey: totalCompletedHabitsKey) }
+        set { userDefaults.set(newValue, forKey: totalCompletedHabitsKey) }
+    }
+    
+    var lastReviewRequestDate: Date? {
+        get { userDefaults.object(forKey: lastReviewRequestDateKey) as? Date }
+        set { userDefaults.set(newValue, forKey: lastReviewRequestDateKey) }
+    }
+    
+    var completedHabitsAtLastReview: Int {
+        get { userDefaults.integer(forKey: completedHabitsAtLastReviewKey) }
+        set { userDefaults.set(newValue, forKey: completedHabitsAtLastReviewKey) }
     }
     
     private init() {
@@ -205,4 +229,14 @@ Model: \(deviceModel)
 OS: \(systemName) \(systemVersion)
 """
     }
+    
+    func incrementAppLaunches() {
+        appLaunches += 1
+    }
+    
+    func incrementCompletedHabits() {
+        totalCompletedHabits += 1
+    }
 }
+
+typealias AppSettingsManager = AppSettings

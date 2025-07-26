@@ -1,6 +1,7 @@
 import SwiftUI
 import StoreKit
 import UIKit
+import WebKit
 
 struct SettingsView: View {
     @ObservedObject private var notificationManager = NotificationPermissionManager.shared
@@ -8,10 +9,12 @@ struct SettingsView: View {
     @State private var activeSheet: SheetType?
     @State private var activeAlert: AlertType?
     @State private var showingExport = false
+    @State private var showingSurvey = false
     
     enum SheetType: Identifiable {
         case appearance
         case about
+        case survey
         
         var id: Self { self }
     }
@@ -67,6 +70,24 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section("Feedback") {
+                    SettingsRowWithIcon(
+                        title: "Rate the App",
+                        subtitle: nil,
+                        icon: "star.fill"
+                    ) {
+                        requestAppReview()
+                    }
+
+                    SettingsRowWithIcon(
+                        title: "Take a Survey",
+                        subtitle: nil,
+                        icon: "doc.text"
+                    ) {
+                        showingSurvey = true
+                    }
+                }
+
                 Section("Support") {
                     SettingsRowWithIcon(
                         title: "Help & FAQ",
@@ -82,10 +103,6 @@ struct SettingsView: View {
                         icon: "envelope"
                     ) {
                         activeAlert = .support
-                    }
-                    
-                    Button("Rate Habitual") {
-                        requestAppReview()
                     }
                     
                     SettingsRowWithIcon(
@@ -127,10 +144,15 @@ struct SettingsView: View {
                     AppearanceSelectionView()
                 case .about:
                     AboutView()
+                case .survey:
+                    SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
                 }
             }
             .sheet(isPresented: $showingExport) {
                 ExportView()
+            }
+            .sheet(isPresented: $showingSurvey) {
+                SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
             }
             .alert(item: $activeAlert) { alertType in
                 switch alertType {
@@ -465,5 +487,39 @@ struct SettingsRowWithIcon: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct SurveyWebView: View {
+    let url: URL
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            WebView(url: url)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            dismiss()
+                        }
+                        .foregroundColor(Color.accentColor)
+                    }
+                }
+        }
+    }
+}
+
+struct WebView: UIViewRepresentable {
+    let url: URL
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        return webView
+    }
+
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 }

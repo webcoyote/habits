@@ -75,6 +75,14 @@ class HabitListViewModel: ObservableObject {
         habits[index] = updatedHabit
         
         saveRecord(newRecord, for: updatedHabit)
+        
+        // Track completed habits for review prompts
+        if completed {
+            AppSettings.shared.incrementCompletedHabits()
+            Task {
+                await ReviewRequestManager.shared.requestReviewIfAppropriate()
+            }
+        }
     }
     
     private func getCurrentNumericValue(for habit: Habit) -> Int {
