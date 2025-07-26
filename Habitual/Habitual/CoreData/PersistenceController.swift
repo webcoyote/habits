@@ -1,0 +1,120 @@
+import CoreData
+import SwiftUI
+
+class PersistenceController {
+    static let shared = PersistenceController()
+    
+    static var preview: PersistenceController = {
+        let result = PersistenceController(inMemory: true)
+        let viewContext = result.container.viewContext
+        
+        let sampleHabits = [
+            Habit(name: "Morning Run", icon: "figure.run", color: .orange, type: .binary),
+            Habit(name: "Drink Water", icon: "drop.fill", color: .blue, type: .numeric(target: 8)),
+            Habit(name: "Daily Mood", icon: "face.smiling", color: .purple, type: .mood(scale: 10)),
+            Habit(name: "Read", icon: "book.fill", color: .orange.opacity(0.8), type: .numeric(target: 30)),
+            Habit(name: "Meditate", icon: "brain.head.profile", color: .green, type: .binary),
+            Habit(name: "Sleep 8 Hours", icon: "bed.double.fill", color: .indigo, type: .binary)
+        ]
+        
+        for habit in sampleHabits {
+            result.saveHabit(habit, context: viewContext)
+        }
+        
+        return result
+    }()
+    
+    let container: NSPersistentContainer
+    
+    init(inMemory: Bool = false) {
+        container = NSPersistentContainer(name: "Habitual")
+        if inMemory {
+            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
+        
+        container.persistentStoreDescriptions.forEach { storeDescription in
+            storeDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            storeDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        }
+        
+        container.loadPersistentStores { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+    
+    func save(context: NSManagedObjectContext) {
+        guard context.hasChanges else { return }
+        
+        do {
+            try context.save()
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    func saveHabit(_ habit: Habit, context: NSManagedObjectContext) {
+        let habitEntity = HabitEntity(context: context)
+        habitEntity.id = habit.id
+        habitEntity.name = habit.name
+        habitEntity.icon = habit.icon
+        habitEntity.createdAt = Date()
+        habitEntity.modifiedAt = Date()
+        
+        let encoder = JSONEncoder()
+        habitEntity.colorData = try? encoder.encode(habit.color)
+        habitEntity.typeData = try? encoder.encode(habit.type)
+        habitEntity.goalData = habit.goal.flatMap { try? encoder.encode($0) }
+        
+        for record in habit.history {
+            let recordEntity = RecordEntity(context: context)
+            recordEntity.id = record.id
+            recordEntity.date = record.date
+            recordEntity.valueData = try? encoder.encode(record.value)
+            recordEntity.habit = habitEntity
+        }
+        
+        save(context: context)
+    }
+    
+    func updateHabit(_ habit: Habit, context: NSManagedObjectContext) {
+        let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", habit.id as CVarArg)
+        
+        do {
+            let results = try context.fetch(request)
+            if let habitEntity = results.first {
+                habitEntity.name = habit.name
+                habitEntity.icon = habit.icon
+                habitEntity.modifiedAt = Date()
+                
+                let encoder = JSONEncoder()
+                habitEntity.colorData = try? encoder.encode(habit.color)
+                habitEntity.typeData = try? encoder.encode(habit.type)
+                habitEntity.goalData = habit.goal.flatMap { try? encoder.encode($0) }
+                
+                save(context: context)
+            }
+        } catch {
+            print("Error updating habit: \(error)")
+        }
+    }
+    
+    func deleteHabit(_ habit: Habit, context: NSManagedObjectContext) {
+        let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", habit.id as CVarArg)
+        
+        do {
+            let results = try context.fetch(request)
+            if let habitEntity = results.first {
+                context.delete(habitEntity)
+                save(context: context)
+            }
+        } catch {
+            print("Error deleting habit: \(error)")
+        }
+    }
+}

@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
 echo "Checking for build tools ..."
+xcode-select -p &>/dev/null || xcode-select --install
 command -v direnv &>/dev/null || brew install direnv
 
 install-git-hooks

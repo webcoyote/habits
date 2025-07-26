@@ -5,7 +5,34 @@ START_TIME=$(date +%s.%N)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
-# TODO: IMPLEMENT
+# Use iPhone 16 Pro with iOS 18.5 (latest available)
+SIMULATOR_ID="C692F47B-CF1C-400E-956D-B22E3079BF40"
+
+# Open Simulator app to make window visible
+echo "📱 Opening simulator"
+open -a Simulator
+
+# Check if simulator is already booted, boot if needed
+SIMULATOR_STATE=$(xcrun simctl list devices | grep "$SIMULATOR_ID" | grep -o "(.*)" | tr -d "()")
+if [ "$SIMULATOR_STATE" != "Booted" ]; then
+    echo "🔄 Booting simulator"
+    xcrun simctl boot "$SIMULATOR_ID" 2>/dev/null || true
+    sleep 3
+fi
+
+# Find the application
+APP_PATH="Habitual/.Build/Products/Debug-iphonesimulator/Habitual.app"
+if [ ! -d "$APP_PATH" ]; then
+    echo "❌ Could not find built app at: $APP_PATH"
+    echo "   Run 'scripts/build' first to build the app"
+    exit 1
+fi
+
+echo "📦 Installing app from: $APP_PATH"
+xcrun simctl install "$SIMULATOR_ID" "$APP_PATH"
+
+echo "🚀 Launching app..."
+xcrun simctl launch "$SIMULATOR_ID" "com.codeofhonor.Habitual" "$@"
 
 END_TIME=$(date +%s.%N)
 ELAPSED_TIME=$(echo "$END_TIME - $START_TIME" | bc --mathlib | xargs printf "%.2f\n")

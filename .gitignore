@@ -2,4 +2,6 @@ worktrees/
 .DS_Store
 .claude/settings.local.json
 .git/
-scratch/
+#UserInterfaceState.xcuserstate
+Habitual/.Build
+Habitual/.DerivedData
