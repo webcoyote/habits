@@ -1,26 +1,59 @@
 import SwiftUI
 import StoreKit
+import UIKit
 
 struct SettingsView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @AppStorage("notificationsEnabled") private var notificationsEnabled = false
-    @State private var reminderTime = Date()
-    @State private var showingAbout = false
+    @ObservedObject private var notificationManager = NotificationPermissionManager.shared
+    @ObservedObject private var appSettings = AppSettings.shared
+    @State private var activeSheet: SheetType?
+    @State private var activeAlert: AlertType?
     @State private var showingExport = false
+    
+    enum SheetType: Identifiable {
+        case appearance
+        case about
+        
+        var id: Self { self }
+    }
+    
+    enum AlertType: Identifiable {
+        case notification, appInfo, language, help, support, privacy, terms
+        
+        var id: Self { self }
+    }
+
+    private let warningColor = Color(red: 255/255.0, green: 104/255.0, blue: 0/255.0, opacity: 1.0)
     
     var body: some View {
         NavigationView {
             Form {
                 Section("Appearance") {
-                    Toggle("Dark Mode", isOn: $themeManager.isDarkMode)
-                    
+                    SettingsRowWithIcon(
+                        title: "Appearance",
+                        subtitle: appSettings.appearanceMode.displayName,
+                        icon: "paintbrush"
+                    ) {
+                        activeSheet = .appearance
+                    }
                 }
                 
                 Section("Reminders") {
-                    Toggle("Daily Reminders", isOn: $notificationsEnabled)
+                    SettingsRowWithIcon(
+                        title: "Notifications",
+                        subtitle: notificationManager.notificationStatus.displayName,
+                        icon: "bell",
+                        isDisabled: notificationManager.notificationStatus.isDisabled,
+                        showWarning: notificationManager.notificationStatus.isDisabled
+                    ) {
+                        activeAlert = .notification
+                    }
                     
-                    if notificationsEnabled {
-                        DatePicker("Reminder Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                    SettingsRowWithIcon(
+                        title: "Language",
+                        subtitle: "English",
+                        icon: "globe"
+                    ) {
+                        activeAlert = .language
                     }
                 }
                 
@@ -35,37 +68,125 @@ struct SettingsView: View {
                 }
                 
                 Section("Support") {
-                    NavigationLink("Help & FAQ") {
-                        HelpView()
+                    SettingsRowWithIcon(
+                        title: "Help & FAQ",
+                        subtitle: nil,
+                        icon: "questionmark.circle"
+                    ) {
+                        activeAlert = .help
+                    }
+                    
+                    SettingsRowWithIcon(
+                        title: "Contact Support",
+                        subtitle: nil,
+                        icon: "envelope"
+                    ) {
+                        activeAlert = .support
                     }
                     
                     Button("Rate Habitual") {
                         requestAppReview()
                     }
                     
+                    SettingsRowWithIcon(
+                        title: "Privacy Policy",
+                        subtitle: nil,
+                        icon: "lock.shield"
+                    ) {
+                        activeAlert = .privacy
+                    }
+                    
+                    SettingsRowWithIcon(
+                        title: "Terms of Service",
+                        subtitle: nil,
+                        icon: "doc.text"
+                    ) {
+                        activeAlert = .terms
+                    }
+                    
                     Button("About") {
-                        showingAbout = true
+                        activeSheet = .about
                     }
                 }
                 
-                Section {
-                    VStack(alignment: .center, spacing: 8) {
-                        Text("Habitual")
-                            .font(.headline)
-                        Text("Version 1.0.0")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                Section("App Information") {
+                    let appInfo = AppSettings.shared.getAppInfo()
+                    SettingsRowWithIcon(
+                        title: "App Details",
+                        subtitle: "\(appInfo.name) v\(appInfo.version) (\(appInfo.build))",
+                        icon: "info.circle"
+                    ) {
+                        activeAlert = .appInfo
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
                 }
             }
             .navigationTitle("Settings")
-            .sheet(isPresented: $showingAbout) {
-                AboutView()
+            .sheet(item: $activeSheet) { sheetType in
+                switch sheetType {
+                case .appearance:
+                    AppearanceSelectionView()
+                case .about:
+                    AboutView()
+                }
             }
             .sheet(isPresented: $showingExport) {
                 ExportView()
+            }
+            .alert(item: $activeAlert) { alertType in
+                switch alertType {
+                case .notification:
+                    Alert(
+                        title: Text("Notifications"),
+                        message: Text(notificationManager.getNotificationActionMessage()),
+                        primaryButton: .default(Text(notificationManager.notificationStatus == .notDetermined ? "Allow" : "Open Settings")) {
+                            if notificationManager.notificationStatus == .notDetermined {
+                                notificationManager.handleNotificationAction()
+                            } else {
+                                notificationManager.openAppSettings()
+                            }
+                        },
+                        secondaryButton: .cancel(Text(notificationManager.notificationStatus == .notDetermined ? "Not Now" : "Cancel"))
+                    )
+                case .appInfo:
+                    Alert(
+                        title: Text("App Information"),
+                        message: Text(AppSettings.shared.getDeviceInfo()),
+                        primaryButton: .default(Text("Copy")) {
+                            UIPasteboard.general.string = AppSettings.shared.getDeviceInfo()
+                        },
+                        secondaryButton: .cancel(Text("OK"))
+                    )
+                case .language:
+                    Alert(
+                        title: Text("Language"),
+                        message: Text("Language selection coming soon"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                case .help:
+                    Alert(
+                        title: Text("Help & FAQ"),
+                        message: Text("Help documentation coming soon"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                case .support:
+                    Alert(
+                        title: Text("Contact Support"),
+                        message: Text("Email: pat@codeofhonor.com"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                case .privacy:
+                    Alert(
+                        title: Text("Privacy Policy"),
+                        message: Text("Privacy policy coming soon"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                case .terms:
+                    Alert(
+                        title: Text("Terms of Service"),
+                        message: Text("Terms of service coming soon"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
             }
         }
     }
@@ -279,6 +400,69 @@ struct ExportButton: View {
             }
             .padding()
             .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct SettingsRowWithIcon: View {
+    let title: String
+    let subtitle: String?
+    let icon: String
+    let isDisabled: Bool
+    let showWarning: Bool
+    let action: () -> Void
+    
+    private let warningColor = Color(red: 255/255.0, green: 104/255.0, blue: 0/255.0, opacity: 1.0)
+    
+    init(
+        title: String,
+        subtitle: String?,
+        icon: String,
+        isDisabled: Bool = false,
+        showWarning: Bool = false,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.icon = icon
+        self.isDisabled = isDisabled
+        self.showWarning = showWarning
+        self.action = action
+    }
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundColor(.accentColor)
+                    .frame(width: 20)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .foregroundColor(isDisabled ? .secondary : .primary)
+                    
+                    if let subtitle = subtitle {
+                        HStack {
+                            if showWarning {
+                                Image(systemName: "exclamationmark.triangle")
+                                    .foregroundColor(warningColor)
+                                    .font(.caption)
+                            }
+                            Text(subtitle)
+                                .font(.caption)
+                                .foregroundColor(showWarning ? warningColor : .secondary)
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
     }
