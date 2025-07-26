@@ -14,12 +14,6 @@ struct SettingsView: View {
                 Section("Appearance") {
                     Toggle("Dark Mode", isOn: $themeManager.isDarkMode)
                     
-                    HStack {
-                        Text("Accent Color")
-                        Spacer()
-                        ColorPicker("", selection: $themeManager.accentColor)
-                            .labelsHidden()
-                    }
                 }
                 
                 Section("Reminders") {
@@ -178,7 +172,7 @@ struct AboutView: View {
                 VStack(spacing: 12) {
                     Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
                     Link("Terms of Service", destination: URL(string: "https://example.com/terms")!)
-                    Link("Contact Support", destination: URL(string: "mailto:support@example.com")!)
+                    Link("Contact Support", destination: URL(string: "mailto:pat@codeofhonor.com")!)
                 }
                 
                 Spacer()
