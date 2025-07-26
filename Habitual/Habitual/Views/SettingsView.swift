@@ -71,7 +71,7 @@ struct SettingsView: View {
     }
     
     private func requestAppReview() {
-        if let windowScene = UIApplication.shared.windows.first?.windowScene {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             SKStoreReviewController.requestReview(in: windowScene)
         }
     }
