@@ -57,9 +57,27 @@ class PersistenceController {
         
         do {
             try context.save()
-        } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        } catch let error as NSError {
+            // Handle merge conflicts
+            if error.code == 133020 { // NSManagedObjectMergeError
+                print("Merge conflict detected, attempting to resolve...")
+                
+                // Refresh objects with conflicts
+                if let conflicts = error.userInfo["conflictList"] as? [NSManagedObject] {
+                    conflicts.forEach { conflict in
+                        context.refresh(conflict, mergeChanges: true)
+                    }
+                }
+                
+                // Retry save
+                do {
+                    try context.save()
+                } catch {
+                    print("Failed to save after merge conflict resolution: \(error)")
+                }
+            } else {
+                print("Core Data save error: \(error), \(error.userInfo)")
+            }
         }
     }
     
@@ -122,6 +140,8 @@ class PersistenceController {
         do {
             let results = try context.fetch(request)
             if let habitEntity = results.first {
+                // Refresh the object to ensure we have the latest version
+                context.refresh(habitEntity, mergeChanges: false)
                 context.delete(habitEntity)
                 save(context: context)
             }

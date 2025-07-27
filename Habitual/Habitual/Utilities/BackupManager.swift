@@ -82,22 +82,38 @@ class BackupManager {
             
             // Perform restore on background context
             let context = persistenceController.container.newBackgroundContext()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             
             context.perform {
                 do {
-                    // Delete existing data
-                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: HabitEntity.fetchRequest())
-                    try context.execute(deleteRequest)
+                    // Delete existing data more thoroughly
+                    // First fetch all existing habits
+                    let fetchRequest: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+                    let existingHabits = try context.fetch(fetchRequest)
+                    
+                    // Delete each habit (this also deletes related records due to cascade rules)
+                    for habit in existingHabits {
+                        context.delete(habit)
+                    }
+                    
+                    // Save the deletion first
+                    try context.save()
+                    
+                    // Reset the context to clear any cached data
+                    context.reset()
                     
                     // Import new data
                     for (index, habit) in backupData.habits.enumerated() {
                         self.createHabitEntity(from: habit, order: index, in: context)
                     }
                     
-                    // Save changes
+                    // Save imported data
                     try context.save()
                     
+                    // Notify the view context to refresh
                     DispatchQueue.main.async {
+                        // Reset the view context to ensure it picks up all changes
+                        self.persistenceController.container.viewContext.reset()
                         completion(.success(backupData.habits.count))
                     }
                 } catch {
