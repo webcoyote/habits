@@ -129,7 +129,7 @@ struct SettingsView: View {
                     
                     SettingsRowWithIcon(
                         title: "App Details",
-                        subtitle: "\(appInfo.name) version \(appInfo.version) (build \(appInfo.build))",
+                        subtitle: "\(appInfo.name) v\(appInfo.version).\(appInfo.build)",
                         icon: "info.circle"
                     ) {
                         activeAlert = .appInfo

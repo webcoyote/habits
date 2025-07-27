@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Builds the project
 set -euo pipefail
 START_TIME=$(date +%s.%N)
 
