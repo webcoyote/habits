@@ -15,6 +15,20 @@ struct AddHabitView: View {
     
     let habitTypeOptions = ["Yes/No", "Count", "Mood"]
     
+    let defaultColors: [Color] = [
+        .red, .orange, .yellow, .green, .mint, .teal, .cyan, 
+        .blue, .indigo, .purple, .pink, .brown
+    ]
+    
+    let allIcons: [String] = [
+        "heart.fill", "figure.run", "figure.walk", "bicycle", "sportscourt", "dumbbell",
+        "drop.fill", "bed.double.fill", "brain.head.profile", "lungs.fill", "cross.case.fill",
+        "book.fill", "pencil", "keyboard", "desktopcomputer", "checklist", "calendar",
+        "leaf.fill", "sun.max.fill", "moon.fill", "sparkles", "wind", "flame.fill",
+        "person.2.fill", "bubble.left.and.bubble.right.fill", "phone.fill", "envelope.fill", "gift.fill",
+        "music.note", "paintbrush.fill", "camera.fill", "gamecontroller.fill", "puzzlepiece.fill"
+    ]
+    
     var body: some View {
         NavigationView {
             Form {
@@ -87,6 +101,11 @@ struct AddHabitView: View {
             }
             .sheet(isPresented: $showingIconPicker) {
                 IconPickerView(selectedIcon: $selectedIcon, selectedColor: selectedColor)
+            }
+            .onAppear {
+                // Set random default color and icon
+                selectedColor = defaultColors.randomElement() ?? Color.purple
+                selectedIcon = allIcons.randomElement() ?? "heart.fill"
             }
         }
     }

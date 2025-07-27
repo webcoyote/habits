@@ -126,22 +126,43 @@ struct CompleteButton: View {
                         .foregroundColor(.secondary)
                 }
                 Button(action: { 
+                    let newValue = max(0, currentValue - 1)
+                    onComplete(newValue)
+                }) {
+                    Image(systemName: "minus.circle")
+                        .font(isCompact ? .title3 : .title2)
+                        .foregroundColor(currentValue > 0 ? color : .gray)
+                }
+                Button(action: { 
                     let newValue = currentValue < target ? currentValue + 1 : 0
                     onComplete(newValue)
                 }) {
                     Image(systemName: currentValue >= target ? "checkmark.circle.fill" : "plus.circle")
                         .font(isCompact ? .title3 : .title2)
-                        .foregroundColor(currentValue > 0 ? color : .gray)
                 }
             }
-        case .mood:
-            if isCompact {
-                Image(systemName: currentValue > 0 ? "face.smiling" : "face.smiling")
-                    .font(.title3)
-                    .foregroundColor(currentValue > 0 ? color : .gray)
-            } else {
-                MoodSelector(currentValue: currentValue, scale: 10, color: color) { value in
-                    onComplete(value)
+        case .mood(let scale):
+            HStack(spacing: 4) {
+                if !isCompact {
+                    Text("\(currentValue)/\(scale)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Button(action: { 
+                    let newValue = max(0, currentValue - 1)
+                    onComplete(newValue)
+                }) {
+                    Image(systemName: "minus.circle")
+                        .font(isCompact ? .title3 : .title2)
+                        .foregroundColor(currentValue > 0 ? color : .gray)
+                }
+                Button(action: { 
+                    let newValue = currentValue < scale ? currentValue + 1 : 0
+                    onComplete(newValue)
+                }) {
+                    Image(systemName: currentValue >= scale ? "checkmark.circle.fill" : "plus.circle")
+                        .font(isCompact ? .title3 : .title2)
+                        .foregroundColor(currentValue >= scale ? color : .gray)
                 }
             }
         }
@@ -166,33 +187,3 @@ struct ProgressView: View {
     }
 }
 
-struct MoodSelector: View {
-    let currentValue: Int
-    let scale: Int
-    let color: Color
-    let onSelect: (Int) -> Void
-    
-    var body: some View {
-        HStack(spacing: 2) {
-            ForEach(1...5, id: \.self) { value in
-                Image(systemName: getMoodIcon(for: value))
-                    .font(.caption)
-                    .foregroundColor(currentValue == value * 2 ? color : .gray.opacity(0.5))
-                    .onTapGesture {
-                        onSelect(value * 2)
-                    }
-            }
-        }
-    }
-    
-    private func getMoodIcon(for value: Int) -> String {
-        switch value {
-        case 1: return "face.smiling"
-        case 2: return "face.smiling.fill"
-        case 3: return "face.smiling"
-        case 4: return "face.smiling.fill"
-        case 5: return "face.smiling"
-        default: return "face.smiling"
-        }
-    }
-}
