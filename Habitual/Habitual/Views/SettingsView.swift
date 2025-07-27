@@ -11,6 +11,7 @@ extension UTType {
 struct SettingsView: View {
     @ObservedObject private var notificationManager = NotificationPermissionManager.shared
     @ObservedObject private var appSettings = AppSettings.shared
+    @ObservedObject private var usageTracker = UsageTracker.shared
     @State private var activeSheet: SheetType?
     @State private var activeAlert: AlertType?
     @State private var showingSurvey = false
@@ -65,8 +66,16 @@ struct SettingsView: View {
                 }
                 
                 Section("Data") {
-                    NavigationLink("Backup") {
+                    NavigationLink {
                         BackupSyncView()
+                    } label: {
+                        HStack {
+                            Image(systemName: "square.and.arrow.up")
+                                .foregroundColor(.accentColor)
+                                .frame(width: 20)
+                            Text("Backup & Restore")
+                            Spacer()
+                        }
                     }
                 }
                 
@@ -125,17 +134,16 @@ struct SettingsView: View {
                 
                 Section("App Information") {
                     let appInfo = AppSettings.shared.getAppInfo()
-                    let stats = UsageTracker.shared.getStats()
                     
                     SettingsRowWithIcon(
                         title: "App Details",
-                        subtitle: "\(appInfo.name) v\(appInfo.version) (\(appInfo.build))",
+                        subtitle: "\(appInfo.name) version \(appInfo.version) (build \(appInfo.build))",
                         icon: "info.circle"
                     ) {
                         activeAlert = .appInfo
                     }
                     
-                    if let stats = stats {
+                    if let stats = usageTracker.stats {
                         SettingsInfoRow(
                             title: "App Launches",
                             subtitle: "\(stats.launches) times",
@@ -258,7 +266,7 @@ struct BackupSyncView: View {
                 .padding(.vertical, 8)
             }
             
-            Section("Backup") {
+            Section("Backup & Restore") {
                 Button(action: createBackup) {
                     HStack {
                         Image(systemName: "square.and.arrow.up")

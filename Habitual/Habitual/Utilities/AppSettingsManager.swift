@@ -223,7 +223,7 @@ class AppSettings: ObservableObject {
         
         return """
 App: \(appInfo.name)
-Version: \(appInfo.version) (\(appInfo.build))
+Version: \(appInfo.version) (build \(appInfo.build))
 Device: \(deviceName)
 Model: \(deviceModel)
 OS: \(systemName) \(systemVersion)

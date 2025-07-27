@@ -1,25 +1,64 @@
 import Foundation
+import Combine
 
-class UsageTracker {
+class UsageTracker: ObservableObject {
     static let shared = UsageTracker()
     private let database = DatabaseManager.shared
     
-    private init() {}
+    @Published var stats: (launches: Int, habitsCreated: Int, habitsFormed: Int)?
+    private var countedHabitsToday: Set<String> = []
+    private var lastResetDate: Date?
+    
+    private init() {
+        refreshStats()
+        resetDailyTrackingIfNeeded()
+    }
     
     func incrementAppLaunches() {
         database.incrementAppLaunches()
+        refreshStats()
     }
     
     func incrementHabitsCreated() {
         database.incrementHabitsCreated()
+        refreshStats()
     }
     
     func incrementHabitsFormed(count: Int = 1) {
         database.incrementHabitsFormed(count: count)
+        refreshStats()
+    }
+    
+    func incrementHabitsFormedIfNotCountedToday(habitId: String) {
+        resetDailyTrackingIfNeeded()
+        
+        if !countedHabitsToday.contains(habitId) {
+            countedHabitsToday.insert(habitId)
+            database.incrementHabitsFormed()
+            refreshStats()
+        }
+    }
+    
+    private func resetDailyTrackingIfNeeded() {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        if let lastReset = lastResetDate {
+            if !calendar.isDate(lastReset, inSameDayAs: now) {
+                countedHabitsToday.removeAll()
+                lastResetDate = now
+            }
+        } else {
+            lastResetDate = now
+        }
     }
     
     func getStats() -> (launches: Int, habitsCreated: Int, habitsFormed: Int)? {
         return database.getStats()
+    }
+    
+    private func refreshStats() {
+        stats = database.getStats()
     }
     
     func shouldRequestReview() -> Bool {
