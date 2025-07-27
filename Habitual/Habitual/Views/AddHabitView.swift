@@ -9,9 +9,10 @@ struct AddHabitView: View {
     @State private var selectedIcon = "heart.fill"
     @State private var selectedColor = Color.purple
     @State private var selectedType = 0
-    @State private var numericTarget = 8
-    @State private var moodScale = 10
+    @State private var numericTarget = 4
+    @State private var moodScale = 5
     @State private var showingIconPicker = false
+    @FocusState private var isNameFieldFocused: Bool
     
     let habitTypeOptions = ["Yes/No", "Count", "Mood"]
     
@@ -34,6 +35,7 @@ struct AddHabitView: View {
             Form {
                 Section("Habit Details") {
                     TextField("Habit Name", text: $habitName)
+                        .focused($isNameFieldFocused)
                     
                     HStack {
                         Label("Icon", systemImage: selectedIcon)
@@ -59,7 +61,12 @@ struct AddHabitView: View {
                     case 1:
                         Stepper("Daily Target: \(numericTarget)", value: $numericTarget, in: 1...100)
                     case 2:
-                        Stepper("Mood Scale: 1-\(moodScale)", value: $moodScale, in: 5...10, step: 5)
+                        Picker("Mood Scale", selection: $moodScale) {
+                            Text("1-5").tag(5)
+                            Text("1-7").tag(7)
+                            Text("1-10").tag(10)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
                     default:
                         EmptyView()
                     }
@@ -72,7 +79,7 @@ struct AddHabitView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     case 1:
-                        Text("Track quantities: Glasses of water, Pages read, Minutes exercised")
+                        Text("Track quantities, like Glasses of water")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     case 2:
@@ -106,6 +113,8 @@ struct AddHabitView: View {
                 // Set random default color and icon
                 selectedColor = defaultColors.randomElement() ?? Color.purple
                 selectedIcon = allIcons.randomElement() ?? "heart.fill"
+                // Focus the habit name field
+                isNameFieldFocused = true
             }
         }
     }

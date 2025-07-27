@@ -36,6 +36,10 @@ struct HabitCardView: View {
             
             if !isCompact {
                 ProgressView(habit: habit)
+            } else {
+                // Show last 7 days in compact mode
+                CompactProgressView(habit: habit)
+                    .frame(height: 20)
             }
         }
         .padding(isCompact ? 12 : 16)
@@ -120,11 +124,9 @@ struct CompleteButton: View {
             }
         case .numeric(let target):
             HStack(spacing: 4) {
-                if !isCompact {
-                    Text("\(currentValue)/\(target)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                Text("\(currentValue)/\(target)")
+                    .font(isCompact ? .caption2 : .caption)
+                    .foregroundColor(.secondary)
                 Button(action: { 
                     let newValue = max(0, currentValue - 1)
                     onComplete(newValue)
@@ -143,11 +145,9 @@ struct CompleteButton: View {
             }
         case .mood(let scale):
             HStack(spacing: 4) {
-                if !isCompact {
-                    Text("\(currentValue)/\(scale)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                Text("\(currentValue)/\(scale)")
+                    .font(isCompact ? .caption2 : .caption)
+                    .foregroundColor(.secondary)
                 Button(action: { 
                     let newValue = max(0, currentValue - 1)
                     onComplete(newValue)
@@ -184,6 +184,64 @@ struct ProgressView: View {
             ProgressChartView(habit: habit, type: .line)
                 .frame(height: 60)
         }
+    }
+}
+
+struct CompactProgressView: View {
+    let habit: Habit
+    
+    var body: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<7, id: \.self) { dayOffset in
+                let date = Calendar.current.date(byAdding: .day, value: -6 + dayOffset, to: Date()) ?? Date()
+                CompactDayIndicator(
+                    habit: habit,
+                    date: date
+                )
+            }
+        }
+    }
+}
+
+struct CompactDayIndicator: View {
+    let habit: Habit
+    let date: Date
+    
+    private var completionValue: Int? {
+        guard let record = habit.history.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) }) else {
+            return nil
+        }
+        
+        switch record.value {
+        case .binary(let completed):
+            return completed ? 1 : 0
+        case .numeric(let value):
+            return value
+        case .mood(let value):
+            return value
+        }
+    }
+    
+    private var fillAmount: Double {
+        guard let value = completionValue else { return 0 }
+        
+        switch habit.type {
+        case .binary:
+            return value > 0 ? 1.0 : 0.0
+        case .numeric(let target):
+            return min(1.0, Double(value) / Double(target))
+        case .mood(let scale):
+            return Double(value) / Double(scale)
+        }
+    }
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 2)
+            .fill(completionValue == nil ? Color.gray.opacity(0.2) : habit.color.color.opacity(0.2 + fillAmount * 0.8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 2)
+                    .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+            )
     }
 }
 
