@@ -59,7 +59,7 @@ class HabitListViewModel: ObservableObject {
         PersistenceController.shared.deleteHabit(habit, context: context)
     }
     
-    func updateHabitCompletion(_ habit: Habit, completed: Bool) {
+    func updateHabitValue(_ habit: Habit, value: Int) {
         guard let index = habits.firstIndex(where: { $0.id == habit.id }) else { return }
         
         var updatedHabit = habit
@@ -71,13 +71,11 @@ class HabitListViewModel: ObservableObject {
         let newRecord: DayRecord
         switch habit.type {
         case .binary:
-            newRecord = DayRecord(date: today, value: .binary(completed: completed))
-        case .numeric(let target):
-            let currentValue = getCurrentNumericValue(for: habit)
-            let newValue = completed ? min(currentValue + 1, target) : 0
-            newRecord = DayRecord(date: today, value: .numeric(value: newValue))
+            newRecord = DayRecord(date: today, value: .binary(completed: value > 0))
+        case .numeric:
+            newRecord = DayRecord(date: today, value: .numeric(value: value))
         case .mood:
-            newRecord = DayRecord(date: today, value: .mood(value: completed ? 5 : 0))
+            newRecord = DayRecord(date: today, value: .mood(value: value))
         }
         
         updatedHabit.history.append(newRecord)
@@ -86,7 +84,7 @@ class HabitListViewModel: ObservableObject {
         saveRecord(newRecord, for: updatedHabit)
         
         // Track completed habits for review prompts
-        if completed {
+        if value > 0 {
             AppSettings.shared.incrementCompletedHabits()
             Task {
                 await ReviewRequestManager.shared.requestReviewIfAppropriate()

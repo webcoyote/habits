@@ -22,14 +22,16 @@ struct HabitListView: View {
                             HabitCardView(
                                 habit: habit,
                                 isCompact: showingCompactView,
-                                onComplete: { completed in
-                                    viewModel.updateHabitCompletion(habit, completed: completed)
+                                onComplete: { value in
+                                    viewModel.updateHabitValue(habit, value: value)
                                     // Track habit completion
+                                    let completed = value > 0
                                     AnalyticsManager.shared.track("habit_completed", properties: [
                                         "habit_id": habit.id.uuidString,
                                         "habit_name": habit.name,
                                         "habit_type": habit.type.displayName,
-                                        "completed": completed
+                                        "completed": completed,
+                                        "value": value
                                     ])
                                     
                                     // Track streak milestone if completed

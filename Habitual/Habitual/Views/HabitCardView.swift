@@ -3,7 +3,7 @@ import SwiftUI
 struct HabitCardView: View {
     let habit: Habit
     let isCompact: Bool
-    let onComplete: (Bool) -> Void
+    let onComplete: (Int) -> Void
     let onTap: () -> Void
     
     @State private var isCompleted = false
@@ -58,7 +58,7 @@ struct HabitCardView: View {
         switch habit.type {
         case .binary:
             isCompleted.toggle()
-            onComplete(isCompleted)
+            onComplete(isCompleted ? 1 : 0)
             // Track habit formation
             if isCompleted && !wasCompleted {
                 UsageTracker.shared.incrementHabitsFormed()
@@ -66,7 +66,7 @@ struct HabitCardView: View {
         case .numeric:
             let previousValue = currentValue
             currentValue = value
-            onComplete(currentValue > 0)
+            onComplete(value)
             // Track when habit goes from incomplete to complete
             if currentValue > 0 && previousValue == 0 {
                 UsageTracker.shared.incrementHabitsFormed()
@@ -74,7 +74,7 @@ struct HabitCardView: View {
         case .mood:
             let hadValue = currentValue > 0
             currentValue = value
-            onComplete(true)
+            onComplete(value)
             // Track when mood is first set for the day
             if !hadValue && currentValue > 0 {
                 UsageTracker.shared.incrementHabitsFormed()
@@ -116,7 +116,7 @@ struct CompleteButton: View {
             Button(action: { onComplete(isCompleted ? 0 : 1) }) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(isCompact ? .title3 : .title2)
-                    .foregroundColor(isCompleted ? color : .gray)
+                    .foregroundColor(color)
             }
         case .numeric(let target):
             HStack(spacing: 4) {
@@ -162,7 +162,7 @@ struct CompleteButton: View {
                 }) {
                     Image(systemName: currentValue >= scale ? "checkmark.circle.fill" : "plus.circle")
                         .font(isCompact ? .title3 : .title2)
-                        .foregroundColor(currentValue >= scale ? color : .gray)
+                        .foregroundColor(color)
                 }
             }
         }
