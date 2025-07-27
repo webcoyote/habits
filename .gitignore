@@ -6,3 +6,4 @@ Habitual/.Build
 Habitual/.DerivedData
 *.xcuserstate
 /temp/
+/logs/
