@@ -247,6 +247,8 @@ struct BackupSyncView: View {
     @State private var alertMessage = ""
     @State private var isLoading = false
     @State private var backupURL: URL?
+    @State private var showingRestoreConfirmation = false
+    @State private var pendingRestoreURL: URL?
     
     var body: some View {
         Form {
@@ -300,7 +302,8 @@ struct BackupSyncView: View {
             DocumentPicker(
                 documentTypes: [UTType.json],
                 onPick: { url in
-                    restoreBackup(from: url)
+                    pendingRestoreURL = url
+                    showingRestoreConfirmation = true
                 }
             )
         }
@@ -308,6 +311,18 @@ struct BackupSyncView: View {
             Button("OK") { }
         } message: {
             Text(alertMessage)
+        }
+        .alert("Restore Backup", isPresented: $showingRestoreConfirmation) {
+            Button("Cancel", role: .cancel) {
+                pendingRestoreURL = nil
+            }
+            Button("Restore", role: .destructive) {
+                if let url = pendingRestoreURL {
+                    restoreBackup(from: url)
+                }
+            }
+        } message: {
+            Text("Warning: Restoring from a backup will permanently delete all your current habits and history. This action cannot be undone.\n\nAre you sure you want to continue?")
         }
     }
     
