@@ -24,14 +24,31 @@ except ImportError:
 def format_with_placeholder(template, **kwargs):
       return template.format(**kwargs)
 
+def get_git_branch():
+    """Get the current git branch name."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=2
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except (subprocess.TimeoutExpired, subprocess.SubprocessError, FileNotFoundError):
+        pass
+    return None
+
 def get_completion_message(project_name):
+    branch = get_git_branch()
+    branch = f" on branch {branch}" if branch else ""
     message = random.choice([
-        "{project_name} done!",
-        "{project_name} finished!",
-        "Completed {project_name}!",
-        "{project_name} is ready!"
+        "{project_name}{branch} done!",
+        "{project_name}{branch} finished!",
+        "Completed {project_name}{branch}!",
+        "{project_name}{branch} is ready!"
     ])
-    return format_with_placeholder(message, project_name=project_name)
+    return format_with_placeholder(message, project_name=project_name, branch=branch)
 
   # Example: format_with_placeholder("Hello {name}, you are {age}", name="Alice", age=25)
 def get_tts_script_path():
@@ -62,7 +79,6 @@ def get_tts_script_path():
     
     return None
 
-
 def get_llm_completion_message(project_name):
     """
     Generate completion message using available LLM services.
@@ -75,6 +91,9 @@ def get_llm_completion_message(project_name):
     script_dir = Path(__file__).parent
     llm_dir = script_dir / "utils" / "llm"
     
+    # Get git branch to include in the message
+    branch = get_git_branch()
+
     # Try OpenAI first (highest priority)
     if os.getenv('OPENAI_API_KEY'):
         oai_script = llm_dir / "oai.py"
@@ -115,8 +134,6 @@ def get_llm_completion_message(project_name):
 def announce_completion(project_name):
     """Announce completion using the best available TTS service."""
     try:
-
-
         tts_script = get_tts_script_path()
         if not tts_script:
             return  # No TTS scripts available
