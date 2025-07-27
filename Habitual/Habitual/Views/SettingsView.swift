@@ -2,6 +2,7 @@ import SwiftUI
 import StoreKit
 import UIKit
 import WebKit
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @ObservedObject private var notificationManager = NotificationPermissionManager.shared
@@ -66,7 +67,7 @@ struct SettingsView: View {
                         AnalyticsManager.shared.track("export_data_tapped")
                     }
                     
-                    NavigationLink("Backup & Sync") {
+                    NavigationLink("Backup") {
                         BackupSyncView()
                     }
                 }
@@ -240,38 +241,172 @@ struct SettingsView: View {
 }
 
 struct BackupSyncView: View {
-    @State private var iCloudEnabled = true
+    @State private var showingShareSheet = false
+    @State private var showingDocumentPicker = false
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+    @State private var isLoading = false
+    @State private var backupURL: URL?
     
     var body: some View {
         Form {
-            Section("iCloud Sync") {
-                Toggle("Sync with iCloud", isOn: $iCloudEnabled)
-                
-                Text("Enable iCloud sync to keep your habits synchronized across all your devices.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            Section {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Keep your habits safe")
+                        .font(.headline)
+                    Text("Create backups to save your habit data and history. You can restore from these backups at any time, even on a different device.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.vertical, 8)
             }
             
             Section("Backup") {
-                Button("Create Backup") {
-                    createBackup()
+                Button(action: createBackup) {
+                    HStack {
+                        Image(systemName: "square.and.arrow.up")
+                        Text("Create Backup")
+                        Spacer()
+                        if isLoading && backupURL == nil {
+                            SwiftUI.ProgressView()
+                                .scaleEffect(0.8)
+                        }
+                    }
                 }
+                .disabled(isLoading)
                 
-                Button("Restore from Backup") {
-                    restoreBackup()
+                Button(action: { showingDocumentPicker = true }) {
+                    HStack {
+                        Image(systemName: "square.and.arrow.down")
+                        Text("Restore from Backup")
+                        Spacer()
+                    }
                 }
+                .disabled(isLoading)
+                
+                Text("Create a backup of all your habits and history, or restore from a previous backup.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
-        .navigationTitle("Backup & Sync")
+        .navigationTitle("Backup")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showingShareSheet) {
+            if let url = backupURL {
+                ShareSheet(items: [url])
+            }
+        }
+        .sheet(isPresented: $showingDocumentPicker) {
+            DocumentPicker(
+                documentTypes: [UTType.json],
+                onPick: { url in
+                    restoreBackup(from: url)
+                }
+            )
+        }
+        .alert("Backup", isPresented: $showingAlert) {
+            Button("OK") { }
+        } message: {
+            Text(alertMessage)
+        }
     }
     
     private func createBackup() {
+        isLoading = true
         
+        BackupManager.shared.createBackup { result in
+            isLoading = false
+            
+            switch result {
+            case .success(let url):
+                backupURL = url
+                showingShareSheet = true
+                AnalyticsManager.shared.track("backup_created")
+            case .failure(let error):
+                alertMessage = "Failed to create backup: \(error.localizedDescription)"
+                showingAlert = true
+                AnalyticsManager.shared.track("backup_failed", properties: ["error": error.localizedDescription])
+            }
+        }
     }
     
-    private func restoreBackup() {
+    private func restoreBackup(from url: URL) {
+        isLoading = true
         
+        BackupManager.shared.restoreBackup(from: url) { result in
+            isLoading = false
+            
+            switch result {
+            case .success(let count):
+                alertMessage = "Successfully restored \(count) habit\(count == 1 ? "" : "s")!"
+                showingAlert = true
+                AnalyticsManager.shared.track("backup_restored", properties: ["habit_count": count])
+                
+                // Post notification to refresh the habit list
+                NotificationCenter.default.post(name: NSNotification.Name("RefreshHabits"), object: nil)
+            case .failure(let error):
+                alertMessage = "Failed to restore backup: \(error.localizedDescription)"
+                showingAlert = true
+                AnalyticsManager.shared.track("restore_failed", properties: ["error": error.localizedDescription])
+            }
+        }
+    }
+}
+
+// MARK: - ShareSheet
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+// MARK: - DocumentPicker
+struct DocumentPicker: UIViewControllerRepresentable {
+    let documentTypes: [UTType]
+    let onPick: (URL) -> Void
+    
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: documentTypes)
+        picker.delegate = context.coordinator
+        picker.allowsMultipleSelection = false
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let parent: DocumentPicker
+        
+        init(_ parent: DocumentPicker) {
+            self.parent = parent
+        }
+        
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let url = urls.first else { return }
+            
+            // Start accessing security-scoped resource
+            guard url.startAccessingSecurityScopedResource() else { return }
+            defer { url.stopAccessingSecurityScopedResource() }
+            
+            // Copy file to temporary location
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
+            try? FileManager.default.removeItem(at: tempURL)
+            
+            do {
+                try FileManager.default.copyItem(at: url, to: tempURL)
+                parent.onPick(tempURL)
+            } catch {
+                print("Error copying file: \(error)")
+            }
+        }
     }
 }
 

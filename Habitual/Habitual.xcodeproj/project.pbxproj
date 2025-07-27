@@ -34,12 +34,13 @@
 		430210F22E3599C50085D398 /* UsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F32E3599C50085D398 /* UsageTracker.swift */; };
 		430210F52E3599C60085D398 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 430210F42E3599C60085D398 /* RollbarNotifier */; };
 		430210F62E3599C70085D398 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F72E3599C70085D398 /* Configuration.swift */; };
+		430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F92E3599C80085D398 /* AnalyticsManager.swift */; };
+		430210FA2E3599C90085D398 /* UserIdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210FB2E3599C90085D398 /* UserIdentityManager.swift */; };
 		4302110A2E3599CE0085D398 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FD2E3599CB0085D398 /* PostHog */; };
 		4302110B2E3599CF0085D398 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FE2E3599CC0085D398 /* AmplitudeSwift */; };
 		4302110C2E3599D00085D398 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FF2E3599CD0085D398 /* Mixpanel */; };
-		430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F92E3599C80085D398 /* AnalyticsManager.swift */; };
-		430210FA2E3599C90085D398 /* UserIdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210FB2E3599C90085D398 /* UserIdentityManager.swift */; };
 		4302110D2E3599D40085D398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302110E2E3599D40085D398 /* AppDelegate.swift */; };
+		B57C5185E77BDA4E7736E3F7 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43EB9682386C6C6FA343DE /* BackupManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		430210F92E3599C80085D398 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		430210FB2E3599C90085D398 /* UserIdentityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentityManager.swift; sourceTree = "<group>"; };
 		4302110E2E3599D40085D398 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8A43EB9682386C6C6FA343DE /* BackupManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 				430210F12E3599C40085D398 /* DatabaseManager.swift */,
 				430210F32E3599C50085D398 /* UsageTracker.swift */,
 				2B1234801234567890ABCDEF /* HabitStatistics.swift */,
+				8A43EB9682386C6C6FA343DE /* BackupManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */,
 				430210FA2E3599C90085D398 /* UserIdentityManager.swift in Sources */,
 				4302110D2E3599D40085D398 /* AppDelegate.swift in Sources */,
+				B57C5185E77BDA4E7736E3F7 /* BackupManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,19 +516,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCVersionGroup section */
-		2B1234651234567890ABCDEF /* Habitual.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2B1234661234567890ABCDEF /* Habitual.xcdatamodel */,
-			);
-			currentVersion = 2B1234661234567890ABCDEF /* Habitual.xcdatamodel */;
-			path = Habitual.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -582,6 +573,19 @@
 			productName = Mixpanel;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		2B1234651234567890ABCDEF /* Habitual.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2B1234661234567890ABCDEF /* Habitual.xcdatamodel */,
+			);
+			currentVersion = 2B1234661234567890ABCDEF /* Habitual.xcdatamodel */;
+			path = Habitual.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2B12344A1234567890ABCDEF /* Project object */;
 }

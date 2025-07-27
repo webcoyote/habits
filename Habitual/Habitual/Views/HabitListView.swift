@@ -120,6 +120,9 @@ struct HabitListView: View {
             .onChange(of: habitEntities.count) { _ in
                 viewModel.loadHabits(from: habitEntities, context: viewContext)
             }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RefreshHabits"))) { _ in
+                viewModel.loadHabits(from: habitEntities, context: viewContext)
+            }
         }
     }
 }
