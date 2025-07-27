@@ -53,16 +53,32 @@ struct HabitCardView: View {
     }
     
     private func handleCompletion(_ value: Int) {
+        let wasCompleted = isCompleted || currentValue > 0
+        
         switch habit.type {
         case .binary:
             isCompleted.toggle()
             onComplete(isCompleted)
+            // Track habit check/uncheck
+            if isCompleted && !wasCompleted {
+                UsageTracker.shared.incrementHabitsChecked()
+            }
         case .numeric:
+            let previousValue = currentValue
             currentValue = value
             onComplete(currentValue > 0)
+            // Track when habit goes from incomplete to complete
+            if currentValue > 0 && previousValue == 0 {
+                UsageTracker.shared.incrementHabitsChecked()
+            }
         case .mood:
+            let hadValue = currentValue > 0
             currentValue = value
             onComplete(true)
+            // Track when mood is first set for the day
+            if !hadValue && currentValue > 0 {
+                UsageTracker.shared.incrementHabitsChecked()
+            }
         }
     }
     

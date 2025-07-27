@@ -110,6 +110,10 @@ struct AddHabitView: View {
         )
         
         viewModel.addHabit(newHabit, context: viewContext)
+        
+        // Track habit creation
+        UsageTracker.shared.incrementHabitsCreated()
+        
         presentationMode.wrappedValue.dismiss()
     }
 }

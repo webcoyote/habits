@@ -13,7 +13,6 @@ struct SettingsView: View {
     
     enum SheetType: Identifiable {
         case appearance
-        case about
         case survey
         
         var id: Self { self }
@@ -121,19 +120,38 @@ struct SettingsView: View {
                         activeAlert = .terms
                     }
                     
-                    Button("About") {
-                        activeSheet = .about
-                    }
                 }
                 
                 Section("App Information") {
                     let appInfo = AppSettings.shared.getAppInfo()
+                    let stats = UsageTracker.shared.getStats()
+                    
                     SettingsRowWithIcon(
                         title: "App Details",
                         subtitle: "\(appInfo.name) v\(appInfo.version) (\(appInfo.build))",
                         icon: "info.circle"
                     ) {
                         activeAlert = .appInfo
+                    }
+                    
+                    if let stats = stats {
+                        SettingsRowWithIcon(
+                            title: "App Launches",
+                            subtitle: "\(stats.launches) times",
+                            icon: "chart.bar.fill"
+                        ) {}
+                        
+                        SettingsRowWithIcon(
+                            title: "Habits Created",
+                            subtitle: "\(stats.habitsCreated) habits",
+                            icon: "plus.circle.fill"
+                        ) {}
+                        
+                        SettingsRowWithIcon(
+                            title: "Habits Checked",
+                            subtitle: "\(stats.habitsChecked) times",
+                            icon: "checkmark.circle.fill"
+                        ) {}
                     }
                 }
             }
@@ -142,8 +160,6 @@ struct SettingsView: View {
                 switch sheetType {
                 case .appearance:
                     AppearanceSelectionView()
-                case .about:
-                    AboutView()
                 case .survey:
                     SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
                 }
@@ -292,50 +308,6 @@ struct HelpItem: View {
     }
 }
 
-struct AboutView: View {
-    @Environment(\.presentationMode) var presentationMode
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Image(systemName: "heart.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.blue)
-                
-                Text("Habitual")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("Build better habits, one day at a time")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-                
-                VStack(spacing: 12) {
-                    Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
-                    Link("Terms of Service", destination: URL(string: "https://example.com/terms")!)
-                    Link("Contact Support", destination: URL(string: "mailto:pat@codeofhonor.com")!)
-                }
-                
-                Spacer()
-                
-                Text("Made with ❤️")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding()
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
 
 struct ExportView: View {
     @Environment(\.presentationMode) var presentationMode

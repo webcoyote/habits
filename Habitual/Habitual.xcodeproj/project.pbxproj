@@ -29,6 +29,10 @@
 		430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E72E35996B0085D398 /* NotificationPermissionManager.swift */; };
 		430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EA2E3599C10085D398 /* SettingsSelectionView.swift */; };
 		430210EC2E3599C20085D398 /* ReviewRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210ED2E3599C20085D398 /* ReviewRequestManager.swift */; };
+		430210EE2E3599C30085D398 /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EF2E3599C30085D398 /* ErrorTracker.swift */; };
+		430210F02E3599C40085D398 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F12E3599C40085D398 /* DatabaseManager.swift */; };
+		430210F22E3599C50085D398 /* UsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F32E3599C50085D398 /* UsageTracker.swift */; };
+		430210F52E3599C60085D398 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 430210F42E3599C60085D398 /* RollbarNotifier */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +60,9 @@
 		430210E72E35996B0085D398 /* NotificationPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionManager.swift; sourceTree = "<group>"; };
 		430210EA2E3599C10085D398 /* SettingsSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSelectionView.swift; sourceTree = "<group>"; };
 		430210ED2E3599C20085D398 /* ReviewRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestManager.swift; sourceTree = "<group>"; };
+		430210EF2E3599C30085D398 /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
+		430210F12E3599C40085D398 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		430210F32E3599C50085D398 /* UsageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				430210F52E3599C60085D398 /* RollbarNotifier in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +166,9 @@
 				430210E62E35996B0085D398 /* AppSettingsManager.swift */,
 				430210E72E35996B0085D398 /* NotificationPermissionManager.swift */,
 				430210ED2E3599C20085D398 /* ReviewRequestManager.swift */,
+				430210EF2E3599C30085D398 /* ErrorTracker.swift */,
+				430210F12E3599C40085D398 /* DatabaseManager.swift */,
+				430210F32E3599C50085D398 /* UsageTracker.swift */,
 				2B1234801234567890ABCDEF /* HabitStatistics.swift */,
 			);
 			path = Utilities;
@@ -179,6 +190,9 @@
 			dependencies = (
 			);
 			name = Habitual;
+			packageProductDependencies = (
+				430210F42E3599C60085D398 /* RollbarNotifier */,
+			);
 			productName = Habitual;
 			productReference = 2B1234521234567890ABCDEF /* Habitual.app */;
 			productType = "com.apple.product-type.application";
@@ -207,6 +221,9 @@
 				Base,
 			);
 			mainGroup = 2B1234491234567890ABCDEF;
+			packageReferences = (
+				430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */,
+			);
 			productRefGroup = 2B1234531234567890ABCDEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -239,6 +256,9 @@
 				430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */,
 				430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */,
 				430210EC2E3599C20085D398 /* ReviewRequestManager.swift in Sources */,
+				430210EE2E3599C30085D398 /* ErrorTracker.swift in Sources */,
+				430210F02E3599C40085D398 /* DatabaseManager.swift in Sources */,
+				430210F22E3599C50085D398 /* UsageTracker.swift in Sources */,
 				2B1234561234567890ABCDEF /* HabitualApp.swift in Sources */,
 				2B1234691234567890ABCDEF /* HabitModels.swift in Sources */,
 				2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */,
@@ -468,6 +488,25 @@
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rollbar/rollbar-apple";
+			requirement = {
+				kind = exactVersion;
+				version = 3.3.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		430210F42E3599C60085D398 /* RollbarNotifier */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */;
+			productName = RollbarNotifier;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2B12344A1234567890ABCDEF /* Project object */;
 }
