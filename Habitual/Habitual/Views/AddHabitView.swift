@@ -72,23 +72,72 @@ struct AddHabitView: View {
                     }
                 }
                 
-                Section("Examples") {
-                    switch selectedType {
-                    case 0:
-                        Text("Perfect for habits you either complete or don't: Exercise, Meditate, Read")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    case 1:
-                        Text("Track quantities, like Glasses of water")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    case 2:
-                        Text("Monitor your daily graph or energy levels")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    default:
-                        EmptyView()
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Examples")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        switch selectedType {
+                        case 0:
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Perfect for habits you either complete or don't:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.primary)
+                                Text("Exercise, Meditate, Read, Journal, Stretch")
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                
+                                // Visual example
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Preview:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    ExampleBinaryProgressView(color: selectedColor)
+                                        .frame(height: 40)
+                                }
+                            }
+                        case 1:
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Track quantities throughout the day:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.primary)
+                                Text("Glasses of water, Steps, Pages read, Minutes studied")
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                
+                                // Visual example
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Preview (Target: \(numericTarget)):")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    ExampleNumericProgressView(color: selectedColor, target: numericTarget)
+                                        .frame(height: 40)
+                                }
+                            }
+                        case 2:
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Monitor levels or ratings:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.primary)
+                                Text("Energy level, Mood, Pain level, Sleep quality")
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                
+                                // Visual example
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Preview (Scale: 1-\(graphScale)):")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    ExampleGraphProgressView(color: selectedColor, scale: graphScale)
+                                        .frame(height: 40)
+                                }
+                            }
+                        default:
+                            EmptyView()
+                        }
                     }
+                    .padding(.vertical, 4)
                 }
             }
             .navigationTitle("New Habit")
@@ -225,6 +274,102 @@ struct IconPickerView: View {
                     Button("Done") {
                         presentationMode.wrappedValue.dismiss()
                     }
+                }
+            }
+        }
+    }
+}
+
+// Example progress views for the Add Habit screen
+struct ExampleBinaryProgressView: View {
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<7, id: \.self) { day in
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(day < 5 ? color : Color.gray.opacity(0.2))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                    )
+                    .frame(width: 25, height: 25)
+            }
+        }
+    }
+}
+
+struct ExampleNumericProgressView: View {
+    let color: Color
+    let target: Int
+    
+    var body: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<7, id: \.self) { day in
+                let progress = Double([0.5, 0.8, 1.0, 0.3, 0.9, 0, 0][day])
+                VStack(spacing: 0) {
+                    Spacer()
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(progress > 0 ? color.opacity(0.3 + progress * 0.7) : Color.gray.opacity(0.2))
+                        .frame(height: 40 * progress)
+                }
+                .frame(width: 25, height: 40)
+                .background(
+                    RoundedRectangle(cornerRadius: 2)
+                        .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                )
+            }
+        }
+    }
+}
+
+struct ExampleGraphProgressView: View {
+    let color: Color
+    let scale: Int
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let values: [Double] = [0.6, 0.7, 0.5, 0.8, 0.4, 0.3, 0.5]
+            let width = geometry.size.width
+            let height = geometry.size.height
+            let spacing = width / 6
+            
+            ZStack {
+                // Grid lines
+                Path { path in
+                    // Horizontal lines
+                    for i in 0...2 {
+                        let y = height * Double(i) / 2
+                        path.move(to: CGPoint(x: 0, y: y))
+                        path.addLine(to: CGPoint(x: width, y: y))
+                    }
+                }
+                .stroke(Color.gray.opacity(0.2), lineWidth: 0.5)
+                
+                // Line graph
+                Path { path in
+                    for (index, value) in values.enumerated() {
+                        let x = Double(index) * spacing
+                        let y = height * (1 - value)
+                        
+                        if index == 0 {
+                            path.move(to: CGPoint(x: x, y: y))
+                        } else {
+                            path.addLine(to: CGPoint(x: x, y: y))
+                        }
+                    }
+                }
+                .stroke(color, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                
+                // Points
+                ForEach(0..<values.count, id: \.self) { index in
+                    Circle()
+                        .fill(color)
+                        .frame(width: 6, height: 6)
+                        .position(
+                            x: Double(index) * spacing,
+                            y: height * (1 - values[index])
+                        )
                 }
             }
         }
