@@ -189,7 +189,7 @@ struct ProgressView: View {
         switch habit.type {
         case .binary:
             ProgressGridView(habit: habit)
-                .frame(height: 60)
+                .frame(height: 70) // 7 rows * 8px + 6 gaps * 2px = 68px, rounded to 70
         case .numeric:
             ProgressChartView(habit: habit, type: .bar)
                 .frame(height: 60)

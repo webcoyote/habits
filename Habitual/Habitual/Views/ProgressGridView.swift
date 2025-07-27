@@ -13,13 +13,25 @@ struct ProgressGridView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let dates = getDateRange()
-            let rows = dates.chunked(into: columnsPerRow)
-            let squareSize = calculateSquareSize(for: geometry.size.width)
+            let squareSize: CGFloat = 8 // Fixed square size
+            let spacing: CGFloat = 2
+            let availableWidth = geometry.size.width
             
-            VStack(spacing: 2) {
-                ForEach(0..<rows.count, id: \.self) { rowIndex in
-                    HStack(spacing: 2) {
+            // Calculate columns that fit in available width
+            let maxColumns = Int((availableWidth + spacing) / (squareSize + spacing))
+            let columnsToUse = min(maxColumns, columnsPerRow)
+            
+            // Always show 7 rows (one week)
+            let rowsToShow = 7
+            let totalDays = rowsToShow * columnsToUse
+            
+            // Get the most recent days that fit in our grid
+            let dates = getDateRange(limit: totalDays)
+            let rows = dates.chunked(into: columnsToUse)
+            
+            VStack(spacing: spacing) {
+                ForEach(0..<min(rows.count, rowsToShow), id: \.self) { rowIndex in
+                    HStack(spacing: spacing) {
                         ForEach(rows[rowIndex], id: \.self) { date in
                             DaySquare(
                                 date: date,
@@ -29,8 +41,13 @@ struct ProgressGridView: View {
                             )
                         }
                         
-                        if rows[rowIndex].count < columnsPerRow {
-                            Spacer()
+                        // Fill remaining space if last row is incomplete
+                        if rows[rowIndex].count < columnsToUse {
+                            ForEach(0..<(columnsToUse - rows[rowIndex].count), id: \.self) { _ in
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(Color.clear)
+                                    .frame(width: squareSize, height: squareSize)
+                            }
                         }
                     }
                 }
@@ -44,12 +61,14 @@ struct ProgressGridView: View {
         return max(8, min(12, availableWidth / CGFloat(columnsPerRow)))
     }
     
-    private func getDateRange() -> [Date] {
+    private func getDateRange(limit: Int? = nil) -> [Date] {
         let calendar = Calendar.current
         let today = Date()
         var dates: [Date] = []
         
-        for dayOffset in (0..<daysToShow).reversed() {
+        let daysToGet = limit ?? daysToShow
+        
+        for dayOffset in (0..<daysToGet).reversed() {
             if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
                 dates.append(date)
             }
