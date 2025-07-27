@@ -2,6 +2,7 @@ import Foundation
 import CoreData
 import SwiftUI
 import UniformTypeIdentifiers
+import Compression
 
 class BackupManager {
     static let shared = BackupManager()
@@ -11,7 +12,8 @@ class BackupManager {
     private let jsonDecoder = JSONDecoder()
     
     private init() {
-        jsonEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        // Use compact JSON format (no pretty printing)
+        jsonEncoder.outputFormatting = []
         jsonEncoder.dateEncodingStrategy = .iso8601
         jsonDecoder.dateDecodingStrategy = .iso8601
     }
@@ -52,10 +54,16 @@ class BackupManager {
                 let backupData = BackupData(habits: habits)
                 let jsonData = try self.jsonEncoder.encode(backupData)
                 
-                // Save to temporary file
-                let fileName = "habitual_backup_\(Date().formatted(.iso8601)).json"
+                // Compress the data
+                let compressedData = try self.compress(data: jsonData)
+                
+                // Save to temporary file with compact timestamp
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+                let timestamp = dateFormatter.string(from: Date())
+                let fileName = "backup_\(timestamp).habitual"
                 let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-                try jsonData.write(to: tempURL)
+                try compressedData.write(to: tempURL)
                 
                 DispatchQueue.main.async {
                     completion(.success(tempURL))
@@ -71,9 +79,18 @@ class BackupManager {
     // MARK: - Restore Methods
     func restoreBackup(from url: URL, completion: @escaping (Result<Int, Error>) -> Void) {
         do {
-            // Read and decode backup data
-            let jsonData = try Data(contentsOf: url)
-            let backupData = try jsonDecoder.decode(BackupData.self, from: jsonData)
+            let fileData = try Data(contentsOf: url)
+            let backupData: BackupData
+            
+            // Check file extension to determine format
+            if url.pathExtension == "habitual" {
+                // Decompress and decode
+                let decompressedData = try decompress(data: fileData)
+                backupData = try jsonDecoder.decode(BackupData.self, from: decompressedData)
+            } else {
+                // Legacy JSON format (if any)
+                backupData = try jsonDecoder.decode(BackupData.self, from: fileData)
+            }
             
             // Validate backup version
             guard backupData.version == 1 else {
@@ -196,14 +213,26 @@ class BackupManager {
         }
     }
     
+    // MARK: - Compression Methods
+    private func compress(data: Data) throws -> Data {
+        return try (data as NSData).compressed(using: .zlib) as Data
+    }
+    
+    private func decompress(data: Data) throws -> Data {
+        return try (data as NSData).decompressed(using: .zlib) as Data
+    }
+    
     // MARK: - Error Types
     enum BackupError: LocalizedError {
         case unsupportedVersion
+        case decompressionFailed
         
         var errorDescription: String? {
             switch self {
             case .unsupportedVersion:
                 return "This backup file is from a newer version of the app and cannot be restored."
+            case .decompressionFailed:
+                return "Failed to decompress the backup file."
             }
         }
     }

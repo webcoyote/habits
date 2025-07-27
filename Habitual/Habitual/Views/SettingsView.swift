@@ -4,6 +4,10 @@ import UIKit
 import WebKit
 import UniformTypeIdentifiers
 
+extension UTType {
+    static let habitual = UTType(exportedAs: "com.habitual.backup")
+}
+
 struct SettingsView: View {
     @ObservedObject private var notificationManager = NotificationPermissionManager.shared
     @ObservedObject private var appSettings = AppSettings.shared
@@ -300,7 +304,7 @@ struct BackupSyncView: View {
         }
         .sheet(isPresented: $showingDocumentPicker) {
             DocumentPicker(
-                documentTypes: [UTType.json],
+                documentTypes: [.habitual, .json],
                 onPick: { url in
                     pendingRestoreURL = url
                     showingRestoreConfirmation = true
