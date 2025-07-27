@@ -24,9 +24,30 @@ struct HabitListView: View {
                                 isCompact: showingCompactView,
                                 onComplete: { completed in
                                     viewModel.updateHabitCompletion(habit, completed: completed)
+                                    // Track habit completion
+                                    AnalyticsManager.shared.track("habit_completed", properties: [
+                                        "habit_id": habit.id.uuidString,
+                                        "habit_name": habit.name,
+                                        "habit_type": habit.type.displayName,
+                                        "completed": completed
+                                    ])
+                                    
+                                    // Track streak milestone if completed
+                                    if completed {
+                                        let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
+                                        UserIdentityManager.shared.trackStreakMilestone(
+                                            streakDays: statistics.currentStreak + 1,
+                                            habitName: habit.name
+                                        )
+                                    }
                                 },
                                 onTap: {
                                     selectedHabit = habit
+                                    // Track habit detail view
+                                    AnalyticsManager.shared.track("habit_viewed", properties: [
+                                        "habit_id": habit.id.uuidString,
+                                        "habit_name": habit.name
+                                    ])
                                 }
                             )
                             .padding(.horizontal)
@@ -42,6 +63,8 @@ struct HabitListView: View {
                         Spacer()
                         AddButton {
                             showingAddHabit = true
+                            // Track add habit button tap
+                            AnalyticsManager.shared.track("add_habit_tapped")
                         }
                         .padding()
                     }
@@ -62,14 +85,12 @@ struct HabitListView: View {
                     }) {
                         Image(systemName: showingCompactView ? "rectangle.grid.1x2" : "square.grid.2x2")
                     }
-                    
+
+                    /*
                     Button(action: {}) {
                         Image(systemName: "star")
                     }
-                    
-                    NavigationLink(destination: SettingsView()) {
-                        Image(systemName: "gear")
-                    }
+                    */
                 }
             }
             .sheet(isPresented: $showingAddHabit) {

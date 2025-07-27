@@ -93,6 +93,16 @@ struct EditHabitView: View {
         updatedHabit.color = CodableColor(color: selectedColor)
         
         viewModel.updateHabit(updatedHabit, context: viewContext)
+        
+        // Track habit update
+        AnalyticsManager.shared.track("habit_updated", properties: [
+            "habit_id": habit.id.uuidString,
+            "habit_name": updatedHabit.name,
+            "name_changed": habit.name != updatedHabit.name,
+            "icon_changed": habit.icon != updatedHabit.icon,
+            "color_changed": habit.color.color != updatedHabit.color.color
+        ])
+        
         presentationMode.wrappedValue.dismiss()
     }
 }

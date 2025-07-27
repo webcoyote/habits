@@ -59,9 +59,9 @@ struct HabitCardView: View {
         case .binary:
             isCompleted.toggle()
             onComplete(isCompleted)
-            // Track habit check/uncheck
+            // Track habit formation
             if isCompleted && !wasCompleted {
-                UsageTracker.shared.incrementHabitsChecked()
+                UsageTracker.shared.incrementHabitsFormed()
             }
         case .numeric:
             let previousValue = currentValue
@@ -69,7 +69,7 @@ struct HabitCardView: View {
             onComplete(currentValue > 0)
             // Track when habit goes from incomplete to complete
             if currentValue > 0 && previousValue == 0 {
-                UsageTracker.shared.incrementHabitsChecked()
+                UsageTracker.shared.incrementHabitsFormed()
             }
         case .mood:
             let hadValue = currentValue > 0
@@ -77,7 +77,7 @@ struct HabitCardView: View {
             onComplete(true)
             // Track when mood is first set for the day
             if !hadValue && currentValue > 0 {
-                UsageTracker.shared.incrementHabitsChecked()
+                UsageTracker.shared.incrementHabitsFormed()
             }
         }
     }

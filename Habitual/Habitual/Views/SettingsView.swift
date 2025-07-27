@@ -36,6 +36,7 @@ struct SettingsView: View {
                         icon: "paintbrush"
                     ) {
                         activeSheet = .appearance
+                        AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "appearance"])
                     }
                 }
                 
@@ -62,6 +63,7 @@ struct SettingsView: View {
                 Section("Data") {
                     Button("Export Data") {
                         showingExport = true
+                        AnalyticsManager.shared.track("export_data_tapped")
                     }
                     
                     NavigationLink("Backup & Sync") {
@@ -135,23 +137,23 @@ struct SettingsView: View {
                     }
                     
                     if let stats = stats {
-                        SettingsRowWithIcon(
+                        SettingsInfoRow(
                             title: "App Launches",
                             subtitle: "\(stats.launches) times",
                             icon: "chart.bar.fill"
-                        ) {}
+                        )
                         
-                        SettingsRowWithIcon(
+                        SettingsInfoRow(
                             title: "Habits Created",
                             subtitle: "\(stats.habitsCreated) habits",
                             icon: "plus.circle.fill"
-                        ) {}
+                        )
                         
-                        SettingsRowWithIcon(
-                            title: "Habits Checked",
-                            subtitle: "\(stats.habitsChecked) times",
+                        SettingsInfoRow(
+                            title: "Habits Formed",
+                            subtitle: "\(stats.habitsFormed) times",
                             icon: "checkmark.circle.fill"
-                        ) {}
+                        )
                     }
                 }
             }
@@ -230,6 +232,7 @@ struct SettingsView: View {
     }
     
     private func requestAppReview() {
+        AnalyticsManager.shared.track("rate_app_tapped")
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             SKStoreReviewController.requestReview(in: windowScene)
         }
@@ -396,6 +399,31 @@ struct ExportButton: View {
             .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
         }
         .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct SettingsInfoRow: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(.accentColor)
+                .frame(width: 20)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .foregroundColor(.primary)
+                
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+        }
     }
 }
 

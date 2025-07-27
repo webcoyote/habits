@@ -76,13 +76,13 @@ class DatabaseManager {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 app_launches INTEGER DEFAULT 0,
                 habits_created INTEGER DEFAULT 0,
-                habits_checked INTEGER DEFAULT 0,
+                habits_formed INTEGER DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
                 last_review_request DATETIME DEFAULT NULL,
-                habits_checked_at_last_review INTEGER DEFAULT 0
+                habits_formed_at_last_review INTEGER DEFAULT 0
             );
             
-            INSERT OR IGNORE INTO usage_stats (id, app_launches, habits_created, habits_checked)
+            INSERT OR IGNORE INTO usage_stats (id, app_launches, habits_created, habits_formed)
             VALUES (1, 0, 0, 0);
         """
         
@@ -157,23 +157,23 @@ class DatabaseManager {
         }
     }
     
-    func incrementHabitsChecked(count: Int = 1) {
+    func incrementHabitsFormed(count: Int = 1) {
         let updateSQL = """
             UPDATE usage_stats 
-            SET habits_checked = habits_checked + \(count), 
+            SET habits_formed = habits_formed + \(count), 
                 last_updated = CURRENT_TIMESTAMP 
             WHERE id = 1
         """
         
         execute(updateSQL) { success in
             if !success {
-                print("Error updating habits checked")
+                print("Error updating habits formed")
             }
         }
     }
     
-    func getStats() -> (launches: Int, habitsCreated: Int, habitsChecked: Int)? {
-        let querySQL = "SELECT app_launches, habits_created, habits_checked FROM usage_stats WHERE id = 1"
+    func getStats() -> (launches: Int, habitsCreated: Int, habitsFormed: Int)? {
+        let querySQL = "SELECT app_launches, habits_created, habits_formed FROM usage_stats WHERE id = 1"
         
         guard let statement = prepare(querySQL) else { return nil }
         defer { finalize(statement) }
@@ -181,16 +181,16 @@ class DatabaseManager {
         if step(statement) == SQLITE_ROW {
             let launches = columnInt(statement, 0)
             let habitsCreated = columnInt(statement, 1)
-            let habitsChecked = columnInt(statement, 2)
-            return (launches, habitsCreated, habitsChecked)
+            let habitsFormed = columnInt(statement, 2)
+            return (launches, habitsCreated, habitsFormed)
         }
         
         return nil
     }
     
-    func getReviewData() -> (lastRequest: String?, habitsCheckedAtLastReview: Int)? {
+    func getReviewData() -> (lastRequest: String?, habitsFormedAtLastReview: Int)? {
         let querySQL = """
-            SELECT last_review_request, habits_checked_at_last_review 
+            SELECT last_review_request, habits_formed_at_last_review 
             FROM usage_stats WHERE id = 1
         """
         
@@ -199,8 +199,8 @@ class DatabaseManager {
         
         if step(statement) == SQLITE_ROW {
             let lastRequest = columnText(statement, 0)
-            let habitsCheckedAtLastReview = columnInt(statement, 1)
-            return (lastRequest, habitsCheckedAtLastReview)
+            let habitsFormedAtLastReview = columnInt(statement, 1)
+            return (lastRequest, habitsFormedAtLastReview)
         }
         
         return nil
@@ -212,7 +212,7 @@ class DatabaseManager {
         let updateSQL = """
             UPDATE usage_stats 
             SET last_review_request = CURRENT_TIMESTAMP,
-                habits_checked_at_last_review = \(stats.habitsChecked)
+                habits_formed_at_last_review = \(stats.habitsFormed)
             WHERE id = 1
         """
         

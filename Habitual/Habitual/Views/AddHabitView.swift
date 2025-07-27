@@ -114,6 +114,30 @@ struct AddHabitView: View {
         // Track habit creation
         UsageTracker.shared.incrementHabitsCreated()
         
+        // Track analytics event for habit creation
+        var properties: [String: Any] = [
+            "habit_id": newHabit.id.uuidString,
+            "habit_name": newHabit.name,
+            "habit_type": habitTypeOptions[selectedType],
+            "icon": selectedIcon,
+            "has_target": selectedType == 1
+        ]
+        
+        if selectedType == 1 {
+            properties["target_value"] = numericTarget
+        }
+        
+        if selectedType == 2 {
+            properties["mood_scale"] = moodScale
+        }
+        
+        AnalyticsManager.shared.track("habit_created", properties: properties)
+        
+        // Track habit creation milestone
+        if let stats = UsageTracker.shared.getStats() {
+            UserIdentityManager.shared.trackHabitMilestone(habitCount: stats.habitsCreated)
+        }
+        
         presentationMode.wrappedValue.dismiss()
     }
 }

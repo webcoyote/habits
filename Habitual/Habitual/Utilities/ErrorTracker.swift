@@ -11,11 +11,9 @@ import RollbarNotifier
 class ErrorTracker {
     static let shared = ErrorTracker()
     
-    private init() {
-        setupExceptionHandlers()
-    }
+    private init() {}
     
-    private func setupExceptionHandlers() {
+    func setupExceptionHandlers() {
         NSSetUncaughtExceptionHandler { exception in
             ErrorTracker.shared.logException(exception)
 

@@ -24,6 +24,17 @@ struct ContentView: View {
                 .tag(2)
         }
         .accentColor(.blue)
+        .onChange(of: selectedTab) { newValue in
+            // Track tab changes
+            let tabNames = ["habits", "statistics", "settings"]
+            if newValue < tabNames.count {
+                AnalyticsManager.shared.trackScreenView(screenName: tabNames[newValue])
+            }
+        }
+        .onAppear {
+            // Track initial screen view
+            AnalyticsManager.shared.trackScreenView(screenName: "habits")
+        }
     }
 }
 

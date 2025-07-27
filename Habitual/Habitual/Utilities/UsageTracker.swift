@@ -14,11 +14,11 @@ class UsageTracker {
         database.incrementHabitsCreated()
     }
     
-    func incrementHabitsChecked(count: Int = 1) {
-        database.incrementHabitsChecked(count: count)
+    func incrementHabitsFormed(count: Int = 1) {
+        database.incrementHabitsFormed(count: count)
     }
     
-    func getStats() -> (launches: Int, habitsCreated: Int, habitsChecked: Int)? {
+    func getStats() -> (launches: Int, habitsCreated: Int, habitsFormed: Int)? {
         return database.getStats()
     }
     
@@ -30,9 +30,9 @@ class UsageTracker {
         
         guard let reviewData = database.getReviewData() else { return false }
         
-        // Criteria 2: User has checked habits at least 30 times since last request
-        let habitsCheckedSinceLastReview = stats.habitsChecked - reviewData.habitsCheckedAtLastReview
-        guard habitsCheckedSinceLastReview >= 30 else { return false }
+        // Criteria 2: User has formed habits at least 30 times since last request
+        let habitsFormedSinceLastReview = stats.habitsFormed - reviewData.habitsFormedAtLastReview
+        guard habitsFormedSinceLastReview >= 30 else { return false }
         
         // Criteria 3: At least a week since last request (or never asked)
         if let lastRequestString = reviewData.lastRequest {

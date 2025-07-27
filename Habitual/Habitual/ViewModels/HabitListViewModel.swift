@@ -46,6 +46,15 @@ class HabitListViewModel: ObservableObject {
     }
     
     func deleteHabit(_ habit: Habit, context: NSManagedObjectContext) {
+        // Track habit deletion
+        let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
+        AnalyticsManager.shared.track("habit_deleted", properties: [
+            "habit_id": habit.id.uuidString,
+            "habit_name": habit.name,
+            "days_active": habit.history.count,
+            "current_streak": statistics.currentStreak
+        ])
+        
         habits.removeAll { $0.id == habit.id }
         PersistenceController.shared.deleteHabit(habit, context: context)
     }
