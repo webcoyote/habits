@@ -17,9 +17,16 @@ class PersistenceController {
             Habit(name: "Sleep 8 Hours", icon: "bed.double.fill", color: .indigo, type: .binary)
         ]
         
-        for habit in sampleHabits {
+        for (index, habit) in sampleHabits.enumerated() {
             result.saveHabit(habit, context: viewContext)
+            // Set initial order for preview data
+            let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", habit.id as CVarArg)
+            if let entity = try? viewContext.fetch(request).first {
+                entity.order = Int32(index)
+            }
         }
+        try? viewContext.save()
         
         return result
     }()
@@ -63,6 +70,11 @@ class PersistenceController {
         habitEntity.icon = habit.icon
         habitEntity.createdAt = Date()
         habitEntity.modifiedAt = Date()
+        
+        // Set order to be at the end
+        let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+        let count = (try? context.count(for: request)) ?? 0
+        habitEntity.order = Int32(count)
         
         let encoder = JSONEncoder()
         habitEntity.colorData = try? encoder.encode(habit.color)

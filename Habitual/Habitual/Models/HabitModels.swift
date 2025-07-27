@@ -29,11 +29,11 @@ enum HabitType: Codable, Equatable {
     var displayName: String {
         switch self {
         case .binary:
-            return "Yes/No"
+            return "On/Off"
         case .numeric:
             return "Count"
         case .mood:
-            return "Mood"
+            return "Graph"
         }
     }
 }

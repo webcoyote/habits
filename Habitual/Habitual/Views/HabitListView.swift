@@ -7,57 +7,71 @@ struct HabitListView: View {
     @State private var showingAddHabit = false
     @State private var selectedHabit: Habit?
     @State private var showingCompactView = false
+    @State private var isEditMode = false
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \HabitEntity.modifiedAt, ascending: false)],
-        animation: .default)
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \HabitEntity.order, ascending: true),
+            NSSortDescriptor(keyPath: \HabitEntity.modifiedAt, ascending: false)
+        ],
+        animation: .easeInOut(duration: 0.15))
     private var habitEntities: FetchedResults<HabitEntity>
     
     var body: some View {
         NavigationView {
             ZStack {
-                ScrollView {
-                    VStack(spacing: showingCompactView ? 8 : 16) {
-                        ForEach(viewModel.habits) { habit in
-                            HabitCardView(
-                                habit: habit,
-                                isCompact: showingCompactView,
-                                onComplete: { value in
-                                    viewModel.updateHabitValue(habit, value: value)
-                                    // Track habit completion
-                                    let completed = value > 0
-                                    AnalyticsManager.shared.track("habit_completed", properties: [
-                                        "habit_id": habit.id.uuidString,
-                                        "habit_name": habit.name,
-                                        "habit_type": habit.type.displayName,
-                                        "completed": completed,
-                                        "value": value
-                                    ])
-                                    
-                                    // Track streak milestone if completed
-                                    if completed {
-                                        let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
-                                        UserIdentityManager.shared.trackStreakMilestone(
-                                            streakDays: statistics.currentStreak + 1,
-                                            habitName: habit.name
-                                        )
-                                    }
-                                },
-                                onTap: {
-                                    selectedHabit = habit
-                                    // Track habit detail view
-                                    AnalyticsManager.shared.track("habit_viewed", properties: [
-                                        "habit_id": habit.id.uuidString,
-                                        "habit_name": habit.name
-                                    ])
+                List {
+                    ForEach(viewModel.habits, id: \.id) { habit in
+                        HabitCardView(
+                            habit: habit,
+                            isCompact: showingCompactView,
+                            onComplete: { value in
+                                viewModel.updateHabitValue(habit, value: value)
+                                // Track habit completion
+                                let completed = value > 0
+                                AnalyticsManager.shared.track("habit_completed", properties: [
+                                    "habit_id": habit.id.uuidString,
+                                    "habit_name": habit.name,
+                                    "habit_type": habit.type.displayName,
+                                    "completed": completed,
+                                    "value": value
+                                ])
+                                
+                                // Track streak milestone if completed
+                                if completed {
+                                    let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
+                                    UserIdentityManager.shared.trackStreakMilestone(
+                                        streakDays: statistics.currentStreak + 1,
+                                        habitName: habit.name
+                                    )
                                 }
-                            )
-                            .padding(.horizontal)
+                            },
+                            onTap: {
+                                selectedHabit = habit
+                                // Track habit detail view
+                                AnalyticsManager.shared.track("habit_viewed", properties: [
+                                    "habit_id": habit.id.uuidString,
+                                    "habit_name": habit.name
+                                ])
+                            }
+                        )
+                        .listRowInsets(EdgeInsets(top: showingCompactView ? 4 : 8, leading: 16, bottom: showingCompactView ? 4 : 8, trailing: 16))
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                    }
+                    .onMove { indices, newOffset in
+                        withAnimation(.none) {
+                            viewModel.moveHabits(from: indices, to: newOffset, context: viewContext)
                         }
                     }
-                    .padding(.vertical)
-                    .padding(.bottom, 80)
+                    
+                    // Spacer to account for FAB
+                    Color.clear
+                        .frame(height: 80)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
                 }
+                .listStyle(PlainListStyle())
                 
                 VStack {
                     Spacer()
@@ -75,8 +89,12 @@ struct HabitListView: View {
             .navigationTitle("Habitual")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {}) {
-                        Image(systemName: "line.horizontal.3")
+                    Button(action: {
+                        withAnimation {
+                            isEditMode.toggle()
+                        }
+                    }) {
+                        Text(isEditMode ? "Done" : "Edit")
                     }
                 }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -87,14 +105,9 @@ struct HabitListView: View {
                     }) {
                         Image(systemName: showingCompactView ? "rectangle.grid.1x2" : "square.grid.2x2")
                     }
-
-                    /*
-                    Button(action: {}) {
-                        Image(systemName: "star")
-                    }
-                    */
                 }
             }
+            .environment(\.editMode, .constant(isEditMode ? EditMode.active : EditMode.inactive))
             .sheet(isPresented: $showingAddHabit) {
                 AddHabitView(viewModel: viewModel)
             }

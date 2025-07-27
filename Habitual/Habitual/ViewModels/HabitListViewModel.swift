@@ -5,8 +5,60 @@ import CoreData
 class HabitListViewModel: ObservableObject {
     @Published var habits: [Habit] = []
     
+    func moveHabits(from source: IndexSet, to destination: Int, context: NSManagedObjectContext) {
+        // Create a copy of habits array
+        var reorderedHabits = habits
+        
+        // Perform the move
+        reorderedHabits.move(fromOffsets: source, toOffset: destination)
+        
+        // Update the published property immediately to prevent UI glitch
+        habits = reorderedHabits
+        
+        // Update Core Data with batch operation
+        context.perform {
+            do {
+                // Fetch all habit entities
+                let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+                let entities = try context.fetch(request)
+                
+                // Create a dictionary for quick lookup
+                let entityDict: [UUID: HabitEntity] = Dictionary(uniqueKeysWithValues: entities.compactMap { entity in
+                    guard let id = entity.id else { return nil }
+                    return (id, entity)
+                })
+                
+                // Update order for all habits in one batch
+                for (index, habit) in reorderedHabits.enumerated() {
+                    if let entity = entityDict[habit.id] {
+                        entity.order = Int32(index)
+                    }
+                }
+                
+                // Single save operation
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                print("Error updating habit order: \(error)")
+            }
+        }
+    }
+    
     func loadHabits(from entities: FetchedResults<HabitEntity>, context: NSManagedObjectContext) {
         let decoder = JSONDecoder()
+        
+        // Check if any habits need order assignment
+        var needsOrderUpdate = false
+        for (index, entity) in entities.enumerated() {
+            if entity.order == 0 && index > 0 {
+                entity.order = Int32(index)
+                needsOrderUpdate = true
+            }
+        }
+        if needsOrderUpdate {
+            try? context.save()
+        }
         
         habits = entities.compactMap { entity in
             guard let id = entity.id,
