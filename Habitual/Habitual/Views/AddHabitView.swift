@@ -81,7 +81,7 @@ struct AddHabitView: View {
                         switch selectedType {
                         case 0:
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Perfect for habits you either complete or don't:")
+                                Text("Perfect for habits you want to complete every day:")
                                     .font(.subheadline)
                                     .foregroundColor(.primary)
                                 Text("Exercise, Meditate, Read, Journal, Stretch")
@@ -90,9 +90,6 @@ struct AddHabitView: View {
                                 
                                 // Visual example
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Preview:")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
                                     ExampleBinaryProgressView(color: selectedColor)
                                         .frame(height: 40)
                                 }
@@ -108,9 +105,6 @@ struct AddHabitView: View {
                                 
                                 // Visual example
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Preview (Target: \(numericTarget)):")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
                                     ExampleNumericProgressView(color: selectedColor, target: numericTarget)
                                         .frame(height: 40)
                                 }
@@ -126,9 +120,6 @@ struct AddHabitView: View {
                                 
                                 // Visual example
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Preview (Scale: 1-\(graphScale)):")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
                                     ExampleGraphProgressView(color: selectedColor, scale: graphScale)
                                         .frame(height: 40)
                                 }
@@ -288,7 +279,7 @@ struct ExampleBinaryProgressView: View {
         HStack(spacing: 3) {
             ForEach(0..<7, id: \.self) { day in
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(day < 5 ? color : Color.gray.opacity(0.2))
+                    .fill(day != 2 ? color : Color.gray.opacity(0.2))
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
                             .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
@@ -307,17 +298,14 @@ struct ExampleNumericProgressView: View {
         HStack(spacing: 3) {
             ForEach(0..<7, id: \.self) { day in
                 let progress = Double([0.5, 0.8, 1.0, 0.3, 0.9, 0, 0][day])
-                VStack(spacing: 0) {
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(progress > 0 ? color.opacity(0.3 + progress * 0.7) : Color.gray.opacity(0.2))
-                        .frame(height: 40 * progress)
-                }
-                .frame(width: 25, height: 40)
-                .background(
-                    RoundedRectangle(cornerRadius: 2)
-                        .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
-                )
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(progress > 0 ? color.opacity(0.3 + progress * 0.7) : Color.gray.opacity(0.2))
+                    .frame(width: 25, height: 40 * progress)
+                    .frame(width: 25, height: 40, alignment: .bottom)
+                    .background(
+                        RoundedRectangle(cornerRadius: 2)
+                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                    )
             }
         }
     }

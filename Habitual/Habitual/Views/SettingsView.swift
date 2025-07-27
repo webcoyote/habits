@@ -24,7 +24,7 @@ struct SettingsView: View {
     }
     
     enum AlertType: Identifiable {
-        case notification, appInfo, language, help, support, privacy, terms
+        case notification, appInfo, language, support, privacy, terms
         
         var id: Self { self }
     }
@@ -98,14 +98,6 @@ struct SettingsView: View {
                 }
 
                 Section("Support") {
-                    SettingsRowWithIcon(
-                        title: "Help & FAQ",
-                        subtitle: nil,
-                        icon: "questionmark.circle"
-                    ) {
-                        activeAlert = .help
-                    }
-                    
                     SettingsRowWithIcon(
                         title: "Contact Support",
                         subtitle: nil,
@@ -204,12 +196,6 @@ struct SettingsView: View {
                     Alert(
                         title: Text("Language"),
                         message: Text("Language selection coming soon"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                case .help:
-                    Alert(
-                        title: Text("Help & FAQ"),
-                        message: Text("Help documentation coming soon"),
                         dismissButton: .default(Text("OK"))
                     )
                 case .support:
@@ -425,42 +411,6 @@ struct DocumentPicker: UIViewControllerRepresentable {
                 print("Error copying file: \(error)")
             }
         }
-    }
-}
-
-struct HelpView: View {
-    var body: some View {
-        List {
-            Section("Getting Started") {
-                HelpItem(title: "Creating a Habit", description: "Tap the + button to create a new habit. Choose a name, icon, color, and tracking type.")
-                HelpItem(title: "Tracking Progress", description: "Tap the circle button on each habit card to mark it as complete for today.")
-                HelpItem(title: "Viewing Details", description: "Tap on any habit card to see detailed statistics and history.")
-            }
-            
-            Section("Habit Types") {
-                HelpItem(title: "Toggle Habits", description: "Simple habits that you either complete (or don't). Perfect for daily activities.")
-                HelpItem(title: "Numeric Habits", description: "Track quantities like glasses of water or pages read. Set a daily target to reach.")
-                HelpItem(title: "Graph Tracking", description: "Monitor your daily graph or energy levels on a scale.")
-            }
-        }
-        .navigationTitle("Help & FAQ")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct HelpItem: View {
-    let title: String
-    let description: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.headline)
-            Text(description)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
     }
 }
 
