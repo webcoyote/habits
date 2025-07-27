@@ -137,7 +137,7 @@ struct HabitStatistics {
                 return value >= target
             }
             return value > 0
-        case .mood(let value):
+        case .graph(let value):
             return value > 0
         }
     }

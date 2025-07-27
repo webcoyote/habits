@@ -126,8 +126,8 @@ class HabitListViewModel: ObservableObject {
             newRecord = DayRecord(date: today, value: .binary(completed: value > 0))
         case .numeric:
             newRecord = DayRecord(date: today, value: .numeric(value: value))
-        case .mood:
-            newRecord = DayRecord(date: today, value: .mood(value: value))
+        case .graph:
+            newRecord = DayRecord(date: today, value: .graph(value: value))
         }
         
         updatedHabit.history.append(newRecord)

@@ -77,11 +77,11 @@ struct HabitCardView: View {
             if currentValue > 0 && previousValue == 0 {
                 UsageTracker.shared.incrementHabitsFormedIfNotCountedToday(habitId: habit.id.uuidString)
             }
-        case .mood:
+        case .graph:
             let hadValue = currentValue > 0
             currentValue = value
             onComplete(value)
-            // Track when mood is first set for the day
+            // Track when graph is first set for the day
             if !hadValue && currentValue > 0 {
                 UsageTracker.shared.incrementHabitsFormedIfNotCountedToday(habitId: habit.id.uuidString)
             }
@@ -101,7 +101,7 @@ struct HabitCardView: View {
         case .numeric(let value):
             currentValue = value
             isCompleted = value > 0
-        case .mood(let value):
+        case .graph(let value):
             currentValue = value
             isCompleted = true
         }
@@ -152,7 +152,7 @@ struct CompleteButton: View {
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
             }
-        case .mood(let scale):
+        case .graph(let scale):
             HStack(spacing: 4) {
                 Text("\(currentValue)/\(scale)")
                     .font(isCompact ? .caption2 : .caption)
@@ -193,7 +193,7 @@ struct ProgressView: View {
         case .numeric:
             ProgressChartView(habit: habit, type: .bar)
                 .frame(height: 60)
-        case .mood:
+        case .graph:
             ProgressChartView(habit: habit, type: .line)
                 .frame(height: 60)
         }
@@ -230,7 +230,7 @@ struct CompactDayIndicator: View {
             return completed ? 1 : 0
         case .numeric(let value):
             return value
-        case .mood(let value):
+        case .graph(let value):
             return value
         }
     }
@@ -243,7 +243,7 @@ struct CompactDayIndicator: View {
             return value > 0 ? 1.0 : 0.0
         case .numeric(let target):
             return min(1.0, Double(value) / Double(target))
-        case .mood(let scale):
+        case .graph(let scale):
             return Double(value) / Double(scale)
         }
     }

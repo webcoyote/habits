@@ -53,9 +53,9 @@ struct EditHabitView: View {
                             Text("\(target)")
                                 .foregroundColor(.secondary)
                         }
-                    case .mood(let scale):
+                    case .graph(let scale):
                         HStack {
-                            Text("Mood Scale")
+                            Text("Graph Scale")
                             Spacer()
                             Text("1-\(scale)")
                                 .foregroundColor(.secondary)

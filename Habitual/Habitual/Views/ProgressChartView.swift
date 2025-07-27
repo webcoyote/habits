@@ -101,7 +101,7 @@ struct ModernChartView: View {
             return completed ? 1 : 0
         case .numeric(let value):
             return Double(value)
-        case .mood(let value):
+        case .graph(let value):
             return Double(value)
         }
     }
@@ -113,7 +113,7 @@ struct ModernChartView: View {
         case .numeric(let target):
             let maxValue = getChartData().map { $0.value }.max() ?? Double(target)
             return 0...max(Double(target), maxValue * 1.1)
-        case .mood(let scale):
+        case .graph(let scale):
             return 0...Double(scale)
         }
     }
@@ -178,7 +178,7 @@ struct LegacyChartView: View {
             return completed ? 1 : 0
         case .numeric(let value):
             return Double(value)
-        case .mood(let value):
+        case .graph(let value):
             return Double(value)
         }
     }

@@ -11,7 +11,7 @@ class PersistenceController {
         let sampleHabits = [
             Habit(name: "Morning Run", icon: "figure.run", color: .orange, type: .binary),
             Habit(name: "Drink Water", icon: "drop.fill", color: .blue, type: .numeric(target: 8)),
-            Habit(name: "Daily Mood", icon: "face.smiling", color: .purple, type: .mood(scale: 10)),
+            Habit(name: "Daily Graph", icon: "face.smiling", color: .purple, type: .graph(scale: 10)),
             Habit(name: "Read", icon: "book.fill", color: .orange.opacity(0.8), type: .numeric(target: 30)),
             Habit(name: "Meditate", icon: "brain.head.profile", color: .green, type: .binary),
             Habit(name: "Sleep 8 Hours", icon: "bed.double.fill", color: .indigo, type: .binary)

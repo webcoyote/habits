@@ -167,8 +167,8 @@ struct ProgressSection: View {
                 ProgressGridView(habit: habit, daysToShow: daysToShow)
                     .frame(height: min(200, CGFloat(daysToShow / 30) * 40))
                     .padding(.horizontal)
-            case .numeric, .mood:
-                ProgressChartView(habit: habit, type: habit.type.isMood ? .line : .bar, daysToShow: min(daysToShow, 30))
+            case .numeric, .graph:
+                ProgressChartView(habit: habit, type: habit.type.isGraph ? .line : .bar, daysToShow: min(daysToShow, 30))
                     .frame(height: 200)
                     .padding(.horizontal)
             }
@@ -232,7 +232,7 @@ struct RecordValueView: View {
             } else {
                 Text("\(val)")
             }
-        case .mood(let val):
+        case .graph(let val):
             HStack(spacing: 2) {
                 Image(systemName: "face.smiling")
                 Text("\(val)")
@@ -243,8 +243,8 @@ struct RecordValueView: View {
 }
 
 extension HabitType {
-    var isMood: Bool {
-        if case .mood = self { return true }
+    var isGraph: Bool {
+        if case .graph = self { return true }
         return false
     }
 }

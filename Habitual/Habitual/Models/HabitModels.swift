@@ -24,7 +24,7 @@ struct Habit: Identifiable, Codable, Equatable {
 enum HabitType: Codable, Equatable {
     case binary
     case numeric(target: Int)
-    case mood(scale: Int)
+    case graph(scale: Int)
     
     var displayName: String {
         switch self {
@@ -32,7 +32,7 @@ enum HabitType: Codable, Equatable {
             return "On/Off"
         case .numeric:
             return "Count"
-        case .mood:
+        case .graph:
             return "Graph"
         }
     }
@@ -53,7 +53,7 @@ struct DayRecord: Codable, Equatable {
 enum HabitValue: Codable, Equatable {
     case binary(completed: Bool)
     case numeric(value: Int)
-    case mood(value: Int)
+    case graph(value: Int)
 }
 
 struct Goal: Codable, Equatable {

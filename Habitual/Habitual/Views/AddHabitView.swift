@@ -10,11 +10,11 @@ struct AddHabitView: View {
     @State private var selectedColor = Color.purple
     @State private var selectedType = 0
     @State private var numericTarget = 4
-    @State private var moodScale = 5
+    @State private var graphScale = 5
     @State private var showingIconPicker = false
     @FocusState private var isNameFieldFocused: Bool
     
-    let habitTypeOptions = ["Yes/No", "Count", "Mood"]
+    let habitTypeOptions = ["Toggle", "Count", "Graph"]
     
     let defaultColors: [Color] = [
         .red, .orange, .yellow, .green, .mint, .teal, .cyan, 
@@ -61,7 +61,7 @@ struct AddHabitView: View {
                     case 1:
                         Stepper("Daily Target: \(numericTarget)", value: $numericTarget, in: 1...100)
                     case 2:
-                        Picker("Mood Scale", selection: $moodScale) {
+                        Picker("Graph Scale", selection: $graphScale) {
                             Text("1-5").tag(5)
                             Text("1-7").tag(7)
                             Text("1-10").tag(10)
@@ -83,7 +83,7 @@ struct AddHabitView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     case 2:
-                        Text("Monitor your daily mood or energy levels")
+                        Text("Monitor your daily graph or energy levels")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     default:
@@ -125,7 +125,7 @@ struct AddHabitView: View {
         case 1:
             habitType = .numeric(target: numericTarget)
         case 2:
-            habitType = .mood(scale: moodScale)
+            habitType = .graph(scale: graphScale)
         default:
             habitType = .binary
         }
@@ -156,7 +156,7 @@ struct AddHabitView: View {
         }
         
         if selectedType == 2 {
-            properties["mood_scale"] = moodScale
+            properties["graph_scale"] = graphScale
         }
         
         AnalyticsManager.shared.track("habit_created", properties: properties)

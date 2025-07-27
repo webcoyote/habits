@@ -438,9 +438,9 @@ struct HelpView: View {
             }
             
             Section("Habit Types") {
-                HelpItem(title: "Yes/No Habits", description: "Simple habits that you either complete or don't. Perfect for daily activities.")
+                HelpItem(title: "Toggle Habits", description: "Simple habits that you either complete (or don't). Perfect for daily activities.")
                 HelpItem(title: "Numeric Habits", description: "Track quantities like glasses of water or pages read. Set a daily target to reach.")
-                HelpItem(title: "Mood Tracking", description: "Monitor your daily mood or energy levels on a scale.")
+                HelpItem(title: "Graph Tracking", description: "Monitor your daily graph or energy levels on a scale.")
             }
         }
         .navigationTitle("Help & FAQ")
