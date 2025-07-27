@@ -68,9 +68,11 @@ struct ModernChartView: View {
             }
         }
         .chartYAxis {
-            AxisMarks { _ in
+            AxisMarks(preset: .aligned, position: .leading, values: .automatic(desiredCount: 3)) { value in
                 AxisGridLine()
                 AxisValueLabel()
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
     }
