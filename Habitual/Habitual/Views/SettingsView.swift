@@ -13,7 +13,6 @@ struct SettingsView: View {
     @ObservedObject private var appSettings = AppSettings.shared
     @State private var activeSheet: SheetType?
     @State private var activeAlert: AlertType?
-    @State private var showingExport = false
     @State private var showingSurvey = false
     
     enum SheetType: Identifiable {
@@ -66,11 +65,6 @@ struct SettingsView: View {
                 }
                 
                 Section("Data") {
-                    Button("Export Data") {
-                        showingExport = true
-                        AnalyticsManager.shared.track("export_data_tapped")
-                    }
-                    
                     NavigationLink("Backup") {
                         BackupSyncView()
                     }
@@ -170,9 +164,6 @@ struct SettingsView: View {
                 case .survey:
                     SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
                 }
-            }
-            .sheet(isPresented: $showingExport) {
-                ExportView()
             }
             .sheet(isPresented: $showingSurvey) {
                 SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
@@ -462,97 +453,6 @@ struct HelpItem: View {
                 .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
-    }
-}
-
-
-struct ExportView: View {
-    @Environment(\.presentationMode) var presentationMode
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Text("Export Your Data")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text("Choose a format to export your habit data")
-                    .foregroundColor(.secondary)
-                
-                VStack(spacing: 12) {
-                    ExportButton(title: "CSV", subtitle: "Compatible with Excel and Google Sheets", icon: "doc.text") {
-                        exportCSV()
-                    }
-                    
-                    ExportButton(title: "JSON", subtitle: "For developers and advanced users", icon: "doc.badge.gearshape") {
-                        exportJSON()
-                    }
-                    
-                    ExportButton(title: "PDF Report", subtitle: "Visual summary of your progress", icon: "doc.richtext") {
-                        exportPDF()
-                    }
-                }
-                .padding()
-                
-                Spacer()
-            }
-            .padding()
-            .navigationTitle("Export Data")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-        }
-    }
-    
-    private func exportCSV() {
-        
-    }
-    
-    private func exportJSON() {
-        
-    }
-    
-    private func exportPDF() {
-        
-    }
-}
-
-struct ExportButton: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .frame(width: 40)
-                
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .font(.headline)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
