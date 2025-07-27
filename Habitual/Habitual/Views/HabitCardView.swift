@@ -32,6 +32,7 @@ struct HabitCardView: View {
                 ) { newValue in
                     handleCompletion(newValue)
                 }
+                .contentShape(Rectangle())
             }
             
             if !isCompact {
@@ -48,6 +49,7 @@ struct HabitCardView: View {
                 .fill(Color(.systemBackground))
                 .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
+        .contentShape(Rectangle())
         .onTapGesture {
             onTap()
         }
@@ -122,6 +124,8 @@ struct CompleteButton: View {
                     .font(isCompact ? .title3 : .title2)
                     .foregroundColor(color)
             }
+            .buttonStyle(PlainButtonStyle())
+            .contentShape(Circle())
         case .numeric(let target):
             HStack(spacing: 4) {
                 Text("\(currentValue)/\(target)")
@@ -135,13 +139,18 @@ struct CompleteButton: View {
                         .font(isCompact ? .title3 : .title2)
                         .foregroundColor(currentValue > 0 ? color : .gray)
                 }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
                 Button(action: { 
                     let newValue = currentValue < target ? currentValue + 1 : 0
                     onComplete(newValue)
                 }) {
                     Image(systemName: currentValue >= target ? "checkmark.circle.fill" : "plus.circle")
                         .font(isCompact ? .title3 : .title2)
+                        .foregroundColor(color)
                 }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
             }
         case .mood(let scale):
             HStack(spacing: 4) {
@@ -156,6 +165,8 @@ struct CompleteButton: View {
                         .font(isCompact ? .title3 : .title2)
                         .foregroundColor(currentValue > 0 ? color : .gray)
                 }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
                 Button(action: { 
                     let newValue = currentValue < scale ? currentValue + 1 : 0
                     onComplete(newValue)
@@ -164,6 +175,8 @@ struct CompleteButton: View {
                         .font(isCompact ? .title3 : .title2)
                         .foregroundColor(color)
                 }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
             }
         }
     }
