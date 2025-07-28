@@ -187,11 +187,11 @@ struct DaySquare: View {
     
     private var fillColor: Color {
         if isFuture {
-            return Color.gray.opacity(0.1)
+            return Color(.systemGray5)
         } else if isCompleted {
             return color
         } else {
-            return Color.gray.opacity(0.2)
+            return Color(.systemGray4)
         }
     }
 }

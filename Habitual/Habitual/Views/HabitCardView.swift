@@ -250,10 +250,10 @@ struct CompactDayIndicator: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 2)
-            .fill(completionValue == nil ? Color.gray.opacity(0.2) : habit.color.color.opacity(0.2 + fillAmount * 0.8))
+            .fill(completionValue == nil ? Color(.systemGray4) : habit.color.color.opacity(0.2 + fillAmount * 0.8))
             .overlay(
                 RoundedRectangle(cornerRadius: 2)
-                    .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                    .strokeBorder(Color(.systemGray3), lineWidth: 0.5)
             )
     }
 }

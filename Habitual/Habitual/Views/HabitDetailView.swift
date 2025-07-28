@@ -87,7 +87,7 @@ struct HeaderSection: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
-                .background(Capsule().fill(Color.gray.opacity(0.1)))
+                .background(Capsule().fill(Color(.systemGray5)))
         }
         .padding()
     }
@@ -137,7 +137,7 @@ struct StatCard: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemGray5)))
     }
 }
 

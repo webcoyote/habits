@@ -253,7 +253,7 @@ struct IconPickerView: View {
                                         .frame(width: 50, height: 50)
                                         .background(
                                             RoundedRectangle(cornerRadius: 8)
-                                                .fill(selectedIcon == icon ? selectedColor.opacity(0.2) : Color.gray.opacity(0.1))
+                                                .fill(selectedIcon == icon ? selectedColor.opacity(0.2) : Color(.systemGray5))
                                         )
                                         .onTapGesture {
                                             selectedIcon = icon
@@ -288,10 +288,10 @@ struct ExampleBinaryProgressView: View {
         HStack(spacing: 3) {
             ForEach(0..<7, id: \.self) { day in
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(day != 2 ? color : Color.gray.opacity(0.2))
+                    .fill(day != 2 ? color : Color(.systemGray4))
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
-                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                            .strokeBorder(Color(.systemGray3), lineWidth: 0.5)
                     )
                     .frame(width: 25, height: 25)
             }
@@ -308,12 +308,12 @@ struct ExampleNumericProgressView: View {
             ForEach(0..<7, id: \.self) { day in
                 let progress = Double([0.5, 0.8, 1.0, 0.3, 0.9, 0, 0][day])
                 RoundedRectangle(cornerRadius: 2)
-                    .fill(progress > 0 ? color.opacity(0.3 + progress * 0.7) : Color.gray.opacity(0.2))
+                    .fill(progress > 0 ? color.opacity(0.3 + progress * 0.7) : Color(.systemGray4))
                     .frame(width: 25, height: 40 * progress)
                     .frame(width: 25, height: 40, alignment: .bottom)
                     .background(
                         RoundedRectangle(cornerRadius: 2)
-                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 0.5)
+                            .strokeBorder(Color(.systemGray3), lineWidth: 0.5)
                     )
             }
         }
@@ -341,7 +341,7 @@ struct ExampleGraphProgressView: View {
                         path.addLine(to: CGPoint(x: width, y: y))
                     }
                 }
-                .stroke(Color.gray.opacity(0.2), lineWidth: 0.5)
+                .stroke(Color(.systemGray4), lineWidth: 0.5)
                 
                 // Line graph
                 Path { path in

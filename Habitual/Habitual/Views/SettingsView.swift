@@ -29,7 +29,7 @@ struct SettingsSection<Content: View>: View {
             VStack(spacing: 0) {
                 content
             }
-            .background(Color.white.opacity(0.8))
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(10)
             .padding(.horizontal)
         }
@@ -66,7 +66,7 @@ struct SettingsView: View {
             ZStack {
                 // Gradient background for entire page
                 appSettings.backgroundGradientWithOpacity
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .top)
 
                 ScrollView {
                     VStack(spacing: 20) {

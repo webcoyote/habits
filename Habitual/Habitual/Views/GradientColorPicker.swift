@@ -52,7 +52,7 @@ struct GradientColorPicker: View {
                         
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
+                                .fill(Color(.systemBackground))
                             
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(appSettings.backgroundGradient.opacity(appSettings.gradientOpacity))
@@ -96,7 +96,7 @@ struct GradientColorPicker: View {
                                 .padding()
                             }
                         }
-                        .background(Color.white.opacity(0.8))
+                        .background(Color(.secondarySystemGroupedBackground))
                         .cornerRadius(10)
                         .padding(.horizontal)
                     }

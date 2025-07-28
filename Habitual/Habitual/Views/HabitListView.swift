@@ -23,7 +23,7 @@ struct HabitListView: View {
             ZStack {
                 // Gradient background for entire page
                 appSettings.backgroundGradientWithOpacity
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .top)
                 
                 List {
                     ForEach(viewModel.habits, id: \.id) { habit in
@@ -77,11 +77,6 @@ struct HabitListView: View {
                         .listRowBackground(Color.clear)
                 }
                 .listStyle(PlainListStyle())
-                .background(Color.clear)
-                .onAppear {
-                    // Make List background transparent for iOS 15
-                    UITableView.appearance().backgroundColor = .clear
-                }
                 
                 VStack {
                     Spacer()
