@@ -11,8 +11,22 @@ struct StatisticsView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
+            ZStack {
+                // Gradient background for entire page
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.blue,
+                        Color.purple,
+                        Color.pink
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .opacity(0.4)
+                .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 20) {
                     Picker("Time Range", selection: $selectedTimeRange) {
                         ForEach(0..<timeRanges.count, id: \.self) { index in
                             Text(timeRanges[index]).tag(index)
@@ -41,6 +55,7 @@ struct StatisticsView: View {
                 .padding(.vertical)
             }
             .navigationTitle("Statistics")
+            }
         }
     }
     

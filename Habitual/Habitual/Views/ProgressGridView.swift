@@ -80,7 +80,6 @@ struct ProgressGridView: View {
     
     private func arrangeInColumnOrder(dates: [Date], rows: Int, columns: Int) -> [Date] {
         var result: [Date] = []
-        let totalCells = rows * columns
         
         // Create a 2D array to hold dates in their final positions
         var grid: [[Date?]] = Array(repeating: Array(repeating: nil, count: columns), count: rows)
