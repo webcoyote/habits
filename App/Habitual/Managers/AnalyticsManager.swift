@@ -197,7 +197,7 @@ class AnalyticsManager {
     ) {
         providers.removeAll()
         
-        let isDebug = isDebugEnvironment()
+        let isDebug = Configuration.isDebugEnvironment()
         
         if let postHogKey = postHogApiKey {
             let host = postHogHost ?? "https://app.posthog.com"
@@ -217,8 +217,8 @@ class AnalyticsManager {
     }
     
     private func setupCommonProperties() {
-        let isDebug = isDebugEnvironment()
-        let isSimulator = isRunningOnSimulator()
+        let isDebug = Configuration.isDebugEnvironment()
+        let isSimulator = Configuration.isRunningOnSimulator()
         
         commonProperties = [
             "app_version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown",
@@ -228,26 +228,9 @@ class AnalyticsManager {
             "device_type": UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone",
             "is_debug": isDebug,
             "is_simulator": isSimulator,
-            "environment": isDebug ? "development" : "production",
+            "environment": Configuration.getEnvironment(),
             "user_type": getUserType(isDebug: isDebug, isSimulator: isSimulator)
         ]
-    }
-    
-    // MARK: - Environment Detection
-    private func isDebugEnvironment() -> Bool {
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
-    }
-    
-    private func isRunningOnSimulator() -> Bool {
-        #if targetEnvironment(simulator)
-        return true
-        #else
-        return false
-        #endif
     }
     
     private func getUserType(isDebug: Bool, isSimulator: Bool) -> String {
@@ -278,13 +261,13 @@ class AnalyticsManager {
     // MARK: - User Management
     func identify(userId: String, properties: [String: Any]? = nil) {
         // Prefix debug user IDs to separate them from production users
-        let finalUserId = isDebugEnvironment() ? "debug_\(userId)" : userId
+        let finalUserId = Configuration.isDebugEnvironment() ? "debug_\(userId)" : userId
         self.userId = finalUserId
         
         var finalProperties = properties ?? [:]
         
         // Add debug context to user properties
-        if isDebugEnvironment() {
+        if Configuration.isDebugEnvironment() {
             finalProperties["is_debug_user"] = true
             finalProperties["original_user_id"] = userId
         }

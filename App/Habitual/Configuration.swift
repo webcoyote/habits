@@ -1,16 +1,12 @@
 import Foundation
 
-enum Configuration {
+class Configuration {
     enum Analytics {
         static let postHogApiKey: String? = "phc_vTNwWX2t1ZlfS5J5ow2IjXvrQPOqyvo0kcrsfrdrist"
         static let postHogHost: String? = "https://app.posthog.com"
         static let amplitudeApiKey: String? = "e6019a6cedcf18389345c3a9d4735234"
         static let mixpanelToken: String? = "713ba3932d7bcab83487e7ae7ea475af"
-    }
-    
-    enum Rollbar {
-        static let accessToken = "0d6c8dc7b2b6471dbef59ba25f537998"
-        static let environment = "production"
+        static let rollbarAccessToken = "0d6c8dc7b2b6471dbef59ba25f537998"
     }
     
     enum App {
@@ -21,7 +17,7 @@ enum Configuration {
         static let privacyPolicyURL =
             "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88"
 
-        // If this changes the Info.plist file must also be updated
+        // Do not change or backup files cannot be loaded
         static let backupUTTypeName = "com.codeofhonor.habitual.backup";
     }
     
@@ -32,8 +28,30 @@ enum Configuration {
     }
     
     enum Database {
-        static let coreDataContainerName = "Habitual"
-        static let sqliteDBName = "HabitualStats.db"
+        // Don't ever change these values or users will lose their data
+        static let coreDataContainerName = "Habits"
+        static let sqliteDBName = "Habits.db"
+    }
+
+    // MARK: - Environment Detection
+    static func getEnvironment() -> String {
+        return isDebugEnvironment() ? "development" : "production";
+    }
+
+    static func isDebugEnvironment() -> Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
+
+   static func isRunningOnSimulator() -> Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return false
+        #endif
     }
 }
 

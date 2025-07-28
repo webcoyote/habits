@@ -35,8 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func setupRollbar() {
         let config = RollbarConfig.mutableConfig(
-            withAccessToken: Configuration.Rollbar.accessToken,
-            environment: Configuration.Rollbar.environment)
+            withAccessToken: Configuration.Analytics.rollbarAccessToken,
+            environment: Configuration.getEnvironment())
         config.loggingOptions.codeVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         config.loggingOptions.captureIp = RollbarCaptureIpType.anonymize
         config.server.host = UIDevice.current.identifierForVendor?.uuidString
@@ -105,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func reportAppStarted() {
-        #if false // for testing only
+        #if false
         Rollbar.infoMessage("Habitual initialized", data: nil, context: nil)
         #endif
     }
