@@ -27,23 +27,24 @@ struct ProgressGridView: View {
             
             // Get the most recent days that fit in our grid
             let dates = getDateRange(limit: totalDays)
-            let rows = dates.chunked(into: columnsToUse)
+            
+            // Reorganize dates to fill column-wise from bottom-right
+            let columnOrderedDates = arrangeInColumnOrder(dates: dates, rows: rowsToShow, columns: columnsToUse)
             
             VStack(spacing: spacing) {
-                ForEach(0..<min(rows.count, rowsToShow), id: \.self) { rowIndex in
+                ForEach(0..<rowsToShow, id: \.self) { rowIndex in
                     HStack(spacing: spacing) {
-                        ForEach(rows[rowIndex], id: \.self) { date in
-                            DaySquare(
-                                date: date,
-                                isCompleted: isCompleted(on: date),
-                                color: habit.color.color,
-                                size: squareSize
-                            )
-                        }
-                        
-                        // Fill remaining space if last row is incomplete
-                        if rows[rowIndex].count < columnsToUse {
-                            ForEach(0..<(columnsToUse - rows[rowIndex].count), id: \.self) { _ in
+                        ForEach(0..<columnsToUse, id: \.self) { colIndex in
+                            let dateIndex = rowIndex * columnsToUse + colIndex
+                            if dateIndex < columnOrderedDates.count {
+                                let date = columnOrderedDates[dateIndex]
+                                DaySquare(
+                                    date: date,
+                                    isCompleted: isCompleted(on: date),
+                                    color: habit.color.color,
+                                    size: squareSize
+                                )
+                            } else {
                                 RoundedRectangle(cornerRadius: 2)
                                     .fill(Color.clear)
                                     .frame(width: squareSize, height: squareSize)
@@ -75,6 +76,39 @@ struct ProgressGridView: View {
         }
         
         return dates
+    }
+    
+    private func arrangeInColumnOrder(dates: [Date], rows: Int, columns: Int) -> [Date] {
+        var result: [Date] = []
+        let totalCells = rows * columns
+        
+        // Create a 2D array to hold dates in their final positions
+        var grid: [[Date?]] = Array(repeating: Array(repeating: nil, count: columns), count: rows)
+        
+        // Fill the grid column by column, from bottom to top, right to left
+        var dateIndex = dates.count - 1 // Start with the most recent date
+        
+        // Start from the rightmost column
+        for col in (0..<columns).reversed() {
+            // Fill from bottom to top
+            for row in (0..<rows).reversed() {
+                if dateIndex >= 0 && dateIndex < dates.count {
+                    grid[row][col] = dates[dateIndex]
+                    dateIndex -= 1
+                }
+            }
+        }
+        
+        // Convert the 2D grid back to a 1D array in row order for display
+        for row in 0..<rows {
+            for col in 0..<columns {
+                if let date = grid[row][col] {
+                    result.append(date)
+                }
+            }
+        }
+        
+        return result
     }
     
     private func isCompleted(on date: Date) -> Bool {

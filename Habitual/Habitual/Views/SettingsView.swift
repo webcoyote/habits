@@ -3,6 +3,7 @@ import StoreKit
 import UIKit
 import WebKit
 import UniformTypeIdentifiers
+import CoreData
 
 extension UTType {
     static let habitual = UTType(exportedAs: "com.habitual.backup")
@@ -24,7 +25,7 @@ struct SettingsView: View {
     }
     
     enum AlertType: Identifiable {
-        case notification, appInfo, language, support, privacy, terms
+        case notification, appInfo, language, support, privacy,  debugFillData
         
         var id: Self { self }
     }
@@ -114,14 +115,6 @@ struct SettingsView: View {
                         activeAlert = .privacy
                     }
                     
-                    SettingsRowWithIcon(
-                        title: "Terms of Service",
-                        subtitle: nil,
-                        icon: "doc.text"
-                    ) {
-                        activeAlert = .terms
-                    }
-                    
                 }
                 
                 Section("App Information") {
@@ -155,6 +148,19 @@ struct SettingsView: View {
                         )
                     }
                 }
+                
+                #if DEBUG
+                Section("Debug") {
+                    SettingsRowWithIcon(
+                        title: "Fill Sample Data",
+                        subtitle: "Overwrites all current data",
+                        icon: "exclamationmark.triangle.fill",
+                        showWarning: true
+                    ) {
+                        activeAlert = .debugFillData
+                    }
+                }
+                #endif
             }
             .navigationTitle("Settings")
             .sheet(item: $activeSheet) { sheetType in
@@ -210,11 +216,14 @@ struct SettingsView: View {
                         message: Text("Privacy policy coming soon"),
                         dismissButton: .default(Text("OK"))
                     )
-                case .terms:
+                case .debugFillData:
                     Alert(
-                        title: Text("Terms of Service"),
-                        message: Text("Terms of service coming soon"),
-                        dismissButton: .default(Text("OK"))
+                        title: Text("Fill Sample Data"),
+                        message: Text("This will permanently delete all your current habits and history, then create sample habits with realistic data. This action cannot be undone.\n\nAre you sure you want to continue?"),
+                        primaryButton: .destructive(Text("Delete & Fill")) {
+                            fillSampleData()
+                        },
+                        secondaryButton: .cancel()
                     )
                 }
             }
@@ -225,6 +234,151 @@ struct SettingsView: View {
         AnalyticsManager.shared.track("rate_app_tapped")
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             SKStoreReviewController.requestReview(in: windowScene)
+        }
+    }
+    
+    private func fillSampleData() {
+        let context = PersistenceController.shared.container.viewContext
+        
+        // Delete all existing records first
+        let recordFetchRequest: NSFetchRequest<NSFetchRequestResult> = RecordEntity.fetchRequest()
+        let deleteRecordsRequest = NSBatchDeleteRequest(fetchRequest: recordFetchRequest)
+        
+        do {
+            try context.execute(deleteRecordsRequest)
+        } catch {
+            print("Error deleting existing records: \(error)")
+        }
+        
+        // Delete all existing habits
+        let habitFetchRequest: NSFetchRequest<NSFetchRequestResult> = HabitEntity.fetchRequest()
+        let deleteHabitsRequest = NSBatchDeleteRequest(fetchRequest: habitFetchRequest)
+        
+        do {
+            try context.execute(deleteHabitsRequest)
+            
+            // Reset the persistent store to ensure clean state
+            context.reset()
+            
+            // Save to ensure deletions are committed
+            try context.save()
+        } catch {
+            print("Error deleting existing habits: \(error)")
+        }
+        
+        // Create sample habits for someone trying to be a better person (one of each type)
+        let sampleHabits = [
+            (name: "Morning Exercise", icon: "figure.run", color: Color.orange, type: HabitType.binary, goal: Goal(value: 5, period: .weekly)),
+            (name: "Drink Water", icon: "drop.fill", color: Color.blue, type: HabitType.numeric(target: 8), goal: Goal(value: 8, period: .daily)),
+            (name: "Mood Tracker", icon: "face.smiling", color: Color.yellow, type: HabitType.graph(scale: 10), goal: nil)
+        ]
+        
+        for (index, habitData) in sampleHabits.enumerated() {
+            let habit = Habit(
+                name: habitData.name,
+                icon: habitData.icon,
+                color: habitData.color,
+                type: habitData.type,
+                goal: habitData.goal
+            )
+            
+            // Save the habit
+            PersistenceController.shared.saveHabit(habit, context: context)
+            
+            // Set order
+            let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", habit.id as CVarArg)
+            if let entity = try? context.fetch(request).first {
+                entity.order = Int32(index)
+                
+                // Generate realistic historical data
+                generateRealisticHistory(for: entity, habit: habit, context: context)
+            }
+        }
+        
+        // Save all changes
+        do {
+            try context.save()
+            
+            // Update statistics
+            DatabaseManager.shared.incrementHabitsCreated()
+            
+            // Post notification to refresh the habit list
+            NotificationCenter.default.post(name: NSNotification.Name("RefreshHabits"), object: nil)
+            
+            AnalyticsManager.shared.track("debug_sample_data_filled")
+        } catch {
+            print("Error saving sample habits: \(error)")
+        }
+    }
+    
+    private func generateRealisticHistory(for habitEntity: HabitEntity, habit: Habit, context: NSManagedObjectContext) {
+        let calendar = Calendar.current
+        let today = Date()
+        let encoder = JSONEncoder()
+        
+        // Generate data for the last year
+        let maxDays = 84
+        for daysAgo in 0..<maxDays {
+            guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+            
+            let dayOfWeek = calendar.component(.weekday, from: date)
+            
+            // Different patterns for different habits
+            switch habit.name {
+            case "Morning Exercise":
+                let recordEntity = RecordEntity(context: context)
+                recordEntity.id = UUID()
+                recordEntity.date = date
+                recordEntity.habit = habitEntity
+                
+                // chance of completion
+                let completed = Double.random(in: 0...1) < 0.6
+                let value = HabitValue.binary(completed: completed)
+                recordEntity.valueData = try? encoder.encode(value)
+                
+            case "Drink Water":
+                // Record most days with varying amounts
+                if Double.random(in: 0...1) < 0.8 {
+                    let recordEntity = RecordEntity(context: context)
+                    recordEntity.id = UUID()
+                    recordEntity.date = date
+                    recordEntity.habit = habitEntity
+                    
+                    // Start lower and improve over time
+                    let progress = min(0.7 + (Double(60 - daysAgo) / Double(maxDays)), 1.0)
+                    let baseValue = Int(8 * progress) // Target is 8 glasses
+                    let variance = Int.random(in: -1...2)
+                    let finalValue = max(0, min(10, baseValue + variance))
+                    
+                    let value = HabitValue.numeric(value: finalValue)
+                    recordEntity.valueData = try? encoder.encode(value)
+                }
+                
+            case "Mood Tracker":
+                // Record most days (85%) with realistic mood patterns
+                if Double.random(in: 0...1) < 0.85 {
+                    let recordEntity = RecordEntity(context: context)
+                    recordEntity.id = UUID()
+                    recordEntity.date = date
+                    recordEntity.habit = habitEntity
+                    
+                    // Lower scores on Mondays, higher on weekends
+                    let dayVariance: Int
+                    switch dayOfWeek {
+                    case 1, 7: dayVariance = Int.random(in: 0...2) // Weekend
+                    case 2: dayVariance = Int.random(in: -2...0) // Monday
+                    default: dayVariance = Int.random(in: -1...1) // Other days
+                    }
+                    
+                    let finalValue = max(1, min(10, 6 + dayVariance))
+                    let value = HabitValue.graph(value: finalValue)
+                    recordEntity.valueData = try? encoder.encode(value)
+                }
+                
+            default:
+                break
+            }
         }
     }
 }
