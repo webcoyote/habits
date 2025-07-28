@@ -160,42 +160,43 @@ struct OverallStatsCard: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             Text("Overall Performance")
                 .font(.headline)
             
-            HStack(spacing: 20) {
-                VStack {
-                    Text("\(habits.count)")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+            VStack(spacing: 16) {
+                HStack {
                     Text("Active Habits")
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
+                    Spacer()
+                    Text("\(habits.count)")
+                        .font(.title2)
+                        .fontWeight(.semibold)
                 }
                 
                 Divider()
-                    .frame(height: 40)
                 
-                VStack {
+                HStack {
+                    Text("Total Completed")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Spacer()
                     Text("\(totalCompletions)")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    Text("Completions")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.title2)
+                        .fontWeight(.semibold)
                 }
                 
                 Divider()
-                    .frame(height: 40)
                 
-                VStack {
-                    Text("\(averageCompletionRate)%")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                HStack {
                     Text("Success Rate")
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
+                    Spacer()
+                    Text("\(averageCompletionRate)%")
+                        .font(.title2)
+                        .fontWeight(.semibold)
                 }
             }
         }
