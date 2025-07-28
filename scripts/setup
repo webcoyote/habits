@@ -10,6 +10,10 @@ command -v direnv &>/dev/null || brew install direnv
 
 install-git-hooks
 
+# Make a logs directory that won't get deleted by git clean
+mkdir -p "logs"
+[[ -d "logs/.git" ]] || git init "logs" 1>/dev/null
+
 END_TIME=$(date +%s.%N)
 ELAPSED_TIME=$(echo "$END_TIME - $START_TIME" | bc --mathlib | xargs printf "%.2f\n")
 echo "✅ Setup complete in $ELAPSED_TIME seconds."
