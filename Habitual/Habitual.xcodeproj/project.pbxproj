@@ -28,6 +28,7 @@
 		430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E62E35996B0085D398 /* AppSettingsManager.swift */; };
 		430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E72E35996B0085D398 /* NotificationPermissionManager.swift */; };
 		430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EA2E3599C10085D398 /* SettingsSelectionView.swift */; };
+		430210EC2E3599C20085D400 /* GradientColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EC2E3599C20085D399 /* GradientColorPicker.swift */; };
 		430210EC2E3599C20085D398 /* ReviewRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210ED2E3599C20085D398 /* ReviewRequestManager.swift */; };
 		430210EE2E3599C30085D398 /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EF2E3599C30085D398 /* ErrorTracker.swift */; };
 		430210F02E3599C40085D398 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F12E3599C40085D398 /* DatabaseManager.swift */; };
@@ -67,6 +68,7 @@
 		430210E62E35996B0085D398 /* AppSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsManager.swift; sourceTree = "<group>"; };
 		430210E72E35996B0085D398 /* NotificationPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionManager.swift; sourceTree = "<group>"; };
 		430210EA2E3599C10085D398 /* SettingsSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSelectionView.swift; sourceTree = "<group>"; };
+		430210EC2E3599C20085D399 /* GradientColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPicker.swift; sourceTree = "<group>"; };
 		430210ED2E3599C20085D398 /* ReviewRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestManager.swift; sourceTree = "<group>"; };
 		430210EF2E3599C30085D398 /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
 		430210F12E3599C40085D398 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				430210EA2E3599C10085D398 /* SettingsSelectionView.swift */,
+				430210EC2E3599C20085D399 /* GradientColorPicker.swift */,
 				2B12346A1234567890ABCDEF /* HabitListView.swift */,
 				2B12346C1234567890ABCDEF /* HabitCardView.swift */,
 				2B12346E1234567890ABCDEF /* ProgressGridView.swift */,
@@ -307,6 +310,7 @@
 				2B12347B1234567890ABCDEF /* StatisticsView.swift in Sources */,
 				2B12347D1234567890ABCDEF /* HabitListViewModel.swift in Sources */,
 				430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */,
+				430210EC2E3599C20085D400 /* GradientColorPicker.swift in Sources */,
 				2B1234811234567890ABCDEF /* HabitStatistics.swift in Sources */,
 				430210F62E3599C70085D398 /* Configuration.swift in Sources */,
 				430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */,

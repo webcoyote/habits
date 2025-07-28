@@ -4,6 +4,7 @@ import CoreData
 struct HabitListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = HabitListViewModel()
+    @ObservedObject private var appSettings = AppSettings.shared
     @State private var showingAddHabit = false
     @State private var selectedHabit: Habit?
     @State private var showingCompactView = false
@@ -21,16 +22,7 @@ struct HabitListView: View {
         NavigationView {
             ZStack {
                 // Gradient background for entire page
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color.blue,
-                        Color.purple,
-                        Color.pink
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .opacity(0.4)
+                appSettings.backgroundGradientWithOpacity
                 .ignoresSafeArea()
                 
                 List {

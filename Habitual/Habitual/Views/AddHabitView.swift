@@ -46,7 +46,16 @@ struct AddHabitView: View {
                         }
                     }
                     
-                    ColorPicker("Color", selection: $selectedColor)
+                    HStack {
+                        Text("Color")
+                        Spacer()
+                        Circle()
+                            .fill(selectedColor)
+                            .frame(width: 30, height: 30)
+                            .overlay(ColorPicker("", selection: $selectedColor)
+                                .labelsHidden()
+                                .opacity(0.015))
+                    }
                 }
                 
                 Section("Tracking Type") {

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct StatisticsView: View {
+    @ObservedObject private var appSettings = AppSettings.shared
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \HabitEntity.name, ascending: true)],
         animation: .default)
@@ -13,16 +14,7 @@ struct StatisticsView: View {
         NavigationView {
             ZStack {
                 // Gradient background for entire page
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color.blue,
-                        Color.purple,
-                        Color.pink
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .opacity(0.4)
+                appSettings.backgroundGradientWithOpacity
                 .ignoresSafeArea()
                 
                 ScrollView {

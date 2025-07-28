@@ -46,6 +46,7 @@ struct SettingsView: View {
 
     enum SheetType: Identifiable {
         case appearance
+        case gradientColors
         case survey
         case privacy
 
@@ -64,30 +65,35 @@ struct SettingsView: View {
         NavigationView {
             ZStack {
                 // Gradient background for entire page
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color.blue,
-                        Color.purple,
-                        Color.pink
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .opacity(0.4)
+                appSettings.backgroundGradientWithOpacity
                 .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
                         SettingsSection("Appearance") {
-                            SettingsRowWithIcon(
-                                title: "Appearance",
-                                subtitle: appSettings.appearanceMode.displayName,
-                                icon: "paintbrush"
-                            ) {
-                                activeSheet = .appearance
-                                AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "appearance"])
+                            VStack(spacing: 0) {
+                                SettingsRowWithIcon(
+                                    title: "Appearance",
+                                    subtitle: appSettings.appearanceMode.displayName,
+                                    icon: "paintbrush"
+                                ) {
+                                    activeSheet = .appearance
+                                    AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "appearance"])
+                                }
+                                .padding()
+                                
+                                Divider()
+                                
+                                SettingsRowWithIcon(
+                                    title: "Background Colors",
+                                    subtitle: "Customize background",
+                                    icon: "paintpalette"
+                                ) {
+                                    activeSheet = .gradientColors
+                                    AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "gradient_colors"])
+                                }
+                                .padding()
                             }
-                            .padding()
                         }
 
                         SettingsSection("Reminders") {
@@ -246,6 +252,8 @@ struct SettingsView: View {
                 switch sheetType {
                 case .appearance:
                     AppearanceSelectionView()
+                case .gradientColors:
+                    GradientColorPicker()
                 case .survey:
                     SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
                 case .privacy:
