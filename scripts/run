@@ -32,7 +32,7 @@ echo "📦 Installing app from: $APP_PATH"
 xcrun simctl install "$SIMULATOR_ID" "$APP_PATH"
 
 echo "🚀 Launching app..."
-xcrun simctl launch "$SIMULATOR_ID" "com.codeofhonor.Habitual" "$@"
+xcrun simctl launch "$SIMULATOR_ID" "com.codeofhonor.habitual" "$@"
 
 END_TIME=$(date +%s.%N)
 ELAPSED_TIME=$(echo "$END_TIME - $START_TIME" | bc --mathlib | xargs printf "%.2f\n")
