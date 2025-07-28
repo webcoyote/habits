@@ -20,12 +20,13 @@ struct SettingsView: View {
     enum SheetType: Identifiable {
         case appearance
         case survey
+        case privacy
         
         var id: Self { self }
     }
     
     enum AlertType: Identifiable {
-        case notification, appInfo, language, support, privacy,  debugFillData
+        case notification, appInfo, language, support, debugFillData
         
         var id: Self { self }
     }
@@ -112,7 +113,8 @@ struct SettingsView: View {
                         subtitle: nil,
                         icon: "lock.shield"
                     ) {
-                        activeAlert = .privacy
+                        activeSheet = .privacy
+                        AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "privacy_policy"])
                     }
                     
                 }
@@ -169,6 +171,8 @@ struct SettingsView: View {
                     AppearanceSelectionView()
                 case .survey:
                     SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
+                case .privacy:
+                    SurveyWebView(url: URL(string: "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88")!)
                 }
             }
             .sheet(isPresented: $showingSurvey) {
@@ -208,13 +212,12 @@ struct SettingsView: View {
                     Alert(
                         title: Text("Contact Support"),
                         message: Text("Email: pat@codeofhonor.com"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                case .privacy:
-                    Alert(
-                        title: Text("Privacy Policy"),
-                        message: Text("Privacy policy coming soon"),
-                        dismissButton: .default(Text("OK"))
+                        primaryButton: .default(Text("Send Email")) {
+                            if let url = URL(string: "mailto:pat@codeofhonor.com") {
+                                UIApplication.shared.open(url)
+                            }
+                        },
+                        secondaryButton: .cancel(Text("Cancel"))
                     )
                 case .debugFillData:
                     Alert(
