@@ -1,5 +1,27 @@
 import SwiftUI
 
+struct TabBarButton: View {
+    let title: String
+    let systemImage: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 2) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 22))
+                Text(title)
+                    .font(.caption2)
+                    .fixedSize()
+            }
+            .frame(maxWidth: .infinity)
+            .foregroundColor(isSelected ? .blue : .gray)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
 struct ContentView: View {
     @State private var selectedTab = 0
     

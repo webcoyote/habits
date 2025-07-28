@@ -43,12 +43,14 @@ struct SettingsView: View {
     @State private var activeSheet: SheetType?
     @State private var activeAlert: AlertType?
     @State private var showingSurvey = false
+    @State private var showingBackupView = false
 
     enum SheetType: Identifiable {
         case appearance
         case gradientColors
         case survey
         case privacy
+        case backup
 
         var id: Self { self }
     }
@@ -123,16 +125,13 @@ struct SettingsView: View {
                         }
 
                         SettingsSection("Data") {
-                            NavigationLink {
-                                BackupSyncView()
-                            } label: {
-                                HStack {
-                                    Image(systemName: "square.and.arrow.up")
-                                        .foregroundColor(.accentColor)
-                                        .frame(width: 20)
-                                    Text("Backup & Restore")
-                                    Spacer()
-                                }
+                            SettingsRowWithIcon(
+                                title: "Backup & Restore",
+                                subtitle: nil,
+                                icon: "square.and.arrow.up"
+                            ) {
+                                activeSheet = .backup
+                                AnalyticsManager.shared.track("settings_tapped", properties: ["setting": "backup_restore"])
                             }
                             .padding()
                         }
@@ -258,6 +257,10 @@ struct SettingsView: View {
                     SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
                 case .privacy:
                     SurveyWebView(url: URL(string: "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88")!)
+                case .backup:
+                    NavigationView {
+                        BackupSyncView()
+                    }
                 }
             }
             .sheet(isPresented: $showingSurvey) {
@@ -514,6 +517,7 @@ struct SettingsView: View {
 
 // MARK: - BackupSyncView
 struct BackupSyncView: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var showingShareSheet = false
     @State private var showingDocumentPicker = false
     @State private var showingAlert = false
@@ -564,8 +568,15 @@ struct BackupSyncView: View {
                     .foregroundColor(.secondary)
             }
         }
-        .navigationTitle("Backup")
+        .navigationTitle("Backup & Restore")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        }
         .sheet(isPresented: $showingShareSheet) {
             if let url = backupURL {
                 ShareSheet(items: [url])
