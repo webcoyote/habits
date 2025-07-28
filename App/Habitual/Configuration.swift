@@ -16,7 +16,24 @@ enum Configuration {
     enum App {
         // Add app-specific configuration here
         static let appName = "Habitual"
-        static let supportEmail = "support@habitual.app"
+        static let supportEmail = "pat@codeofhonor.com"
+        static let surveyURL = "https://tally.so/r/mRyLPp"
+        static let privacyPolicyURL =
+            "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88"
+
+        // If this changes the Info.plist file must also be updated
+        static let backupUTTypeName = "com.codeofhonor.habitual.backup";
+    }
+    
+    enum ReviewRequest {
+        static let minimumAppLaunches = 3
+        static let minimumCompletedHabits = 50
+        static let daysBetweenRequests: TimeInterval = 7 * 24 * 60 * 60 // 7 days
+    }
+    
+    enum Database {
+        static let coreDataContainerName = "Habitual"
+        static let sqliteDBName = "HabitualStats.db"
     }
 }
 

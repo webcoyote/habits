@@ -91,7 +91,7 @@ struct HabitListView: View {
                     }
                 }
             }
-            .navigationTitle("Habitual")
+            .navigationTitle("Habits")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {

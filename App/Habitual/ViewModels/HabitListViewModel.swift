@@ -139,7 +139,7 @@ class HabitListViewModel: ObservableObject {
         if value > 0 {
             AppSettings.shared.incrementCompletedHabits()
             Task {
-                await ReviewRequestManager.shared.requestReviewIfAppropriate()
+                await UsageTracker.shared.requestReviewIfAppropriate()
             }
         }
     }

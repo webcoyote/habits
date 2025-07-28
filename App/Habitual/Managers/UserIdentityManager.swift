@@ -70,11 +70,10 @@ class UserIdentityManager {
         properties["locale"] = Locale.current.identifier
         
         // Add Habitual-specific properties
-        if let stats = UsageTracker.shared.getStats() {
-            properties["total_launches"] = stats.launches
-            properties["habits_created"] = stats.habitsCreated
-            properties["habits_formed"] = stats.habitsFormed
-        }
+        let stats = UsageTracker.shared.stats
+        properties["total_launches"] = stats.launches
+        properties["habits_created"] = stats.habitsCreated
+        properties["habits_formed"] = stats.habitsFormed
         
         if let storedProperties = userDefaults.dictionary(forKey: userPropertiesKey) {
             properties.merge(storedProperties) { _, new in new }
@@ -191,13 +190,12 @@ extension UserIdentityManager {
     }
     
     func updateHabitStats() {
-        if let stats = UsageTracker.shared.getStats() {
-            setUserProperties([
-                "total_launches": stats.launches,
-                "habits_created": stats.habitsCreated,
-                "habits_formed": stats.habitsFormed,
-                "last_activity": Date().timeIntervalSince1970
-            ])
-        }
+        let stats = UsageTracker.shared.stats
+        setUserProperties([
+            "total_launches": stats.launches,
+            "habits_created": stats.habitsCreated,
+            "habits_formed": stats.habitsFormed,
+            "last_activity": Date().timeIntervalSince1970
+        ])
     }
 }

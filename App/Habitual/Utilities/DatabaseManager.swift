@@ -4,7 +4,7 @@ import SQLite3
 class DatabaseManager {
     static let shared = DatabaseManager()
     private var db: OpaquePointer?
-    private let dbName = "HabitualStats.db"
+    private let dbName = Configuration.Database.sqliteDBName
     private let currentVersion = 1
     
     private init() {
@@ -172,10 +172,10 @@ class DatabaseManager {
         }
     }
     
-    func getStats() -> (launches: Int, habitsCreated: Int, habitsFormed: Int)? {
+    func getStats() -> (launches: Int, habitsCreated: Int, habitsFormed: Int) {
         let querySQL = "SELECT app_launches, habits_created, habits_formed FROM usage_stats WHERE id = 1"
         
-        guard let statement = prepare(querySQL) else { return nil }
+        guard let statement = prepare(querySQL) else { return (0, 0, 0) }
         defer { finalize(statement) }
         
         if step(statement) == SQLITE_ROW {
@@ -185,7 +185,7 @@ class DatabaseManager {
             return (launches, habitsCreated, habitsFormed)
         }
         
-        return nil
+        return (0, 0, 0)
     }
     
     func getReviewData() -> (lastRequest: String?, habitsFormedAtLastReview: Int)? {
@@ -207,12 +207,10 @@ class DatabaseManager {
     }
     
     func recordReviewRequest() {
-        guard let stats = getStats() else { return }
-        
         let updateSQL = """
             UPDATE usage_stats 
             SET last_review_request = CURRENT_TIMESTAMP,
-                habits_formed_at_last_review = \(stats.habitsFormed)
+                habits_formed_at_last_review = habitsFormed
             WHERE id = 1
         """
         

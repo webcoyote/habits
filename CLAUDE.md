@@ -1,7 +1,7 @@
 
 ## Development Commands
 
-Remember when creating code files to add them to the Xcode project.
+Remember when creating/removing code files to add/remove them to the Xcode project.
 
 
 ```bash

@@ -202,9 +202,8 @@ struct AddHabitView: View {
         AnalyticsManager.shared.track("habit_created", properties: properties)
         
         // Track habit creation milestone
-        if let stats = UsageTracker.shared.getStats() {
-            UserIdentityManager.shared.trackHabitMilestone(habitCount: stats.habitsCreated)
-        }
+        let stats = UsageTracker.shared.stats
+        UserIdentityManager.shared.trackHabitMilestone(habitCount: stats.habitsCreated)
         
         presentationMode.wrappedValue.dismiss()
     }

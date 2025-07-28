@@ -28,7 +28,7 @@ protocol AnalyticsProvider {
 class PostHogProvider: AnalyticsProvider {
     private let posthog: PostHogSDK
     
-    init(apiKey: String, host: String = "https://app.posthog.com", isDebug: Bool = false) {
+    init(apiKey: String, host: String, isDebug: Bool = false) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         config.captureApplicationLifecycleEvents = true
         config.captureScreenViews = true

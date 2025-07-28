@@ -105,42 +105,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func reportAppStarted() {
-        // Check notification status
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            var notificationStatus = "unknown"
-            switch settings.authorizationStatus {
-            case .notDetermined:
-                notificationStatus = "not_determined"
-            case .denied:
-                notificationStatus = "denied"
-            case .authorized:
-                notificationStatus = "authorized"
-            case .provisional:
-                notificationStatus = "provisional"
-            case .ephemeral:
-                notificationStatus = "ephemeral"
-            @unknown default:
-                notificationStatus = "unknown"
-            }
-            
-            // Include usage stats and notification status in startup message
-            if let stats = UsageTracker.shared.getStats() {
-                let statsData: [String: Any] = [
-                    "launches": stats.launches,
-                    "habits_created": stats.habitsCreated,
-                    "habits_formed": stats.habitsFormed,
-                    "notification_enabled": settings.authorizationStatus == .authorized,
-                    "notification_status": notificationStatus
-                ]
-                Rollbar.infoMessage("Habitual initialized", data: statsData, context: nil)
-            } else {
-                let notificationData: [String: Any] = [
-                    "notification_enabled": settings.authorizationStatus == .authorized,
-                    "notification_status": notificationStatus
-                ]
-                Rollbar.infoMessage("Habitual initialized", data: notificationData, context: nil)
-            }
-        }
+        #if false // for testing only
+        Rollbar.infoMessage("Habitual initialized", data: nil, context: nil)
+        #endif
     }
 }
 

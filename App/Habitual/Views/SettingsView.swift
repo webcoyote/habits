@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 import CoreData
 
 extension UTType {
-    static let habitual = UTType(exportedAs: "com.habitual.backup")
+    static let habitual = UTType(exportedAs: Configuration.App.backupUTTypeName)
 }
 
 struct SettingsSection<Content: View>: View {
@@ -199,34 +199,33 @@ struct SettingsView: View {
                                 }
                                 .padding()
 
-                                if let stats = usageTracker.stats {
-                                    Divider()
+                                let stats = usageTracker.stats
+                                Divider()
 
-                                    SettingsInfoRow(
-                                        title: "App Launches",
-                                        subtitle: "\(stats.launches) times",
-                                        icon: "chart.bar.fill"
-                                    )
-                                    .padding()
+                                SettingsInfoRow(
+                                    title: "App Launches",
+                                    subtitle: "\(stats.launches) times",
+                                    icon: "chart.bar.fill"
+                                )
+                                .padding()
 
-                                    Divider()
+                                Divider()
 
-                                    SettingsInfoRow(
-                                        title: "Habits Created",
-                                        subtitle: "\(stats.habitsCreated) habits",
-                                        icon: "plus.circle.fill"
-                                    )
-                                    .padding()
+                                SettingsInfoRow(
+                                    title: "Habits Created",
+                                    subtitle: "\(stats.habitsCreated) habits",
+                                    icon: "plus.circle.fill"
+                                )
+                                .padding()
 
-                                    Divider()
+                                Divider()
 
-                                    SettingsInfoRow(
-                                        title: "Habits Formed",
-                                        subtitle: "\(stats.habitsFormed) times",
-                                        icon: "checkmark.circle.fill"
-                                    )
-                                    .padding()
-                                }
+                                SettingsInfoRow(
+                                    title: "Habits Formed",
+                                    subtitle: "\(stats.habitsFormed) times",
+                                    icon: "checkmark.circle.fill"
+                                )
+                                .padding()
                             }
                         }
 
@@ -255,9 +254,9 @@ struct SettingsView: View {
                 case .gradientColors:
                     GradientColorPicker()
                 case .survey:
-                    SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
+                    SurveyWebView(url: URL(string: Configuration.App.surveyURL)!)
                 case .privacy:
-                    SurveyWebView(url: URL(string: "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88")!)
+                    SurveyWebView(url: URL(string: Configuration.App.privacyPolicyURL)!)
                 case .backup:
                     NavigationView {
                         BackupSyncView()
@@ -267,7 +266,7 @@ struct SettingsView: View {
                 }
             }
             .sheet(isPresented: $showingSurvey) {
-                SurveyWebView(url: URL(string: "https://tally.so/r/mRyLPp")!)
+                SurveyWebView(url: URL(string: Configuration.App.surveyURL)!)
             }
             .alert(item: $activeAlert) { alertType in
                 switch alertType {
@@ -847,7 +846,7 @@ struct ContactSupportView: View {
                     Button(action: {
                         var components = URLComponents()
                         components.scheme = "mailto"
-                        components.path = "pat@codeofhonor.com"
+                        components.path = Configuration.App.supportEmail
                         components.queryItems = [
                             URLQueryItem(name: "subject", value: "Support Request for Habitual App")
                         ]
@@ -856,7 +855,7 @@ struct ContactSupportView: View {
                             UIApplication.shared.open(url)
                         }
                     }) {
-                        Text("pat@codeofhonor.com")
+                        Text(Configuration.App.supportEmail)
                             .font(.system(.body, design: .monospaced))
                             .foregroundColor(.accentColor)
                             .underline()

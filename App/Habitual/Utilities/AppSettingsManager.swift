@@ -291,7 +291,7 @@ class AppSettings: ObservableObject {
     }
     
     func getAppInfo() -> (name: String, version: String, build: String) {
-        let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Habitual"
+        let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? Configuration.App.appName
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
         let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         return (appName, appVersion, buildNumber)
