@@ -17,6 +17,7 @@
 		2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346A1234567890ABCDEF /* HabitListView.swift */; };
 		2B12346D1234567890ABCDEF /* HabitCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346C1234567890ABCDEF /* HabitCardView.swift */; };
 		2B12346F1234567890ABCDEF /* ProgressGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346E1234567890ABCDEF /* ProgressGridView.swift */; };
+		2B12346F1234567890ABCDEE /* CelebrationEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */; };
 		2B1234711234567890ABCDEF /* ProgressChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234701234567890ABCDEF /* ProgressChartView.swift */; };
 		2B1234731234567890ABCDEF /* AddHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234721234567890ABCDEF /* AddHabitView.swift */; };
 		2B1234751234567890ABCDEF /* HabitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234741234567890ABCDEF /* HabitDetailView.swift */; };
@@ -41,6 +42,7 @@
 		4302110C2E3599D00085D398 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FF2E3599CD0085D398 /* Mixpanel */; };
 		4302110D2E3599D40085D398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302110E2E3599D40085D398 /* AppDelegate.swift */; };
 		B57C5185E77BDA4E7736E3F7 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43EB9682386C6C6FA343DE /* BackupManager.swift */; };
+		4302110012E3599D60085D398 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 4302110002E3599D40085D398 /* Vortex */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +57,7 @@
 		2B12346A1234567890ABCDEF /* HabitListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListView.swift; sourceTree = "<group>"; };
 		2B12346C1234567890ABCDEF /* HabitCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCardView.swift; sourceTree = "<group>"; };
 		2B12346E1234567890ABCDEF /* ProgressGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressGridView.swift; sourceTree = "<group>"; };
+		2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationEffectView.swift; sourceTree = "<group>"; };
 		2B1234701234567890ABCDEF /* ProgressChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressChartView.swift; sourceTree = "<group>"; };
 		2B1234721234567890ABCDEF /* AddHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitView.swift; sourceTree = "<group>"; };
 		2B1234741234567890ABCDEF /* HabitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView.swift; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 				4302110A2E3599CE0085D398 /* PostHog in Frameworks */,
 				4302110B2E3599CF0085D398 /* AmplitudeSwift in Frameworks */,
 				4302110C2E3599D00085D398 /* Mixpanel in Frameworks */,
+				4302110012E3599D60085D398 /* Vortex in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +156,7 @@
 				430210EC2E3599C20085D399 /* GradientColorPicker.swift */,
 				2B12346A1234567890ABCDEF /* HabitListView.swift */,
 				2B12346C1234567890ABCDEF /* HabitCardView.swift */,
+				2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */,
 				2B12346E1234567890ABCDEF /* ProgressGridView.swift */,
 				2B1234701234567890ABCDEF /* ProgressChartView.swift */,
 				2B1234721234567890ABCDEF /* AddHabitView.swift */,
@@ -224,6 +229,7 @@
 				430210FD2E3599CB0085D398 /* PostHog */,
 				430210FE2E3599CC0085D398 /* AmplitudeSwift */,
 				430210FF2E3599CD0085D398 /* Mixpanel */,
+				4302110002E3599D40085D398 /* Vortex */,
 			);
 			productName = Habitual;
 			productReference = 2B1234521234567890ABCDEF /* Habitual.app */;
@@ -258,6 +264,7 @@
 				4302110D2E3599D10085D398 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				4302110E2E3599D20085D398 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 				4302110F2E3599D30085D398 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+				4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */,
 			);
 			productRefGroup = 2B1234531234567890ABCDEF /* Products */;
 			projectDirPath = "";
@@ -297,6 +304,7 @@
 				2B1234691234567890ABCDEF /* HabitModels.swift in Sources */,
 				2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */,
 				2B12346D1234567890ABCDEF /* HabitCardView.swift in Sources */,
+				2B12346F1234567890ABCDEE /* CelebrationEffectView.swift in Sources */,
 				2B12346F1234567890ABCDEF /* ProgressGridView.swift in Sources */,
 				2B1234711234567890ABCDEF /* ProgressChartView.swift in Sources */,
 				2B1234731234567890ABCDEF /* AddHabitView.swift in Sources */,
@@ -558,6 +566,14 @@
 				version = 2.10.4;
 			};
 		};
+		4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Vortex";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -580,6 +596,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4302110F2E3599D30085D398 /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
 			productName = Mixpanel;
+		};
+		4302110002E3599D40085D398 /* Vortex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */;
+			productName = Vortex;
 		};
 /* End XCSwiftPackageProductDependency section */
 

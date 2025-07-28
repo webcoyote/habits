@@ -3,6 +3,7 @@ import SwiftUI
 struct HabitCardView: View {
     let habit: Habit
     let isCompact: Bool
+    let isAnimating: Bool
     let onComplete: (Int) -> Void
     let onTap: () -> Void
     
@@ -28,7 +29,8 @@ struct HabitCardView: View {
                     isCompleted: isCompleted,
                     currentValue: currentValue,
                     color: habit.color.color,
-                    isCompact: isCompact
+                    isCompact: isCompact,
+                    isAnimating: isAnimating
                 ) { newValue in
                     handleCompletion(newValue)
                 }
@@ -114,15 +116,32 @@ struct CompleteButton: View {
     let currentValue: Int
     let color: Color
     let isCompact: Bool
+    let isAnimating: Bool
     let onComplete: (Int) -> Void
     
+    @State private var buttonScale: CGFloat = 1.0
+    @State private var buttonOffset: CGSize = .zero
+    @State private var glowOpacity: Double = 0
+    @State private var rotation: Double = 0
+    
     var body: some View {
-        switch habitType {
+        Group {
+            switch habitType {
         case .binary:
             Button(action: { onComplete(isCompleted ? 0 : 1) }) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(isCompact ? .title3 : .title2)
                     .foregroundColor(color)
+                    .background(
+                        Circle()
+                            .fill(color.opacity(glowOpacity))
+                            .blur(radius: 8)
+                            .scaleEffect(1.5)
+                    )
+                    .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
+                    .scaleEffect(buttonScale)
+                    .offset(buttonOffset)
+                    .rotationEffect(.degrees(rotation))
             }
             .buttonStyle(PlainButtonStyle())
             .contentShape(Circle())
@@ -148,6 +167,16 @@ struct CompleteButton: View {
                     Image(systemName: currentValue >= target ? "checkmark.circle.fill" : "plus.circle")
                         .font(isCompact ? .title3 : .title2)
                         .foregroundColor(color)
+                        .background(
+                            Circle()
+                                .fill(color.opacity(glowOpacity))
+                                .blur(radius: 8)
+                                .scaleEffect(1.5)
+                        )
+                        .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
+                        .scaleEffect(buttonScale)
+                        .offset(buttonOffset)
+                        .rotationEffect(.degrees(rotation))
                 }
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
@@ -174,9 +203,71 @@ struct CompleteButton: View {
                     Image(systemName: currentValue >= scale ? "checkmark.circle.fill" : "plus.circle")
                         .font(isCompact ? .title3 : .title2)
                         .foregroundColor(color)
+                        .background(
+                            Circle()
+                                .fill(color.opacity(glowOpacity))
+                                .blur(radius: 8)
+                                .scaleEffect(1.5)
+                        )
+                        .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
+                        .scaleEffect(buttonScale)
+                        .offset(buttonOffset)
+                        .rotationEffect(.degrees(rotation))
                 }
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
+            }
+            }
+        }
+        .onChange(of: isAnimating) { newValue in
+            if newValue {
+                // Start with a big pulse and glow
+                withAnimation(.easeOut(duration: 0.2)) {
+                    buttonScale = 1.8
+                    glowOpacity = 0.6
+                }
+                
+                // Then bounce with movement
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.4)) {
+                        buttonScale = 1.2
+                        buttonOffset = CGSize(width: -8, height: -8)
+                        rotation = -20
+                    }
+                }
+                
+                // Bounce to other side
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.4)) {
+                        buttonOffset = CGSize(width: 8, height: -8)
+                        rotation = 20
+                    }
+                }
+                
+                // Back to center with another pulse
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
+                        buttonOffset = .zero
+                        rotation = 0
+                        buttonScale = 1.5
+                        glowOpacity = 0.8
+                    }
+                }
+                
+                // Final settle
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        buttonScale = 1.0
+                        glowOpacity = 0
+                    }
+                }
+            } else {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    rotation = 0
+                    buttonScale = 1.0
+                    buttonOffset = .zero
+                    glowOpacity = 0
+                }
             }
         }
     }

@@ -9,6 +9,10 @@ struct HabitListView: View {
     @State private var selectedHabit: Habit?
     @State private var showingCompactView = false
     @State private var isEditMode = false
+    @State private var animatingHabitId: UUID?
+    @State private var animationTimer: Timer?
+    @State private var showingCelebration = false
+    @State private var celebrationEffect: CelebrationEffect = .confetti
     
     @FetchRequest(
         sortDescriptors: [
@@ -30,10 +34,24 @@ struct HabitListView: View {
                         HabitCardView(
                             habit: habit,
                             isCompact: showingCompactView,
+                            isAnimating: animatingHabitId == habit.id,
                             onComplete: { value in
+                                let wasCompleted = habit.todayValue > 0
                                 viewModel.updateHabitValue(habit, value: value)
-                                // Track habit completion
                                 let completed = value > 0
+                                
+                                // Show celebration if habit was just completed (not uncompleted)
+                                if completed && !wasCompleted {
+                                    showingCelebration = true
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                                        showingCelebration = false
+                                        // Move to next effect for the next celebration
+                                        celebrationEffect = celebrationEffect.next()
+                                    }
+                                }
+                                
+                                // Track habit completion
                                 AnalyticsManager.shared.track("habit_completed", properties: [
                                     "habit_id": habit.id.uuidString,
                                     "habit_name": habit.name,
@@ -127,6 +145,73 @@ struct HabitListView: View {
             }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RefreshHabits"))) { _ in
                 viewModel.loadHabits(from: habitEntities, context: viewContext)
+            }
+            .onAppear {
+                startAnimationTimer()
+            }
+            .onDisappear {
+                stopAnimationTimer()
+            }
+        }
+        .overlay(
+            Group {
+                if showingCelebration {
+                    CelebrationEffectView(effect: celebrationEffect)
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
+                        .zIndex(999)
+                }
+            }
+        )
+    }
+    
+    private func startAnimationTimer() {
+        stopAnimationTimer()
+        
+        animationTimer = Timer.scheduledTimer(withTimeInterval: Double.random(in: 3...5), repeats: true) { _ in
+            selectRandomIncompleteHabit()
+        }
+    }
+    
+    private func stopAnimationTimer() {
+        animationTimer?.invalidate()
+        animationTimer = nil
+        animatingHabitId = nil
+    }
+    
+    private func selectRandomIncompleteHabit() {
+        let incompleteHabits = viewModel.habits.filter { habit in
+            guard let todayRecord = habit.history.first(where: { Calendar.current.isDateInToday($0.date) }) else {
+                return true // No record today means incomplete
+            }
+            
+            switch habit.type {
+            case .binary:
+                if case .binary(let completed) = todayRecord.value {
+                    return !completed
+                }
+                return true
+            case .numeric(let target):
+                if case .numeric(let value) = todayRecord.value {
+                    return value < target
+                }
+                return true
+            case .graph(let scale):
+                if case .graph(let value) = todayRecord.value {
+                    return value < scale
+                }
+                return true
+            }
+        }
+        
+        if !incompleteHabits.isEmpty {
+            animatingHabitId = incompleteHabits.randomElement()?.id
+            
+            // Stop animation after 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                if animatingHabitId != nil {
+                    animatingHabitId = nil
+                }
             }
         }
     }

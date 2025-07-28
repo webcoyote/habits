@@ -19,6 +19,24 @@ struct Habit: Identifiable, Codable, Equatable {
         self.goal = goal
         self.history = history
     }
+    
+    var todayValue: Int {
+        let today = Date()
+        let calendar = Calendar.current
+        
+        guard let todayRecord = history.first(where: { calendar.isDate($0.date, inSameDayAs: today) }) else {
+            return 0
+        }
+        
+        switch todayRecord.value {
+        case .binary(let completed):
+            return completed ? 1 : 0
+        case .numeric(let value):
+            return value
+        case .graph(let value):
+            return value
+        }
+    }
 }
 
 enum HabitType: Codable, Equatable {
