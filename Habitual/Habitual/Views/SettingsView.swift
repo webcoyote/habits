@@ -463,6 +463,7 @@ struct SettingsView: View {
     }
 }
 
+// MARK: - BackupSyncView
 struct BackupSyncView: View {
     @State private var showingShareSheet = false
     @State private var showingDocumentPicker = false

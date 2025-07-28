@@ -216,7 +216,8 @@ struct OverallStatsCard: View {
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 16).fill(Color.blue.opacity(0.1)))
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(10)
         .padding(.horizontal)
     }
 }
@@ -256,6 +257,7 @@ struct HabitStatsCard: View {
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(10)
     }
 }

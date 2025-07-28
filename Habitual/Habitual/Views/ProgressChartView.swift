@@ -83,8 +83,8 @@ struct ModernChartView: View {
         var data: [ChartDataItem] = []
         
         for dayOffset in (0..<daysToShow).reversed() {
-            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
-                let value = getValue(for: date)
+            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today),
+               let value = getValue(for: date, dayOffset: dayOffset, totalDays: daysToShow) {
                 data.append(ChartDataItem(date: date, value: value))
             }
         }
@@ -92,11 +92,12 @@ struct ModernChartView: View {
         return data
     }
     
-    private func getValue(for date: Date) -> Double {
+    private func getValue(for date: Date, dayOffset: Int, totalDays: Int) -> Double? {
         let calendar = Calendar.current
-        guard let record = habit.history.first(where: {
+        // Check if we have a record for this date
+        if let record = habit.history.first(where: {
             calendar.isDate($0.date, inSameDayAs: date)
-        }) else { return 0 }
+        }) {
         
         switch record.value {
         case .binary(let completed):
@@ -105,6 +106,62 @@ struct ModernChartView: View {
             return Double(value)
         case .graph(let value):
             return Double(value)
+            }
+        }
+        // For graph type, interpolate if no data exists
+        if case .graph(_) = habit.type {
+            return interpolateValue(for: date, dayOffset: dayOffset, totalDays: totalDays)
+        }
+        // For other types, return 0
+        return 0
+    }
+    private func interpolateValue(for date: Date, dayOffset: Int, totalDays: Int) -> Double? {
+        let calendar = Calendar.current
+        let today = Date()
+        // Find the nearest values before and after this date
+        var beforeValue: Double?
+        var afterValue: Double?
+        var beforeOffset: Int?
+        var afterOffset: Int?
+        // Look for values before this date
+        for i in (dayOffset + 1)..<totalDays {
+            if let checkDate = calendar.date(byAdding: .day, value: -i, to: today),
+               let record = habit.history.first(where: { calendar.isDate($0.date, inSameDayAs: checkDate) }) {
+                if case .graph(let value) = record.value {
+                    beforeValue = Double(value)
+                    beforeOffset = i
+                    break
+                }
+            }
+        }
+        // Look for values after this date
+        for i in 0..<dayOffset {
+            if let checkDate = calendar.date(byAdding: .day, value: -i, to: today),
+               let record = habit.history.first(where: { calendar.isDate($0.date, inSameDayAs: checkDate) }) {
+                if case .graph(let value) = record.value {
+                    afterValue = Double(value)
+                    afterOffset = i
+                    break
+                }
+            }
+        }
+        // Interpolate based on available data
+        if let before = beforeValue, let after = afterValue,
+           let beforeOff = beforeOffset, let afterOff = afterOffset {
+            // Linear interpolation between two points
+            let totalDistance = Double(beforeOff - afterOff)
+            let positionFromAfter = Double(dayOffset - afterOff)
+            let ratio = positionFromAfter / totalDistance
+            return after + (before - after) * ratio
+        } else if let before = beforeValue, afterValue != nil {
+            // Only have data before, but also have data after - use before value
+            return before
+        } else if beforeValue != nil {
+            // Have data on the left side - return nil to not render
+            return nil
+        } else {
+            // No data on the left side at all - return nil to not render
+            return nil
         }
     }
     
@@ -160,8 +217,8 @@ struct LegacyChartView: View {
         var data: [SimpleChartItem] = []
         
         for dayOffset in (0..<daysToShow).reversed() {
-            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
-                let value = getValue(for: date)
+            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today),
+               let value = getValue(for: date, dayOffset: dayOffset, totalDays: daysToShow) {
                 data.append(SimpleChartItem(id: dayOffset, value: value))
             }
         }
@@ -169,11 +226,12 @@ struct LegacyChartView: View {
         return data
     }
     
-    private func getValue(for date: Date) -> Double {
+    private func getValue(for date: Date, dayOffset: Int, totalDays: Int) -> Double? {
         let calendar = Calendar.current
-        guard let record = habit.history.first(where: {
+        // Check if we have a record for this date
+        if let record = habit.history.first(where: {
             calendar.isDate($0.date, inSameDayAs: date)
-        }) else { return 0 }
+        }) {
         
         switch record.value {
         case .binary(let completed):
@@ -182,6 +240,62 @@ struct LegacyChartView: View {
             return Double(value)
         case .graph(let value):
             return Double(value)
+            }
+        }
+        // For graph type, interpolate if no data exists
+        if case .graph(_) = habit.type {
+            return interpolateValue(for: date, dayOffset: dayOffset, totalDays: totalDays)
+        }
+        // For other types, return 0
+        return 0
+    }
+    private func interpolateValue(for date: Date, dayOffset: Int, totalDays: Int) -> Double? {
+        let calendar = Calendar.current
+        let today = Date()
+        // Find the nearest values before and after this date
+        var beforeValue: Double?
+        var afterValue: Double?
+        var beforeOffset: Int?
+        var afterOffset: Int?
+        // Look for values before this date
+        for i in (dayOffset + 1)..<totalDays {
+            if let checkDate = calendar.date(byAdding: .day, value: -i, to: today),
+               let record = habit.history.first(where: { calendar.isDate($0.date, inSameDayAs: checkDate) }) {
+                if case .graph(let value) = record.value {
+                    beforeValue = Double(value)
+                    beforeOffset = i
+                    break
+                }
+            }
+        }
+        // Look for values after this date
+        for i in 0..<dayOffset {
+            if let checkDate = calendar.date(byAdding: .day, value: -i, to: today),
+               let record = habit.history.first(where: { calendar.isDate($0.date, inSameDayAs: checkDate) }) {
+                if case .graph(let value) = record.value {
+                    afterValue = Double(value)
+                    afterOffset = i
+                    break
+                }
+            }
+        }
+        // Interpolate based on available data
+        if let before = beforeValue, let after = afterValue,
+           let beforeOff = beforeOffset, let afterOff = afterOffset {
+            // Linear interpolation between two points
+            let totalDistance = Double(beforeOff - afterOff)
+            let positionFromAfter = Double(dayOffset - afterOff)
+            let ratio = positionFromAfter / totalDistance
+            return after + (before - after) * ratio
+        } else if let before = beforeValue, afterValue != nil {
+            // Only have data before, but also have data after - use before value
+            return before
+        } else if beforeValue != nil {
+            // Have data on the left side - return nil to not render
+            return nil
+        } else {
+            // No data on the left side at all - return nil to not render
+            return nil
         }
     }
 }
