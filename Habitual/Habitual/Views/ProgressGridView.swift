@@ -23,21 +23,16 @@ struct ProgressGridView: View {
             
             // Always show 7 rows (one week)
             let rowsToShow = 7
-            let totalDays = rowsToShow * columnsToUse
+            let totalDays = min(daysToShow, rowsToShow * columnsToUse)
             
             // Get the most recent days that fit in our grid
             let dates = getDateRange(limit: totalDays)
-            
-            // Reorganize dates to fill column-wise from bottom-right
-            let columnOrderedDates = arrangeInColumnOrder(dates: dates, rows: rowsToShow, columns: columnsToUse)
             
             VStack(spacing: spacing) {
                 ForEach(0..<rowsToShow, id: \.self) { rowIndex in
                     HStack(spacing: spacing) {
                         ForEach(0..<columnsToUse, id: \.self) { colIndex in
-                            let dateIndex = rowIndex * columnsToUse + colIndex
-                            if dateIndex < columnOrderedDates.count {
-                                let date = columnOrderedDates[dateIndex]
+                            if let date = getDateForPosition(row: rowIndex, col: colIndex, dates: dates, columns: columnsToUse) {
                                 DaySquare(
                                     date: date,
                                     isCompleted: isCompleted(on: date),
@@ -54,6 +49,55 @@ struct ProgressGridView: View {
                 }
             }
         }
+    }
+    
+    private func getDateForPosition(row: Int, col: Int, dates: [Date], columns: Int) -> Date? {
+        let calendar = Calendar.current
+        guard !dates.isEmpty else { return nil }
+        
+        // Calculate date index based on column-wise filling
+        var dateIndex = dates.count - 1
+        
+        // Process columns from right to left
+        for currentCol in (0..<columns).reversed() {
+            if currentCol == columns - 1 && dateIndex >= 0 && dateIndex < dates.count {
+                // For the rightmost column, check weekday constraints
+                let mostRecentWeekday = calendar.component(.weekday, from: dates[dateIndex])
+                let maxRowForCol = mostRecentWeekday - 1
+                
+                if currentCol == col {
+                    // We're in the rightmost column
+                    if row <= maxRowForCol {
+                        let offset = maxRowForCol - row
+                        let targetIndex = dateIndex - offset
+                        if targetIndex >= 0 && targetIndex < dates.count {
+                            return dates[targetIndex]
+                        }
+                    }
+                    return nil
+                } else {
+                    // Skip past the dates in the rightmost column
+                    dateIndex -= (maxRowForCol + 1)
+                }
+            } else if currentCol == col {
+                // We're in the target column (not rightmost)
+                let offset = 6 - row // bottom to top
+                let targetIndex = dateIndex - offset
+                if targetIndex >= 0 && targetIndex < dates.count {
+                    return dates[targetIndex]
+                }
+                return nil
+            } else {
+                // Skip past the dates in this column
+                dateIndex -= 7
+            }
+            
+            if dateIndex < 0 {
+                return nil
+            }
+        }
+        
+        return nil
     }
     
     private func calculateSquareSize(for width: CGFloat) -> CGFloat {
@@ -78,37 +122,6 @@ struct ProgressGridView: View {
         return dates
     }
     
-    private func arrangeInColumnOrder(dates: [Date], rows: Int, columns: Int) -> [Date] {
-        var result: [Date] = []
-        
-        // Create a 2D array to hold dates in their final positions
-        var grid: [[Date?]] = Array(repeating: Array(repeating: nil, count: columns), count: rows)
-        
-        // Fill the grid column by column, from bottom to top, right to left
-        var dateIndex = dates.count - 1 // Start with the most recent date
-        
-        // Start from the rightmost column
-        for col in (0..<columns).reversed() {
-            // Fill from bottom to top
-            for row in (0..<rows).reversed() {
-                if dateIndex >= 0 && dateIndex < dates.count {
-                    grid[row][col] = dates[dateIndex]
-                    dateIndex -= 1
-                }
-            }
-        }
-        
-        // Convert the 2D grid back to a 1D array in row order for display
-        for row in 0..<rows {
-            for col in 0..<columns {
-                if let date = grid[row][col] {
-                    result.append(date)
-                }
-            }
-        }
-        
-        return result
-    }
     
     private func isCompleted(on date: Date) -> Bool {
         let calendar = Calendar.current
