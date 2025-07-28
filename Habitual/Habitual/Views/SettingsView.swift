@@ -51,12 +51,13 @@ struct SettingsView: View {
         case survey
         case privacy
         case backup
+        case support
 
         var id: Self { self }
     }
 
     enum AlertType: Identifiable {
-        case notification, appInfo, language, support, debugFillData
+        case notification, appInfo, language, debugFillData
 
         var id: Self { self }
     }
@@ -167,7 +168,7 @@ struct SettingsView: View {
                                     subtitle: nil,
                                     icon: "envelope"
                                 ) {
-                                    activeAlert = .support
+                                    activeSheet = .support
                                 }
                                 .padding()
 
@@ -261,6 +262,8 @@ struct SettingsView: View {
                     NavigationView {
                         BackupSyncView()
                     }
+                case .support:
+                    ContactSupportView()
                 }
             }
             .sheet(isPresented: $showingSurvey) {
@@ -295,17 +298,6 @@ struct SettingsView: View {
                         title: Text("Language"),
                         message: Text("Language selection coming soon"),
                         dismissButton: .default(Text("OK"))
-                    )
-                case .support:
-                    Alert(
-                        title: Text("Contact Support"),
-                        message: Text("Email: pat@codeofhonor.com"),
-                        primaryButton: .default(Text("Send Email")) {
-                            if let url = URL(string: "mailto:pat@codeofhonor.com") {
-                                UIApplication.shared.open(url)
-                            }
-                        },
-                        secondaryButton: .cancel(Text("Cancel"))
                     )
                 case .debugFillData:
                     Alert(
@@ -828,5 +820,66 @@ struct WebView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {
         let request = URLRequest(url: url)
         webView.load(request)
+    }
+}
+
+// MARK: - ContactSupportView
+struct ContactSupportView: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Spacer()
+                
+                Image(systemName: "envelope.circle.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.accentColor)
+                
+                Text("Contact Support")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                VStack(spacing: 12) {
+                    Text("Send us an email at:")
+                        .foregroundColor(.secondary)
+                    
+                    Button(action: {
+                        var components = URLComponents()
+                        components.scheme = "mailto"
+                        components.path = "pat@codeofhonor.com"
+                        components.queryItems = [
+                            URLQueryItem(name: "subject", value: "Support Request for Habitual App")
+                        ]
+                        
+                        if let url = components.url {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        Text("pat@codeofhonor.com")
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundColor(.accentColor)
+                            .underline()
+                    }
+                }
+                
+                Spacer()
+                
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("OK")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.accentColor)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal, 40)
+                .padding(.bottom, 40)
+            }
+            .navigationBarHidden(true)
+        }
     }
 }
