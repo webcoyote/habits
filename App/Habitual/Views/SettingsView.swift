@@ -343,7 +343,7 @@ struct SettingsView: View {
             context.reset()
 
             // Save to ensure deletions are committed
-            try context.save()
+            PersistenceController.shared.save(context: context)
         } catch {
             print("Error deleting existing habits: \(error)")
         }
@@ -379,19 +379,15 @@ struct SettingsView: View {
         }
 
         // Save all changes
-        do {
-            try context.save()
+        PersistenceController.shared.save(context: context)
 
-            // Update statistics
-            DatabaseManager.shared.incrementHabitsCreated()
+        // Update statistics
+        DatabaseManager.shared.incrementHabitsCreated()
 
-            // Post notification to refresh the habit list
-            NotificationCenter.default.post(name: NSNotification.Name("RefreshHabits"), object: nil)
+        // Post notification to refresh the habit list
+        NotificationCenter.default.post(name: NSNotification.Name("RefreshHabits"), object: nil)
 
-            AnalyticsManager.shared.track("debug_sample_data_filled")
-        } catch {
-            print("Error saving sample habits: \(error)")
-        }
+        AnalyticsManager.shared.track("debug_sample_data_filled")
     }
 
     private func generateRealisticHistory(for habitEntity: HabitEntity, habit: Habit, context: NSManagedObjectContext) {

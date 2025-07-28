@@ -29,7 +29,7 @@ class Configuration {
     
     enum Database {
         // Don't ever change these values or users will lose their data
-        static let coreDataContainerName = "Habits"
+        static let coreDataContainerName = "Habitual"
         static let sqliteDBName = "Habits.db"
     }
 

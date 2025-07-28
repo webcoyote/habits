@@ -114,7 +114,7 @@ class BackupManager {
                     }
                     
                     // Save the deletion first
-                    try context.save()
+                    PersistenceController.shared.save(context: context)
                     
                     // Reset the context to clear any cached data
                     context.reset()
@@ -125,7 +125,7 @@ class BackupManager {
                     }
                     
                     // Save imported data
-                    try context.save()
+                    PersistenceController.shared.save(context: context)
                     
                     // Notify the view context to refresh
                     DispatchQueue.main.async {

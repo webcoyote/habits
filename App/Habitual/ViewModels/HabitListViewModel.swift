@@ -37,7 +37,7 @@ class HabitListViewModel: ObservableObject {
                 
                 // Single save operation
                 if context.hasChanges {
-                    try context.save()
+                    PersistenceController.shared.save(context: context)
                 }
             } catch {
                 print("Error updating habit order: \(error)")
@@ -183,7 +183,7 @@ class HabitListViewModel: ObservableObject {
                 recordEntity.valueData = try JSONEncoder().encode(record.value)
                 recordEntity.habit = habitEntity
                 
-                try context.save()
+                PersistenceController.shared.save(context: context)
             }
         } catch {
             print("Error saving record: \(error)")

@@ -1,6 +1,9 @@
 import CoreData
 import SwiftUI
 
+// Core Data error codes
+let NSManagedObjectMergeError = 133020
+
 class PersistenceController {
     static let shared = PersistenceController()
     
@@ -59,11 +62,19 @@ class PersistenceController {
             try context.save()
         } catch let error as NSError {
             // Handle merge conflicts
-            if error.code == 133020 { // NSManagedObjectMergeError
+            if error.code == NSManagedObjectMergeError {
                 print("Merge conflict detected, attempting to resolve...")
                 
-                // Refresh objects with conflicts
-                if let conflicts = error.userInfo["conflictList"] as? [NSManagedObject] {
+                // Get the conflicted objects
+                if let conflictList = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+                    for conflict in conflictList {
+                        if let conflictedObject = conflict.userInfo[NSAffectedObjectsErrorKey] as? [NSManagedObject] {
+                            conflictedObject.forEach { object in
+                                context.refresh(object, mergeChanges: true)
+                            }
+                        }
+                    }
+                } else if let conflicts = error.userInfo["conflictList"] as? [NSManagedObject] {
                     conflicts.forEach { conflict in
                         context.refresh(conflict, mergeChanges: true)
                     }
@@ -72,8 +83,16 @@ class PersistenceController {
                 // Retry save
                 do {
                     try context.save()
+                    print("Successfully resolved merge conflict")
                 } catch {
                     print("Failed to save after merge conflict resolution: \(error)")
+                    // Last resort: refresh all objects
+                    context.refreshAllObjects()
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Final save attempt failed: \(error)")
+                    }
                 }
             } else {
                 print("Core Data save error: \(error), \(error.userInfo)")

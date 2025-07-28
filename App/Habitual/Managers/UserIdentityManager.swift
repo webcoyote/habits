@@ -1,5 +1,7 @@
 import Foundation
 import UIKit
+import CoreData
+import SwiftUI
 
 class UserIdentityManager {
     static let shared = UserIdentityManager()
@@ -197,5 +199,38 @@ extension UserIdentityManager {
             "habits_formed": stats.habitsFormed,
             "last_activity": Date().timeIntervalSince1970
         ])
+        
+        // Check if there are no habits and create a default one
+        createDefaultHabitIfNeeded()
+    }
+    
+    private func createDefaultHabitIfNeeded() {
+        let context = PersistenceController.shared.container.viewContext
+        let request: NSFetchRequest<HabitEntity> = HabitEntity.fetchRequest()
+        
+        do {
+            let count = try context.count(for: request)
+            if count == 0 {
+                // Create default "Daily Exercise" habit
+                let defaultHabit = Habit(
+                    name: "Daily Exercise",
+                    icon: "figure.run",
+                    color: .orange,
+                    type: .binary
+                )
+                
+                PersistenceController.shared.saveHabit(defaultHabit, context: context)
+                
+                // Track that we created the default habit
+                AnalyticsManager.shared.track("default_habit_created", properties: [
+                    "habit_name": "Daily Exercise",
+                    "habit_type": "binary"
+                ])
+                
+                print("📱 Created default Daily Exercise habit")
+            }
+        } catch {
+            print("Error checking for habits: \(error)")
+        }
     }
 }
