@@ -3,12 +3,10 @@ import SwiftUI
 struct ProgressGridView: View {
     let habit: Habit
     let daysToShow: Int
-    let columnsPerRow: Int
     
-    init(habit: Habit, daysToShow: Int = 90, columnsPerRow: Int = 30) {
+    init(habit: Habit, daysToShow: Int = 90) {
         self.habit = habit
         self.daysToShow = daysToShow
-        self.columnsPerRow = columnsPerRow
     }
     
     var body: some View {
@@ -19,14 +17,18 @@ struct ProgressGridView: View {
             
             // Calculate columns that fit in available width
             let maxColumns = Int((availableWidth + spacing) / (squareSize + spacing))
-            let columnsToUse = min(maxColumns, columnsPerRow)
             
             // Always show 7 rows (one week)
             let rowsToShow = 7
-            let totalDays = min(daysToShow, rowsToShow * columnsToUse)
+            
+            // Calculate how many days we can actually show based on available space
+            let totalDays = rowsToShow * maxColumns
             
             // Get the most recent days that fit in our grid
             let dates = getDateRange(limit: totalDays)
+            
+            // Recalculate columns based on actual dates to show
+            let columnsToUse = min(maxColumns, max(1, (dates.count + rowsToShow - 1) / rowsToShow))
             
             VStack(spacing: spacing) {
                 ForEach(0..<rowsToShow, id: \.self) { rowIndex in
@@ -100,10 +102,10 @@ struct ProgressGridView: View {
         return nil
     }
     
-    private func calculateSquareSize(for width: CGFloat) -> CGFloat {
-        let totalSpacing = CGFloat(columnsPerRow - 1) * 2
+    private func calculateSquareSize(for width: CGFloat, columns: Int) -> CGFloat {
+        let totalSpacing = CGFloat(columns - 1) * 2
         let availableWidth = width - totalSpacing
-        return max(8, min(12, availableWidth / CGFloat(columnsPerRow)))
+        return max(8, min(12, availableWidth / CGFloat(columns)))
     }
     
     private func getDateRange(limit: Int? = nil) -> [Date] {
@@ -111,11 +113,25 @@ struct ProgressGridView: View {
         let today = Date()
         var dates: [Date] = []
         
-        let daysToGet = limit ?? daysToShow
-        
-        for dayOffset in (0..<daysToGet).reversed() {
-            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
-                dates.append(date)
+        // If we have history, use the earliest date from history
+        if let earliestRecord = habit.history.min(by: { $0.date < $1.date }) {
+            let startDate = earliestRecord.date
+            let days = calendar.dateComponents([.day], from: startDate, to: today).day ?? 0
+            let daysToGet = limit ?? max(daysToShow, days + 1)
+            
+            for dayOffset in (0..<daysToGet).reversed() {
+                if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
+                    dates.append(date)
+                }
+            }
+        } else {
+            // No history, use default
+            let daysToGet = limit ?? daysToShow
+            
+            for dayOffset in (0..<daysToGet).reversed() {
+                if let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) {
+                    dates.append(date)
+                }
             }
         }
         

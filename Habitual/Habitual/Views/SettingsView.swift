@@ -405,68 +405,109 @@ struct SettingsView: View {
         let today = Date()
         let encoder = JSONEncoder()
 
-        // Generate data for the last year
-        let maxDays = 84
-        for daysAgo in 0..<maxDays {
-            guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+        // Different patterns for different habits
+        switch habit.name {
+        case "Morning Exercise":
+            // Generate data, starting sporadically on weekends and getting progressively better
+            let maxDays = 200
+            for daysAgo in 0..<maxDays {
+                guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
 
-            let dayOfWeek = calendar.component(.weekday, from: date)
+                let dayOfWeek = calendar.component(.weekday, from: date)
+                let progress = Double(maxDays - daysAgo) / Double(maxDays)
 
-            // Different patterns for different habits
-            switch habit.name {
-            case "Morning Exercise":
+                // Start with low completion rate on weekends only, improve over time
+                var completionChance: Double = 0.0
+
+                if daysAgo > 160 {
+                    // First month: only weekends with low chance
+                    if dayOfWeek == 1 || dayOfWeek == 7 {
+                        completionChance = 0.4
+                    }
+                } else if daysAgo > 120 {
+                    // Second month: weekends more likely, some weekdays
+                    if dayOfWeek == 1 || dayOfWeek == 7 {
+                        completionChance = 0.5
+                    } else {
+                        completionChance = 0.2
+                    }
+                } else if daysAgo > 80 {
+                    // Third month: improving consistency
+                    if dayOfWeek == 1 || dayOfWeek == 7 {
+                        completionChance = 0.6
+                    } else {
+                        completionChance = 0.3
+                    }
+                } else if daysAgo > 7 {
+                    // Last 40 days: much better consistency
+                    completionChance = 0.7 + (progress * 0.2) // 70% to 90%
+                } else {
+                    completionChance = 1
+                }
+
+                let completed = Double.random(in: 0...1) < completionChance
+
+                if completed || (daysAgo < 20 && Double.random(in: 0...1) < 0.3) {
+                    let recordEntity = RecordEntity(context: context)
+                    recordEntity.id = UUID()
+                    recordEntity.date = date
+                    recordEntity.habit = habitEntity
+
+                    let value = HabitValue.binary(completed: completed)
+                    recordEntity.valueData = try? encoder.encode(value)
+                }
+            }
+
+        case "Drink Water":
+            // Generate 7 days of data, starting low and finishing higher
+            for daysAgo in 0..<7 {
+                guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+
                 let recordEntity = RecordEntity(context: context)
                 recordEntity.id = UUID()
                 recordEntity.date = date
                 recordEntity.habit = habitEntity
 
-                // chance of completion
-                let completed = Double.random(in: 0...1) < 0.6
-                let value = HabitValue.binary(completed: completed)
+                // Start at ~3-4 glasses, end at ~8 glasses
+                let progress = Double(7 - daysAgo) / 7.0
+                let baseValue = Int(3.5 + (4.5 * progress))
+                let variance = Int.random(in: -1...1)
+                let finalValue = max(0, min(10, baseValue + variance))
+
+                let value = HabitValue.numeric(value: finalValue)
                 recordEntity.valueData = try? encoder.encode(value)
-
-            case "Drink Water":
-                // Record most days with varying amounts
-                if Double.random(in: 0...1) < 0.8 {
-                    let recordEntity = RecordEntity(context: context)
-                    recordEntity.id = UUID()
-                    recordEntity.date = date
-                    recordEntity.habit = habitEntity
-
-                    // Start lower and improve over time
-                    let progress = min(0.7 + (Double(60 - daysAgo) / Double(maxDays)), 1.0)
-                    let baseValue = Int(8 * progress) // Target is 8 glasses
-                    let variance = Int.random(in: -1...2)
-                    let finalValue = max(0, min(10, baseValue + variance))
-
-                    let value = HabitValue.numeric(value: finalValue)
-                    recordEntity.valueData = try? encoder.encode(value)
-                }
-
-            case "Mood Tracker":
-                // Record most days (85%) with realistic mood patterns
-                if Double.random(in: 0...1) < 0.85 {
-                    let recordEntity = RecordEntity(context: context)
-                    recordEntity.id = UUID()
-                    recordEntity.date = date
-                    recordEntity.habit = habitEntity
-
-                    // Lower scores on Mondays, higher on weekends
-                    let dayVariance: Int
-                    switch dayOfWeek {
-                    case 1, 7: dayVariance = Int.random(in: 0...2) // Weekend
-                    case 2: dayVariance = Int.random(in: -2...0) // Monday
-                    default: dayVariance = Int.random(in: -1...1) // Other days
-                    }
-
-                    let finalValue = max(1, min(10, 6 + dayVariance))
-                    let value = HabitValue.graph(value: finalValue)
-                    recordEntity.valueData = try? encoder.encode(value)
-                }
-
-            default:
-                break
             }
+
+        case "Mood Tracker":
+            // Generate 7 days of data, starting low and finishing at 10
+            for daysAgo in 0..<7 {
+                guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+
+                let recordEntity = RecordEntity(context: context)
+                recordEntity.id = UUID()
+                recordEntity.date = date
+                recordEntity.habit = habitEntity
+
+                // Start at ~3-4, end at 10
+                let progress = Double(7 - daysAgo) / 7.0
+                let baseValue: Int
+
+                if daysAgo == 0 {
+                    // Today should be exactly 10
+                    baseValue = 10
+                } else {
+                    baseValue = Int(3.5 + (6.5 * progress))
+                }
+
+                let variance = daysAgo == 0 ? 0 : Int.random(in: -1...1)
+                let finalValue = max(1, min(10, baseValue + variance))
+
+                let value = HabitValue.graph(value: finalValue)
+                recordEntity.valueData = try? encoder.encode(value)
+            }
+
+        default:
+            break
         }
     }
 }

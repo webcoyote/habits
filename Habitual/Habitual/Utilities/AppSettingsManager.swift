@@ -203,7 +203,7 @@ class AppSettings: ObservableObject {
         // Load saved gradient colors
         let savedStartColor: Color
         if let data = userDefaults.data(forKey: gradientStartColorKey),
-           let uiColor = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? UIColor {
+           let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
             savedStartColor = Color(uiColor)
         } else {
             savedStartColor = .blue
@@ -211,7 +211,7 @@ class AppSettings: ObservableObject {
         
         let savedMiddleColor: Color
         if let data = userDefaults.data(forKey: gradientMiddleColorKey),
-           let uiColor = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? UIColor {
+           let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
             savedMiddleColor = Color(uiColor)
         } else {
             savedMiddleColor = .purple
@@ -219,7 +219,7 @@ class AppSettings: ObservableObject {
         
         let savedEndColor: Color
         if let data = userDefaults.data(forKey: gradientEndColorKey),
-           let uiColor = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? UIColor {
+           let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
             savedEndColor = Color(uiColor)
         } else {
             savedEndColor = .pink

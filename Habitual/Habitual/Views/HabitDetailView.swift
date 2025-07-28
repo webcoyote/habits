@@ -165,7 +165,7 @@ struct ProgressSection: View {
             switch habit.type {
             case .binary:
                 ProgressGridView(habit: habit, daysToShow: daysToShow)
-                    .frame(height: min(200, CGFloat(daysToShow / 30) * 40))
+                    .frame(height: 70) // 7 rows * 8px + spacing
                     .padding(.horizontal)
             case .numeric, .graph:
                 ProgressChartView(habit: habit, type: habit.type.isGraph ? .line : .bar, daysToShow: min(daysToShow, 30))
