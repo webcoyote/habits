@@ -21,7 +21,7 @@ if [ "$SIMULATOR_STATE" != "Booted" ]; then
 fi
 
 # Find the application
-APP_PATH="Habitual/.Build/Products/Debug-iphonesimulator/Habitual.app"
+APP_PATH="App/.Build/Products/Debug-iphonesimulator/Habitual.app"
 if [ ! -d "$APP_PATH" ]; then
     echo "❌ Could not find built app at: $APP_PATH"
     echo "   Run 'scripts/build' first to build the app"

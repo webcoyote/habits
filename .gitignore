@@ -2,8 +2,8 @@ worktrees/
 .DS_Store
 .claude/settings.local.json
 .git/
-Habitual/.Build
-Habitual/.DerivedData
+App/.Build
+App/.DerivedData
 *.xcuserstate
 /temp/
 /logs/
