@@ -11,7 +11,7 @@ class Configuration {
     
     enum App {
         // Add app-specific configuration here
-        static let appName = "Habitual"
+        static let appName = "Habitual Offender"
         static let supportEmail = "pat@codeofhonor.com"
         static let surveyURL = "https://tally.so/r/mRyLPp"
         static let privacyPolicyURL =
