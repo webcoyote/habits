@@ -11,9 +11,11 @@ struct HabitListView: View {
     @State private var isEditMode = false
     @State private var animatingHabitId: UUID?
     @State private var animationTimer: Timer?
+    #if CELEBRATION_EFFECTS_ENABLED
     @State private var showingCelebration = false
     @State private var celebrationEffect: CelebrationEffect = .confetti
     @State private var celebrationClickLocation: CGPoint? = nil
+    #endif
     
     @FetchRequest(
         sortDescriptors: [
@@ -52,7 +54,9 @@ struct HabitListView: View {
                 }
         }
         .coordinateSpace(name: "habitListView")
+        #if CELEBRATION_EFFECTS_ENABLED
         .overlay(celebrationOverlay)
+        #endif
     }
     
     @ViewBuilder
@@ -115,6 +119,7 @@ struct HabitListView: View {
         viewModel.updateHabitValue(habit, value: value)
         let completed = value > 0
         
+        #if CELEBRATION_EFFECTS_ENABLED
         if completed && !wasCompleted {
             celebrationClickLocation = location
             showingCelebration = true
@@ -124,6 +129,7 @@ struct HabitListView: View {
                 celebrationEffect = celebrationEffect.next()
             }
         }
+        #endif
         
         AnalyticsManager.shared.track("habit_completed", properties: [
             "habit_id": habit.id.uuidString,
@@ -180,6 +186,7 @@ struct HabitListView: View {
         }
     }
     
+    #if CELEBRATION_EFFECTS_ENABLED
     @ViewBuilder
     private var celebrationOverlay: some View {
         if showingCelebration {
@@ -189,6 +196,7 @@ struct HabitListView: View {
                 .zIndex(999)
         }
     }
+    #endif
     
     private func startAnimationTimer() {
         stopAnimationTimer()
