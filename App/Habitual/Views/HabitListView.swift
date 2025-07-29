@@ -24,145 +24,167 @@ struct HabitListView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                // Gradient background for entire page
-                appSettings.backgroundGradientWithOpacity
-                .ignoresSafeArea(edges: .top)
-                
-                List {
-                    ForEach(viewModel.habits, id: \.id) { habit in
-                        HabitCardView(
-                            habit: habit,
-                            isCompact: showingCompactView,
-                            isAnimating: animatingHabitId == habit.id,
-                            onComplete: { value in
-                                let wasCompleted = habit.todayValue > 0
-                                viewModel.updateHabitValue(habit, value: value)
-                                let completed = value > 0
-                                
-                                // Show celebration if habit was just completed (not uncompleted)
-                                if completed && !wasCompleted {
-                                    showingCelebration = true
-                                    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-                                        showingCelebration = false
-                                        // Move to next effect for the next celebration
-                                        celebrationEffect = celebrationEffect.next()
-                                    }
-                                }
-                                
-                                // Track habit completion
-                                AnalyticsManager.shared.track("habit_completed", properties: [
-                                    "habit_id": habit.id.uuidString,
-                                    "habit_name": habit.name,
-                                    "habit_type": habit.type.displayName,
-                                    "completed": completed,
-                                    "value": value
-                                ])
-                                
-                                // Track streak milestone if completed
-                                if completed {
-                                    let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
-                                    UserIdentityManager.shared.trackStreakMilestone(
-                                        streakDays: statistics.currentStreak + 1,
-                                        habitName: habit.name
-                                    )
-                                }
-                            },
-                            onTap: {
-                                selectedHabit = habit
-                                // Track habit detail view
-                                AnalyticsManager.shared.track("habit_viewed", properties: [
-                                    "habit_id": habit.id.uuidString,
-                                    "habit_name": habit.name
-                                ])
-                            }
-                        )
-                        .listRowInsets(EdgeInsets(top: showingCompactView ? 4 : 8, leading: 16, bottom: showingCompactView ? 4 : 8, trailing: 16))
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                    }
-                    .onMove { indices, newOffset in
-                        withAnimation(.none) {
-                            viewModel.moveHabits(from: indices, to: newOffset, context: viewContext)
-                        }
-                    }
-                    
-                    // Spacer to account for FAB
-                    Color.clear
-                        .frame(height: 80)
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
+            mainContent
+                .navigationTitle("Habits")
+                .toolbar {
+                    toolbarContent
                 }
-                .listStyle(PlainListStyle())
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        AddButton {
-                            showingAddHabit = true
-                            // Track add habit button tap
-                            AnalyticsManager.shared.track("add_habit_tapped")
-                        }
-                        .padding()
-                    }
+                .environment(\.editMode, .constant(isEditMode ? EditMode.active : EditMode.inactive))
+                .sheet(isPresented: $showingAddHabit) {
+                    AddHabitView(viewModel: viewModel)
                 }
-            }
-            .navigationTitle("Habits")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        withAnimation {
-                            isEditMode.toggle()
-                        }
-                    }) {
-                        Text(isEditMode ? "Done" : "Edit")
-                    }
+                .sheet(item: $selectedHabit) { habit in
+                    HabitDetailView(habit: habit, viewModel: viewModel)
                 }
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        withAnimation {
-                            showingCompactView.toggle()
-                        }
-                    }) {
-                        Image(systemName: showingCompactView ? "rectangle.grid.1x2" : "square.grid.2x2")
-                    }
+                .onAppear {
+                    viewModel.loadHabits(from: habitEntities, context: viewContext)
+                    startAnimationTimer()
                 }
-            }
-            .environment(\.editMode, .constant(isEditMode ? EditMode.active : EditMode.inactive))
-            .sheet(isPresented: $showingAddHabit) {
-                AddHabitView(viewModel: viewModel)
-            }
-            .sheet(item: $selectedHabit) { habit in
-                HabitDetailView(habit: habit, viewModel: viewModel)
-            }
-            .onAppear {
-                viewModel.loadHabits(from: habitEntities, context: viewContext)
-            }
-            .onChange(of: habitEntities.count) { _ in
-                viewModel.loadHabits(from: habitEntities, context: viewContext)
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RefreshHabits"))) { _ in
-                viewModel.loadHabits(from: habitEntities, context: viewContext)
-            }
-            .onAppear {
-                startAnimationTimer()
-            }
-            .onDisappear {
-                stopAnimationTimer()
-            }
+                .onChange(of: habitEntities.count) { _ in
+                    viewModel.loadHabits(from: habitEntities, context: viewContext)
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RefreshHabits"))) { _ in
+                    viewModel.loadHabits(from: habitEntities, context: viewContext)
+                }
+                .onDisappear {
+                    stopAnimationTimer()
+                }
         }
-        .overlay(
-            Group {
-                if showingCelebration {
-                    CelebrationEffectView(effect: celebrationEffect)
-                        .ignoresSafeArea()
-                        .allowsHitTesting(false)
-                        .zIndex(999)
+        .overlay(celebrationOverlay)
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        ZStack {
+            appSettings.backgroundGradientWithOpacity
+                .ignoresSafeArea(edges: .top)
+            
+            habitList
+            
+            floatingActionButton
+        }
+    }
+    
+    @ViewBuilder
+    private var habitList: some View {
+        List {
+            ForEach(viewModel.habits, id: \.id) { habit in
+                habitRow(for: habit)
+                    .listRowInsets(EdgeInsets(top: showingCompactView ? 4 : 8, leading: 16, bottom: showingCompactView ? 4 : 8, trailing: 16))
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+            }
+            .onMove { indices, newOffset in
+                withAnimation(.none) {
+                    viewModel.moveHabits(from: indices, to: newOffset, context: viewContext)
                 }
+            }
+            
+            // Spacer to account for FAB
+            Color.clear
+                .frame(height: 80)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+        }
+        .listStyle(PlainListStyle())
+    }
+    
+    @ViewBuilder
+    private func habitRow(for habit: Habit) -> some View {
+        HabitCardView(
+            habit: habit,
+            isCompact: showingCompactView,
+            isAnimating: animatingHabitId == habit.id,
+            onComplete: { value in
+                handleHabitCompletion(habit: habit, value: value)
+            },
+            onTap: {
+                selectedHabit = habit
+                AnalyticsManager.shared.track("habit_viewed", properties: [
+                    "habit_id": habit.id.uuidString,
+                    "habit_name": habit.name
+                ])
             }
         )
+    }
+    
+    private func handleHabitCompletion(habit: Habit, value: Int) {
+        let wasCompleted = habit.todayValue > 0
+        viewModel.updateHabitValue(habit, value: value)
+        let completed = value > 0
+        
+        if completed && !wasCompleted {
+            showingCelebration = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                showingCelebration = false
+                celebrationEffect = celebrationEffect.next()
+            }
+        }
+        
+        AnalyticsManager.shared.track("habit_completed", properties: [
+            "habit_id": habit.id.uuidString,
+            "habit_name": habit.name,
+            "habit_type": habit.type.displayName,
+            "completed": completed,
+            "value": value
+        ])
+        
+        if completed {
+            let statistics = HabitStatistics(habit: habit, timeRange: .allTime)
+            UserIdentityManager.shared.trackStreakMilestone(
+                streakDays: statistics.currentStreak + 1,
+                habitName: habit.name
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var floatingActionButton: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                AddButton {
+                    showingAddHabit = true
+                    AnalyticsManager.shared.track("add_habit_tapped")
+                }
+                .padding()
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button(action: {
+                withAnimation {
+                    isEditMode.toggle()
+                }
+            }) {
+                Text(isEditMode ? "Done" : "Edit")
+            }
+        }
+        
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            Button(action: {
+                withAnimation {
+                    showingCompactView.toggle()
+                }
+            }) {
+                Image(systemName: showingCompactView ? "rectangle.grid.1x2" : "square.grid.2x2")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var celebrationOverlay: some View {
+        if showingCelebration {
+            CelebrationEffectView(effect: celebrationEffect)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .zIndex(999)
+        }
     }
     
     private func startAnimationTimer() {
