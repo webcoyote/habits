@@ -4,7 +4,7 @@ struct HabitCardView: View {
     let habit: Habit
     let isCompact: Bool
     let isAnimating: Bool
-    let onComplete: (Int) -> Void
+    let onComplete: (Int, CGPoint?) -> Void
     let onTap: () -> Void
     
     @State private var isCompleted = false
@@ -31,8 +31,8 @@ struct HabitCardView: View {
                     color: habit.color.color,
                     isCompact: isCompact,
                     isAnimating: isAnimating
-                ) { newValue in
-                    handleCompletion(newValue)
+                ) { newValue, location in
+                    handleCompletion(newValue, location)
                 }
                 .contentShape(Rectangle())
             }
@@ -60,13 +60,13 @@ struct HabitCardView: View {
         }
     }
     
-    private func handleCompletion(_ value: Int) {
+    private func handleCompletion(_ value: Int, _ location: CGPoint?) {
         let wasCompleted = isCompleted || currentValue > 0
         
         switch habit.type {
         case .binary:
             isCompleted.toggle()
-            onComplete(isCompleted ? 1 : 0)
+            onComplete(isCompleted ? 1 : 0, location)
             // Track habit formation
             if isCompleted && !wasCompleted {
                 UsageTracker.shared.incrementHabitsFormedIfNotCountedToday(habitId: habit.id.uuidString)
@@ -74,7 +74,7 @@ struct HabitCardView: View {
         case .numeric:
             let previousValue = currentValue
             currentValue = value
-            onComplete(value)
+            onComplete(value, location)
             // Track when habit goes from incomplete to complete
             if currentValue > 0 && previousValue == 0 {
                 UsageTracker.shared.incrementHabitsFormedIfNotCountedToday(habitId: habit.id.uuidString)
@@ -82,7 +82,7 @@ struct HabitCardView: View {
         case .graph:
             let hadValue = currentValue > 0
             currentValue = value
-            onComplete(value)
+            onComplete(value, location)
             // Track when graph is first set for the day
             if !hadValue && currentValue > 0 {
                 UsageTracker.shared.incrementHabitsFormedIfNotCountedToday(habitId: habit.id.uuidString)
@@ -117,7 +117,7 @@ struct CompleteButton: View {
     let color: Color
     let isCompact: Bool
     let isAnimating: Bool
-    let onComplete: (Int) -> Void
+    let onComplete: (Int, CGPoint?) -> Void
     
     @State private var buttonScale: CGFloat = 1.0
     @State private var buttonOffset: CGSize = .zero
@@ -128,8 +128,53 @@ struct CompleteButton: View {
         Group {
             switch habitType {
         case .binary:
-            Button(action: { onComplete(isCompleted ? 0 : 1) }) {
-                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+            Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                .font(isCompact ? .title3 : .title2)
+                .foregroundColor(color)
+                .background(
+                    Circle()
+                        .fill(color.opacity(glowOpacity))
+                        .blur(radius: 8)
+                        .scaleEffect(1.5)
+                )
+                .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
+                .scaleEffect(buttonScale)
+                .offset(buttonOffset)
+                .rotationEffect(.degrees(rotation))
+                .contentShape(Circle())
+                .overlay(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .contentShape(Circle())
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onEnded { value in
+                                        let frame = geometry.frame(in: .named("habitListView"))
+                                        let globalPoint = CGPoint(
+                                            x: frame.origin.x + value.location.x,
+                                            y: frame.origin.y + value.location.y
+                                        )
+                                        onComplete(isCompleted ? 0 : 1, globalPoint)
+                                    }
+                            )
+                    }
+                )
+        case .numeric(let target):
+            HStack(spacing: 4) {
+                Text("\(currentValue)/\(target)")
+                    .font(isCompact ? .caption2 : .caption)
+                    .foregroundColor(.secondary)
+                Button(action: { 
+                    let newValue = max(0, currentValue - 1)
+                    onComplete(newValue, nil)
+                }) {
+                    Image(systemName: "minus.circle")
+                        .font(isCompact ? .title3 : .title2)
+                        .foregroundColor(currentValue > 0 ? color : .gray)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
+                Image(systemName: currentValue >= target ? "checkmark.circle.fill" : "plus.circle")
                     .font(isCompact ? .title3 : .title2)
                     .foregroundColor(color)
                     .background(
@@ -142,44 +187,25 @@ struct CompleteButton: View {
                     .scaleEffect(buttonScale)
                     .offset(buttonOffset)
                     .rotationEffect(.degrees(rotation))
-            }
-            .buttonStyle(PlainButtonStyle())
-            .contentShape(Circle())
-        case .numeric(let target):
-            HStack(spacing: 4) {
-                Text("\(currentValue)/\(target)")
-                    .font(isCompact ? .caption2 : .caption)
-                    .foregroundColor(.secondary)
-                Button(action: { 
-                    let newValue = max(0, currentValue - 1)
-                    onComplete(newValue)
-                }) {
-                    Image(systemName: "minus.circle")
-                        .font(isCompact ? .title3 : .title2)
-                        .foregroundColor(currentValue > 0 ? color : .gray)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .contentShape(Circle())
-                Button(action: { 
-                    let newValue = currentValue < target ? currentValue + 1 : 0
-                    onComplete(newValue)
-                }) {
-                    Image(systemName: currentValue >= target ? "checkmark.circle.fill" : "plus.circle")
-                        .font(isCompact ? .title3 : .title2)
-                        .foregroundColor(color)
-                        .background(
-                            Circle()
-                                .fill(color.opacity(glowOpacity))
-                                .blur(radius: 8)
-                                .scaleEffect(1.5)
-                        )
-                        .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
-                        .scaleEffect(buttonScale)
-                        .offset(buttonOffset)
-                        .rotationEffect(.degrees(rotation))
-                }
-                .buttonStyle(PlainButtonStyle())
-                .contentShape(Circle())
+                    .contentShape(Circle())
+                    .overlay(
+                        GeometryReader { geometry in
+                            Color.clear
+                                .contentShape(Circle())
+                                .gesture(
+                                    DragGesture(minimumDistance: 0)
+                                        .onEnded { value in
+                                            let frame = geometry.frame(in: .named("habitListView"))
+                                            let globalPoint = CGPoint(
+                                                x: frame.origin.x + value.location.x,
+                                                y: frame.origin.y + value.location.y
+                                            )
+                                            let newValue = currentValue < target ? currentValue + 1 : 0
+                                            onComplete(newValue, globalPoint)
+                                        }
+                                )
+                        }
+                    )
             }
         case .graph(let scale):
             HStack(spacing: 4) {
@@ -188,7 +214,7 @@ struct CompleteButton: View {
                     .foregroundColor(.secondary)
                 Button(action: { 
                     let newValue = max(0, currentValue - 1)
-                    onComplete(newValue)
+                    onComplete(newValue, nil)
                 }) {
                     Image(systemName: "minus.circle")
                         .font(isCompact ? .title3 : .title2)
@@ -196,26 +222,38 @@ struct CompleteButton: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
-                Button(action: { 
-                    let newValue = currentValue < scale ? currentValue + 1 : 0
-                    onComplete(newValue)
-                }) {
-                    Image(systemName: currentValue >= scale ? "checkmark.circle.fill" : "plus.circle")
-                        .font(isCompact ? .title3 : .title2)
-                        .foregroundColor(color)
-                        .background(
-                            Circle()
-                                .fill(color.opacity(glowOpacity))
-                                .blur(radius: 8)
-                                .scaleEffect(1.5)
-                        )
-                        .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
-                        .scaleEffect(buttonScale)
-                        .offset(buttonOffset)
-                        .rotationEffect(.degrees(rotation))
-                }
-                .buttonStyle(PlainButtonStyle())
-                .contentShape(Circle())
+                Image(systemName: currentValue >= scale ? "checkmark.circle.fill" : "plus.circle")
+                    .font(isCompact ? .title3 : .title2)
+                    .foregroundColor(color)
+                    .background(
+                        Circle()
+                            .fill(color.opacity(glowOpacity))
+                            .blur(radius: 8)
+                            .scaleEffect(1.5)
+                    )
+                    .shadow(color: color.opacity(glowOpacity), radius: 10, x: 0, y: 0)
+                    .scaleEffect(buttonScale)
+                    .offset(buttonOffset)
+                    .rotationEffect(.degrees(rotation))
+                    .contentShape(Circle())
+                    .overlay(
+                        GeometryReader { geometry in
+                            Color.clear
+                                .contentShape(Circle())
+                                .gesture(
+                                    DragGesture(minimumDistance: 0)
+                                        .onEnded { value in
+                                            let frame = geometry.frame(in: .named("habitListView"))
+                                            let globalPoint = CGPoint(
+                                                x: frame.origin.x + value.location.x,
+                                                y: frame.origin.y + value.location.y
+                                            )
+                                            let newValue = currentValue < scale ? currentValue + 1 : 0
+                                            onComplete(newValue, globalPoint)
+                                        }
+                                )
+                        }
+                    )
             }
             }
         }

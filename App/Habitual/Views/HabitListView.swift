@@ -13,6 +13,7 @@ struct HabitListView: View {
     @State private var animationTimer: Timer?
     @State private var showingCelebration = false
     @State private var celebrationEffect: CelebrationEffect = .confetti
+    @State private var celebrationClickLocation: CGPoint? = nil
     
     @FetchRequest(
         sortDescriptors: [
@@ -50,6 +51,7 @@ struct HabitListView: View {
                     stopAnimationTimer()
                 }
         }
+        .coordinateSpace(name: "habitListView")
         .overlay(celebrationOverlay)
     }
     
@@ -95,8 +97,8 @@ struct HabitListView: View {
             habit: habit,
             isCompact: showingCompactView,
             isAnimating: animatingHabitId == habit.id,
-            onComplete: { value in
-                handleHabitCompletion(habit: habit, value: value)
+            onComplete: { value, location in
+                handleHabitCompletion(habit: habit, value: value, location: location)
             },
             onTap: {
                 selectedHabit = habit
@@ -108,15 +110,16 @@ struct HabitListView: View {
         )
     }
     
-    private func handleHabitCompletion(habit: Habit, value: Int) {
+    private func handleHabitCompletion(habit: Habit, value: Int, location: CGPoint?) {
         let wasCompleted = habit.todayValue > 0
         viewModel.updateHabitValue(habit, value: value)
         let completed = value > 0
         
         if completed && !wasCompleted {
+            celebrationClickLocation = location
             showingCelebration = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 showingCelebration = false
                 celebrationEffect = celebrationEffect.next()
             }
@@ -180,7 +183,7 @@ struct HabitListView: View {
     @ViewBuilder
     private var celebrationOverlay: some View {
         if showingCelebration {
-            CelebrationEffectView(effect: celebrationEffect)
+            CelebrationEffectView(effect: celebrationEffect, location: celebrationClickLocation ?? CGPoint(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY))
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
                 .zIndex(999)

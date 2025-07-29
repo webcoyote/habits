@@ -27,6 +27,7 @@ enum CelebrationEffect: CaseIterable {
 
 struct CelebrationEffectView: View {
     let effect: CelebrationEffect
+    let location: CGPoint
     @State private var showEffect = false
     
     var body: some View {
@@ -50,7 +51,7 @@ struct CelebrationEffectView: View {
     @ViewBuilder
     private var debugLabel: some View {
         VStack {
-            Text("Effect: \(String(describing: effect))")
+            Text("Effect: \(String(describing: effect)) \(location)")
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(.white)
                 .padding()
@@ -107,7 +108,7 @@ struct CelebrationEffectView: View {
                 .fill(.white)
                 .frame(width: 16, height: 16)
                 .tag("square")
-            
+
             Circle()
                 .fill(.white)
                 .frame(width: 16)
@@ -125,6 +126,7 @@ struct CelebrationEffectView: View {
                 .blendMode(.plusLighter)
                 .tag("circle")
         }
+        .position(location)
     }
     
     @ViewBuilder
@@ -179,6 +181,7 @@ struct CelebrationEffectView: View {
                 .opacity(0.3)
                 .tag("circle")
         }
+        .position(location)
     }
     
     @ViewBuilder
@@ -186,7 +189,7 @@ struct CelebrationEffectView: View {
         VortexView(.fireflies) {
             Circle()
                 .fill(Color.yellow)
-                .frame(width: 12)
+                .frame(width: 24)
                 .blur(radius: 4)
                 .blendMode(.plusLighter)
                 .tag("circle")
