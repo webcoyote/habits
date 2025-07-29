@@ -20,7 +20,7 @@ if ! command -v magick &> /dev/null; then
 fi
 
 # Define output directories based on Project.swift configuration
-IOS_ASSETS_DIR="$SCRIPT_DIR/../Habitual/Assets.xcassets/AppIcon.appiconset"
+IOS_ASSETS_DIR="$SCRIPT_DIR/../../App/Habitual/Assets.xcassets/AppIcon.appiconset"
 
 # Create output directories
 mkdir -p "$IOS_ASSETS_DIR"
