@@ -57,7 +57,7 @@
     <array>
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>com.codeofhonor.habitual.backup</string>
+            <string>com.codeofhonor.habits.backup</string>
             <key>UTTypeDescription</key>
             <string>Habitual Backup File</string>
             <key>UTTypeConformsTo</key>
@@ -84,7 +84,7 @@
             <string>Editor</string>
             <key>LSItemContentTypes</key>
             <array>
-                <string>com.codeofhonor.habitual.backup</string>
+                <string>com.codeofhonor.habits.backup</string>
             </array>
         </dict>
     </array>

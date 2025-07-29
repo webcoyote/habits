@@ -18,7 +18,7 @@ class Configuration {
             "https://www.termsfeed.com/live/d7469d0c-8047-435a-8208-f7811d293a88"
 
         // Do not change or backup files cannot be loaded
-        static let backupUTTypeName = "com.codeofhonor.habitual.backup";
+        static let backupUTTypeName = "com.codeofhonor.habits.backup";
     }
     
     enum ReviewRequest {
