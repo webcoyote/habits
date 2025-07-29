@@ -13,7 +13,7 @@ cd "$SCRIPT_DIR/.."
 heredoc(){ IFS=$'\n' read -r -d '' "${1}" || true; }
 
 warn () {
-  echo >&2 -e "\033[33m$@\033[0m"
+  echo >&2 -e "\033[33m$*\033[0m"
 }
 
 heredoc PROMPT << EOF

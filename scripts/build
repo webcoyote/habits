@@ -13,7 +13,7 @@ xcodebuild \
     -configuration Debug \
     -destination "platform=iOS Simulator,arch=arm64,id=F57EC888-735B-4165-8842-985CE251390D" \
     -parallelizeTargets \
-    -jobs $(sysctl -n hw.ncpu) \
+    -jobs "$(sysctl -n hw.ncpu)" \
     CODE_SIGNING_ALLOWED=NO \
     -quiet \
     build
