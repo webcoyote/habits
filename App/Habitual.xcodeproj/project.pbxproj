@@ -14,7 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4350979F2E3977C80066C813 /* Streak Peak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Streak Peak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4350979F2E3977C80066C813 /* Habitzilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Habitzilla.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -51,7 +51,7 @@
 		435097A02E3977C80066C813 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4350979F2E3977C80066C813 /* Streak Peak.app */,
+				4350979F2E3977C80066C813 /* Habitzilla.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,8 +81,8 @@
 				43703CA62E3AF21E00D2168E /* PostHog */,
 				43703CA82E3AF22800D2168E /* Vortex */,
 			);
-			productName = "Streak Peak";
-			productReference = 4350979F2E3977C80066C813 /* Streak Peak.app */;
+			productName = "Habitzilla";
+			productReference = 4350979F2E3977C80066C813 /* Habitzilla.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -278,7 +278,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ./Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Streak Peak";
+				INFOPLIST_KEY_CFBundleDisplayName = "Habitzilla";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -292,7 +292,7 @@
 				);
 				MARKETING_VERSION = 1.2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "Streak Peak";
+				PRODUCT_NAME = "Habitzilla";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -310,7 +310,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ./Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Streak Peak";
+				INFOPLIST_KEY_CFBundleDisplayName = "Habitzilla";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -324,7 +324,7 @@
 				);
 				MARKETING_VERSION = 1.2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "Streak Peak";
+				PRODUCT_NAME = "Habitzilla";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

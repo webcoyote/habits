@@ -20,7 +20,7 @@ if [ "$SIMULATOR_STATE" != "Booted" ]; then
     sleep 3
 fi
 
-APP_PATH="App/.DerivedData/Habitual/Build/Products/Debug-iphonesimulator/Streak Peak.app/"
+APP_PATH="App/.DerivedData/Habitual/Build/Products/Debug-iphonesimulator/Habitzilla.app/"
 if [[ ! -d "$APP_PATH" ]]; then
     echo "❌ Could not find app"
     echo "   Run 'scripts/build' first to build the app"
