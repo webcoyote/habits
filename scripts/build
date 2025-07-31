@@ -11,7 +11,7 @@ SIMULATOR_ID="C692F47B-CF1C-400E-956D-B22E3079BF40"
 echo "🔨 Building app..."
 xcodebuild \
     -project App/Habitual.xcodeproj \
-    -scheme Habitual \
+    -scheme App \
     -configuration Debug \
     -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
     -parallelizeTargets \

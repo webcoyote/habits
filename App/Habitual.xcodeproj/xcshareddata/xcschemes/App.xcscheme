@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4350979E2E3977C80066C813"
                BuildableName = "Streak Peak.app"
-               BlueprintName = "Streak Peak"
+               BlueprintName = "App"
                ReferencedContainer = "container:Habitual.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4350979E2E3977C80066C813"
             BuildableName = "Streak Peak.app"
-            BlueprintName = "Streak Peak"
+            BlueprintName = "App"
             ReferencedContainer = "container:Habitual.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4350979E2E3977C80066C813"
             BuildableName = "Streak Peak.app"
-            BlueprintName = "Streak Peak"
+            BlueprintName = "App"
             ReferencedContainer = "container:Habitual.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

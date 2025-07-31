@@ -59,9 +59,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4350979E2E3977C80066C813 /* Streak Peak */ = {
+		4350979E2E3977C80066C813 /* App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "Streak Peak" */;
+			buildConfigurationList = 435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "App" */;
 			buildPhases = (
 				4350979B2E3977C80066C813 /* Sources */,
 				4350979C2E3977C80066C813 /* Frameworks */,
@@ -74,7 +74,7 @@
 			fileSystemSynchronizedGroups = (
 				435097A12E3977C80066C813 /* Habitual */,
 			);
-			name = "Streak Peak";
+			name = App;
 			packageProductDependencies = (
 				43703CA02E3AF20000D2168E /* RollbarNotifier */,
 				43703CA42E3AF21400D2168E /* Mixpanel */,
@@ -120,7 +120,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4350979E2E3977C80066C813 /* Streak Peak */,
+				4350979E2E3977C80066C813 /* App */,
 			);
 		};
 /* End PBXProject section */
@@ -343,7 +343,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "Streak Peak" */ = {
+		435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				435097B02E3977C90066C813 /* Debug */,

@@ -8,7 +8,7 @@ echo "🚀 Testing app..."
 xcodebuild \
     test \
     -project App/Habitual.xcodeproj \
-    -scheme Habitual \
+    -scheme App \
     -destination "platform=iOS Simulator,arch=arm64,id=F57EC888-735B-4165-8842-985CE251390D" \
     -quiet \
     "$@"
