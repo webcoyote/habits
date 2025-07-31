@@ -64,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AnalyticsManager.shared.configure(
             postHogApiKey: Configuration.Analytics.postHogApiKey,
             postHogHost: Configuration.Analytics.postHogHost,
-            amplitudeApiKey: Configuration.Analytics.amplitudeApiKey,
             mixpanelToken: Configuration.Analytics.mixpanelToken
         )
     }

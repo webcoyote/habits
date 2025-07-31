@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		434ED5352E3AFAB300782702 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA02E3AF20000D2168E /* RollbarNotifier */; };
-		434ED5362E3AFAB300782702 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA22E3AF20A00D2168E /* AmplitudeSwift */; };
 		434ED5372E3AFAB300782702 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA42E3AF21400D2168E /* Mixpanel */; };
 		434ED5382E3AFAB300782702 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA62E3AF21E00D2168E /* PostHog */; };
 		434ED5392E3AFAB300782702 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA82E3AF22800D2168E /* Vortex */; };
@@ -34,7 +33,6 @@
 				434ED5392E3AFAB300782702 /* Vortex in Frameworks */,
 				434ED5382E3AFAB300782702 /* PostHog in Frameworks */,
 				434ED5372E3AFAB300782702 /* Mixpanel in Frameworks */,
-				434ED5362E3AFAB300782702 /* AmplitudeSwift in Frameworks */,
 				434ED5352E3AFAB300782702 /* RollbarNotifier in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,7 +77,6 @@
 			name = "Streak Peak";
 			packageProductDependencies = (
 				43703CA02E3AF20000D2168E /* RollbarNotifier */,
-				43703CA22E3AF20A00D2168E /* AmplitudeSwift */,
 				43703CA42E3AF21400D2168E /* Mixpanel */,
 				43703CA62E3AF21E00D2168E /* PostHog */,
 				43703CA82E3AF22800D2168E /* Vortex */,
@@ -113,7 +110,6 @@
 			mainGroup = 435097962E3977C80066C813;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 				43703C9A2E3AF00D00D2168E /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
 				43703C9B2E3AF02200D2168E /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				43703C9C2E3AF04200D2168E /* XCRemoteSwiftPackageReference "rollbar-apple" */,
@@ -359,14 +355,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/amplitude/Amplitude-Swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.13.9;
-			};
-		};
 		43703C9A2E3AF00D00D2168E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mixpanel/mixpanel-swift.git";
@@ -406,11 +394,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43703C9C2E3AF04200D2168E /* XCRemoteSwiftPackageReference "rollbar-apple" */;
 			productName = RollbarNotifier;
-		};
-		43703CA22E3AF20A00D2168E /* AmplitudeSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
-			productName = AmplitudeSwift;
 		};
 		43703CA42E3AF21400D2168E /* Mixpanel */ = {
 			isa = XCSwiftPackageProductDependency;

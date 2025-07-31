@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import PostHog
-import AmplitudeSwift
 import Mixpanel
 
 // MARK: - Analytics Event Protocol
@@ -63,52 +62,6 @@ class PostHogProvider: AnalyticsProvider {
     
     func flush() {
         posthog.flush()
-    }
-}
-
-class AmplitudeProvider: AnalyticsProvider {
-    private let amplitude: Amplitude
-    
-    init(apiKey: String, isDebug: Bool = false) {
-        let config = AmplitudeSwift.Configuration(
-            apiKey: apiKey,
-            autocapture: AutocaptureOptions.all
-        )
-        
-        // Configure debug settings
-        if isDebug {
-            config.flushIntervalMillis = 1000 // Flush every second in debug
-            config.flushQueueSize = 1 // Flush immediately
-        }
-        
-        self.amplitude = Amplitude(configuration: config)
-    }
-    
-    func track(event: String, properties: [String: Any]?) {
-        amplitude.track(eventType: event, eventProperties: properties)
-    }
-    
-    func identify(userId: String, properties: [String: Any]?) {
-        amplitude.setUserId(userId: userId)
-        if let properties = properties {
-            setUserProperties(properties)
-        }
-    }
-    
-    func setUserProperties(_ properties: [String: Any]) {
-        let identify = Identify()
-        for (key, value) in properties {
-            identify.set(property: key, value: value)
-        }
-        amplitude.identify(identify: identify)
-    }
-    
-    func reset() {
-        amplitude.reset()
-    }
-    
-    func flush() {
-        amplitude.flush()
     }
 }
 
@@ -192,7 +145,6 @@ class AnalyticsManager {
     func configure(
         postHogApiKey: String? = nil,
         postHogHost: String? = nil,
-        amplitudeApiKey: String? = nil,
         mixpanelToken: String? = nil
     ) {
         providers.removeAll()
@@ -204,9 +156,6 @@ class AnalyticsManager {
             providers.append(PostHogProvider(apiKey: postHogKey, host: host, isDebug: isDebug))
         }
         
-        if let ampKey = amplitudeApiKey {
-            providers.append(AmplitudeProvider(apiKey: ampKey, isDebug: isDebug))
-        }
 
         if let mixToken = mixpanelToken {
             providers.append(MixpanelProvider(token: mixToken, isDebug: isDebug))
@@ -404,7 +353,6 @@ AnalyticsManager.shared.identify(userId: "user123", properties: [
 //
 // 3. Filtering in Analytics Dashboards:
 //    - PostHog: Filter by user_type = "debug_simulator" or environment = "development"
-//    - Amplitude: Create segments using "is_debug" = true
 //    - Mixpanel: Use "user_type" property to exclude debug users
 //
 // 4. Query Examples:
