@@ -14,7 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4350979F2E3977C80066C813 /* Habitzilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Habitzilla.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4350979F2E3977C80066C813 /* Habitzilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Habitzilla.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -81,7 +81,7 @@
 				43703CA62E3AF21E00D2168E /* PostHog */,
 				43703CA82E3AF22800D2168E /* Vortex */,
 			);
-			productName = "Habitzilla";
+			productName = Habitzilla;
 			productReference = 4350979F2E3977C80066C813 /* Habitzilla.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -278,7 +278,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ./Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Habitzilla";
+				INFOPLIST_KEY_CFBundleDisplayName = Habitzilla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -292,10 +292,12 @@
 				);
 				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "Habitzilla";
+				PRODUCT_NAME = Habitzilla;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -310,7 +312,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ./Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Habitzilla";
+				INFOPLIST_KEY_CFBundleDisplayName = Habitzilla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -324,10 +326,12 @@
 				);
 				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "Habitzilla";
+				PRODUCT_NAME = Habitzilla;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
