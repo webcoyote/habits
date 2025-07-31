@@ -4,11 +4,20 @@ START_TIME=$(date +%s.%N)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
-echo "Checking for build tools ..."
-xcode-select -p &>/dev/null || xcode-select --install
+echo "Installing build tools ..."
 command -v direnv &>/dev/null || brew install direnv
+command -v git-lfs &>/dev/null || brew install git-lfs
+xcode-select -p &>/dev/null || xcode-select --install
 
-install-git-hooks
+# Configurating tools
+git lfs install
+"$SCRIPT_DIR/install-git-hooks"
+
+# Set Xcode so that it writes derived data into the project directory.
+# It's unfortunate that this has to be set globally, but other methods didn't work
+echo "Configuration xcode..."
+defaults write com.apple.dt.Xcode DerivedDataLocationStyle Custom
+defaults write com.apple.dt.Xcode IDECustomDerivedDataLocation ".DerivedData"
 
 # Make a logs directory that won't get deleted by git clean
 mkdir -p "logs"

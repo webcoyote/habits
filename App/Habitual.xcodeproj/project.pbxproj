@@ -3,334 +3,158 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B1234561234567890ABCDEF /* HabitualApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234551234567890ABCDEF /* HabitualApp.swift */; };
-		2B1234581234567890ABCDEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234571234567890ABCDEF /* ContentView.swift */; };
-		2B12345A1234567890ABCDEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B1234591234567890ABCDEF /* Assets.xcassets */; };
-		2B12345D1234567890ABCDEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B12345C1234567890ABCDEF /* Preview Assets.xcassets */; };
-		2B1234641234567890ABCDEF /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234631234567890ABCDEF /* PersistenceController.swift */; };
-		2B1234671234567890ABCDEF /* Habitual.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234651234567890ABCDEF /* Habitual.xcdatamodeld */; };
-		2B1234691234567890ABCDEF /* HabitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234681234567890ABCDEF /* HabitModels.swift */; };
-		2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346A1234567890ABCDEF /* HabitListView.swift */; };
-		2B12346D1234567890ABCDEF /* HabitCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346C1234567890ABCDEF /* HabitCardView.swift */; };
-		2B12346F1234567890ABCDEF /* ProgressGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346E1234567890ABCDEF /* ProgressGridView.swift */; };
-		2B12346F1234567890ABCDEE /* CelebrationEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */; };
-		2B1234711234567890ABCDEF /* ProgressChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234701234567890ABCDEF /* ProgressChartView.swift */; };
-		2B1234731234567890ABCDEF /* AddHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234721234567890ABCDEF /* AddHabitView.swift */; };
-		2B1234751234567890ABCDEF /* HabitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234741234567890ABCDEF /* HabitDetailView.swift */; };
-		2B1234771234567890ABCDEF /* EditHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234761234567890ABCDEF /* EditHabitView.swift */; };
-		2B1234791234567890ABCDEF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234781234567890ABCDEF /* SettingsView.swift */; };
-		2B12347B1234567890ABCDEF /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12347A1234567890ABCDEF /* StatisticsView.swift */; };
-		2B12347D1234567890ABCDEF /* HabitListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12347C1234567890ABCDEF /* HabitListViewModel.swift */; };
-		2B1234811234567890ABCDEF /* HabitStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1234801234567890ABCDEF /* HabitStatistics.swift */; };
-		430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E62E35996B0085D398 /* AppSettingsManager.swift */; };
-		430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210E72E35996B0085D398 /* NotificationPermissionManager.swift */; };
-		430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EA2E3599C10085D398 /* SettingsSelectionView.swift */; };
-		430210EC2E3599C20085D400 /* GradientColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EC2E3599C20085D399 /* GradientColorPicker.swift */; };
-		430210EE2E3599C30085D398 /* ErrorTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210EF2E3599C30085D398 /* ErrorTracker.swift */; };
-		430210F02E3599C40085D398 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F12E3599C40085D398 /* DatabaseManager.swift */; };
-		430210F22E3599C50085D398 /* UsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F32E3599C50085D398 /* UsageTracker.swift */; };
-		430210F52E3599C60085D398 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 430210F42E3599C60085D398 /* RollbarNotifier */; };
-		430210F62E3599C70085D398 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F72E3599C70085D398 /* Configuration.swift */; };
-		430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210F92E3599C80085D398 /* AnalyticsManager.swift */; };
-		430210FA2E3599C90085D398 /* UserIdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430210FB2E3599C90085D398 /* UserIdentityManager.swift */; };
-		4302110A2E3599CE0085D398 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FD2E3599CB0085D398 /* PostHog */; };
-		4302110B2E3599CF0085D398 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FE2E3599CC0085D398 /* AmplitudeSwift */; };
-		4302110C2E3599D00085D398 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 430210FF2E3599CD0085D398 /* Mixpanel */; };
-		4302110D2E3599D40085D398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302110E2E3599D40085D398 /* AppDelegate.swift */; };
-		B57C5185E77BDA4E7736E3F7 /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A43EB9682386C6C6FA343DE /* BackupManager.swift */; };
-		4302110012E3599D60085D398 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 4302110002E3599D40085D398 /* Vortex */; };
+		434ED5352E3AFAB300782702 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA02E3AF20000D2168E /* RollbarNotifier */; };
+		434ED5362E3AFAB300782702 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA22E3AF20A00D2168E /* AmplitudeSwift */; };
+		434ED5372E3AFAB300782702 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA42E3AF21400D2168E /* Mixpanel */; };
+		434ED5382E3AFAB300782702 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA62E3AF21E00D2168E /* PostHog */; };
+		434ED5392E3AFAB300782702 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 43703CA82E3AF22800D2168E /* Vortex */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2B1234521234567890ABCDEF /* Habitual.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Habitual.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B1234551234567890ABCDEF /* HabitualApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitualApp.swift; sourceTree = "<group>"; };
-		2B1234571234567890ABCDEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2B1234591234567890ABCDEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2B12345C1234567890ABCDEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2B1234631234567890ABCDEF /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		2B1234661234567890ABCDEF /* Habitual.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Habitual.xcdatamodel; sourceTree = "<group>"; };
-		2B1234681234567890ABCDEF /* HabitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModels.swift; sourceTree = "<group>"; };
-		2B12346A1234567890ABCDEF /* HabitListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListView.swift; sourceTree = "<group>"; };
-		2B12346C1234567890ABCDEF /* HabitCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCardView.swift; sourceTree = "<group>"; };
-		2B12346E1234567890ABCDEF /* ProgressGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressGridView.swift; sourceTree = "<group>"; };
-		2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationEffectView.swift; sourceTree = "<group>"; };
-		2B1234701234567890ABCDEF /* ProgressChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressChartView.swift; sourceTree = "<group>"; };
-		2B1234721234567890ABCDEF /* AddHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitView.swift; sourceTree = "<group>"; };
-		2B1234741234567890ABCDEF /* HabitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView.swift; sourceTree = "<group>"; };
-		2B1234761234567890ABCDEF /* EditHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabitView.swift; sourceTree = "<group>"; };
-		2B1234781234567890ABCDEF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		2B12347A1234567890ABCDEF /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
-		2B12347C1234567890ABCDEF /* HabitListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListViewModel.swift; sourceTree = "<group>"; };
-		2B1234801234567890ABCDEF /* HabitStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStatistics.swift; sourceTree = "<group>"; };
-		2B1234821234567890ABCDEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		430210E62E35996B0085D398 /* AppSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsManager.swift; sourceTree = "<group>"; };
-		430210E72E35996B0085D398 /* NotificationPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionManager.swift; sourceTree = "<group>"; };
-		430210EA2E3599C10085D398 /* SettingsSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSelectionView.swift; sourceTree = "<group>"; };
-		430210EC2E3599C20085D399 /* GradientColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPicker.swift; sourceTree = "<group>"; };
-		430210EF2E3599C30085D398 /* ErrorTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTracker.swift; sourceTree = "<group>"; };
-		430210F12E3599C40085D398 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
-		430210F32E3599C50085D398 /* UsageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracker.swift; sourceTree = "<group>"; };
-		430210F72E3599C70085D398 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		430210F92E3599C80085D398 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
-		430210FB2E3599C90085D398 /* UserIdentityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentityManager.swift; sourceTree = "<group>"; };
-		4302110E2E3599D40085D398 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8A43EB9682386C6C6FA343DE /* BackupManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
+		4350979F2E3977C80066C813 /* Streak Peak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Streak Peak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		435097A12E3977C80066C813 /* Habitual */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Habitual;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
-		2B12344F1234567890ABCDEF /* Frameworks */ = {
+		4350979C2E3977C80066C813 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				430210F52E3599C60085D398 /* RollbarNotifier in Frameworks */,
-				4302110A2E3599CE0085D398 /* PostHog in Frameworks */,
-				4302110B2E3599CF0085D398 /* AmplitudeSwift in Frameworks */,
-				4302110C2E3599D00085D398 /* Mixpanel in Frameworks */,
-				4302110012E3599D60085D398 /* Vortex in Frameworks */,
+				434ED5392E3AFAB300782702 /* Vortex in Frameworks */,
+				434ED5382E3AFAB300782702 /* PostHog in Frameworks */,
+				434ED5372E3AFAB300782702 /* Mixpanel in Frameworks */,
+				434ED5362E3AFAB300782702 /* AmplitudeSwift in Frameworks */,
+				434ED5352E3AFAB300782702 /* RollbarNotifier in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B1234491234567890ABCDEF = {
+		435097962E3977C80066C813 = {
 			isa = PBXGroup;
 			children = (
-				2B1234541234567890ABCDEF /* Habitual */,
-				2B1234531234567890ABCDEF /* Products */,
+				435097A12E3977C80066C813 /* Habitual */,
+				435097A02E3977C80066C813 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		2B1234531234567890ABCDEF /* Products */ = {
+		435097A02E3977C80066C813 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2B1234521234567890ABCDEF /* Habitual.app */,
+				4350979F2E3977C80066C813 /* Streak Peak.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2B1234541234567890ABCDEF /* Habitual */ = {
-			isa = PBXGroup;
-			children = (
-				2B1234551234567890ABCDEF /* HabitualApp.swift */,
-				4302110E2E3599D40085D398 /* AppDelegate.swift */,
-				2B1234571234567890ABCDEF /* ContentView.swift */,
-				430210F72E3599C70085D398 /* Configuration.swift */,
-				2B1234821234567890ABCDEF /* Info.plist */,
-				2B1234831234567890ABCDEF /* Models */,
-				2B1234841234567890ABCDEF /* Views */,
-				2B1234851234567890ABCDEF /* ViewModels */,
-				2B1234861234567890ABCDEF /* CoreData */,
-				2B1234871234567890ABCDEF /* Utilities */,
-				430210FC2E3599CA0085D398 /* Managers */,
-				2B1234591234567890ABCDEF /* Assets.xcassets */,
-				2B12345B1234567890ABCDEF /* Preview Content */,
-			);
-			path = Habitual;
-			sourceTree = "<group>";
-		};
-		2B12345B1234567890ABCDEF /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				2B12345C1234567890ABCDEF /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		2B1234831234567890ABCDEF /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				2B1234681234567890ABCDEF /* HabitModels.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		2B1234841234567890ABCDEF /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				430210EA2E3599C10085D398 /* SettingsSelectionView.swift */,
-				430210EC2E3599C20085D399 /* GradientColorPicker.swift */,
-				2B12346A1234567890ABCDEF /* HabitListView.swift */,
-				2B12346C1234567890ABCDEF /* HabitCardView.swift */,
-				2B12346E1234567890ABCDEE /* CelebrationEffectView.swift */,
-				2B12346E1234567890ABCDEF /* ProgressGridView.swift */,
-				2B1234701234567890ABCDEF /* ProgressChartView.swift */,
-				2B1234721234567890ABCDEF /* AddHabitView.swift */,
-				2B1234741234567890ABCDEF /* HabitDetailView.swift */,
-				2B1234761234567890ABCDEF /* EditHabitView.swift */,
-				2B1234781234567890ABCDEF /* SettingsView.swift */,
-				2B12347A1234567890ABCDEF /* StatisticsView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		2B1234851234567890ABCDEF /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				2B12347C1234567890ABCDEF /* HabitListViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		2B1234861234567890ABCDEF /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				2B1234631234567890ABCDEF /* PersistenceController.swift */,
-				2B1234651234567890ABCDEF /* Habitual.xcdatamodeld */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
-		2B1234871234567890ABCDEF /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				430210E62E35996B0085D398 /* AppSettingsManager.swift */,
-				430210E72E35996B0085D398 /* NotificationPermissionManager.swift */,
-				430210EF2E3599C30085D398 /* ErrorTracker.swift */,
-				430210F12E3599C40085D398 /* DatabaseManager.swift */,
-				430210F32E3599C50085D398 /* UsageTracker.swift */,
-				2B1234801234567890ABCDEF /* HabitStatistics.swift */,
-				8A43EB9682386C6C6FA343DE /* BackupManager.swift */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		430210FC2E3599CA0085D398 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				430210F92E3599C80085D398 /* AnalyticsManager.swift */,
-				430210FB2E3599C90085D398 /* UserIdentityManager.swift */,
-			);
-			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2B1234511234567890ABCDEF /* Habitual */ = {
+		4350979E2E3977C80066C813 /* Streak Peak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2B1234601234567890ABCDEF /* Build configuration list for PBXNativeTarget "Habitual" */;
+			buildConfigurationList = 435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "Streak Peak" */;
 			buildPhases = (
-				2B12344E1234567890ABCDEF /* Sources */,
-				2B12344F1234567890ABCDEF /* Frameworks */,
-				2B1234501234567890ABCDEF /* Resources */,
+				4350979B2E3977C80066C813 /* Sources */,
+				4350979C2E3977C80066C813 /* Frameworks */,
+				4350979D2E3977C80066C813 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Habitual;
-			packageProductDependencies = (
-				430210F42E3599C60085D398 /* RollbarNotifier */,
-				430210FD2E3599CB0085D398 /* PostHog */,
-				430210FE2E3599CC0085D398 /* AmplitudeSwift */,
-				430210FF2E3599CD0085D398 /* Mixpanel */,
-				4302110002E3599D40085D398 /* Vortex */,
+			fileSystemSynchronizedGroups = (
+				435097A12E3977C80066C813 /* Habitual */,
 			);
-			productName = Habitual;
-			productReference = 2B1234521234567890ABCDEF /* Habitual.app */;
+			name = "Streak Peak";
+			packageProductDependencies = (
+				43703CA02E3AF20000D2168E /* RollbarNotifier */,
+				43703CA22E3AF20A00D2168E /* AmplitudeSwift */,
+				43703CA42E3AF21400D2168E /* Mixpanel */,
+				43703CA62E3AF21E00D2168E /* PostHog */,
+				43703CA82E3AF22800D2168E /* Vortex */,
+			);
+			productName = "Streak Peak";
+			productReference = 4350979F2E3977C80066C813 /* Streak Peak.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		2B12344A1234567890ABCDEF /* Project object */ = {
+		435097972E3977C80066C813 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
-					2B1234511234567890ABCDEF = {
-						CreatedOnToolsVersion = 14.3;
+					4350979E2E3977C80066C813 = {
+						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
-			buildConfigurationList = 2B12344D1234567890ABCDEF /* Build configuration list for PBXProject "Habitual" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = 4350979A2E3977C80066C813 /* Build configuration list for PBXProject "Habitual" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 2B1234491234567890ABCDEF;
+			mainGroup = 435097962E3977C80066C813;
+			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */,
-				4302110D2E3599D10085D398 /* XCRemoteSwiftPackageReference "posthog-ios" */,
-				4302110E2E3599D20085D398 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
-				4302110F2E3599D30085D398 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
-				4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */,
+				43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
+				43703C9A2E3AF00D00D2168E /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+				43703C9B2E3AF02200D2168E /* XCRemoteSwiftPackageReference "posthog-ios" */,
+				43703C9C2E3AF04200D2168E /* XCRemoteSwiftPackageReference "rollbar-apple" */,
+				43703C9E2E3AF14D00D2168E /* XCRemoteSwiftPackageReference "Vortex" */,
 			);
-			productRefGroup = 2B1234531234567890ABCDEF /* Products */;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 435097A02E3977C80066C813 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2B1234511234567890ABCDEF /* Habitual */,
+				4350979E2E3977C80066C813 /* Streak Peak */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2B1234501234567890ABCDEF /* Resources */ = {
+		4350979D2E3977C80066C813 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B12345D1234567890ABCDEF /* Preview Assets.xcassets in Resources */,
-				2B12345A1234567890ABCDEF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2B12344E1234567890ABCDEF /* Sources */ = {
+		4350979B2E3977C80066C813 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B1234641234567890ABCDEF /* PersistenceController.swift in Sources */,
-				2B1234581234567890ABCDEF /* ContentView.swift in Sources */,
-				2B1234671234567890ABCDEF /* Habitual.xcdatamodeld in Sources */,
-				430210E82E35996B0085D398 /* AppSettingsManager.swift in Sources */,
-				430210E92E35996B0085D398 /* NotificationPermissionManager.swift in Sources */,
-				430210EE2E3599C30085D398 /* ErrorTracker.swift in Sources */,
-				430210F02E3599C40085D398 /* DatabaseManager.swift in Sources */,
-				430210F22E3599C50085D398 /* UsageTracker.swift in Sources */,
-				2B1234561234567890ABCDEF /* HabitualApp.swift in Sources */,
-				2B1234691234567890ABCDEF /* HabitModels.swift in Sources */,
-				2B12346B1234567890ABCDEF /* HabitListView.swift in Sources */,
-				2B12346D1234567890ABCDEF /* HabitCardView.swift in Sources */,
-				2B12346F1234567890ABCDEE /* CelebrationEffectView.swift in Sources */,
-				2B12346F1234567890ABCDEF /* ProgressGridView.swift in Sources */,
-				2B1234711234567890ABCDEF /* ProgressChartView.swift in Sources */,
-				2B1234731234567890ABCDEF /* AddHabitView.swift in Sources */,
-				2B1234751234567890ABCDEF /* HabitDetailView.swift in Sources */,
-				2B1234771234567890ABCDEF /* EditHabitView.swift in Sources */,
-				2B1234791234567890ABCDEF /* SettingsView.swift in Sources */,
-				2B12347B1234567890ABCDEF /* StatisticsView.swift in Sources */,
-				2B12347D1234567890ABCDEF /* HabitListViewModel.swift in Sources */,
-				430210EB2E3599C10085D398 /* SettingsSelectionView.swift in Sources */,
-				430210EC2E3599C20085D400 /* GradientColorPicker.swift in Sources */,
-				2B1234811234567890ABCDEF /* HabitStatistics.swift in Sources */,
-				430210F62E3599C70085D398 /* Configuration.swift in Sources */,
-				430210F82E3599C80085D398 /* AnalyticsManager.swift in Sources */,
-				430210FA2E3599C90085D398 /* UserIdentityManager.swift in Sources */,
-				4302110D2E3599D40085D398 /* AppDelegate.swift in Sources */,
-				B57C5185E77BDA4E7736E3F7 /* BackupManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2B12345E1234567890ABCDEF /* Debug */ = {
+		435097AD2E3977C90066C813 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -365,7 +189,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -379,20 +203,22 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		2B12345F1234567890ABCDEF /* Release */ = {
+		435097AE2E3977C90066C813 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -427,9 +253,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -437,96 +261,97 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		2B1234611234567890ABCDEF /* Debug */ = {
+		435097B02E3977C90066C813 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Habitual/Preview Content\"";
+				DEVELOPMENT_TEAM = 89UVFF67QF;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Habitual/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ./Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Streak Peak";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Streak Peak";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		2B1234621234567890ABCDEF /* Release */ = {
+		435097B12E3977C90066C813 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Habitual/Preview Content\"";
+				DEVELOPMENT_TEAM = 89UVFF67QF;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Habitual/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ./Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Streak Peak";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codeofhonor.habits;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Streak Peak";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				DEAD_CODE_STRIPPING = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				DWARF_DSYM_FOLDER_PATH = "$(CONFIGURATION_BUILD_DIR)";
-				DWARF_DSYM_FILE_SHOULD_ACCOMPANY_PRODUCT = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2B12344D1234567890ABCDEF /* Build configuration list for PBXProject "Habitual" */ = {
+		4350979A2E3977C80066C813 /* Build configuration list for PBXProject "Habitual" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2B12345E1234567890ABCDEF /* Debug */,
-				2B12345F1234567890ABCDEF /* Release */,
+				435097AD2E3977C90066C813 /* Debug */,
+				435097AE2E3977C90066C813 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2B1234601234567890ABCDEF /* Build configuration list for PBXNativeTarget "Habitual" */ = {
+		435097AF2E3977C90066C813 /* Build configuration list for PBXNativeTarget "Streak Peak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2B1234611234567890ABCDEF /* Debug */,
-				2B1234621234567890ABCDEF /* Release */,
+				435097B02E3977C90066C813 /* Debug */,
+				435097B12E3977C90066C813 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -534,88 +359,75 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */ = {
+		43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/rollbar/rollbar-apple";
-			requirement = {
-				kind = exactVersion;
-				version = 3.3.3;
-			};
-		};
-		4302110D2E3599D10085D398 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios";
-			requirement = {
-				kind = exactVersion;
-				version = 3.29.0;
-			};
-		};
-		4302110E2E3599D20085D398 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
-			requirement = {
-				kind = exactVersion;
-				version = 1.13.9;
-			};
-		};
-		4302110F2E3599D30085D398 /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mixpanel/mixpanel-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 2.10.4;
-			};
-		};
-		4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/Vortex";
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.13.9;
+			};
+		};
+		43703C9A2E3AF00D00D2168E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mixpanel/mixpanel-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.4;
+			};
+		};
+		43703C9B2E3AF02200D2168E /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.30.0;
+			};
+		};
+		43703C9C2E3AF04200D2168E /* XCRemoteSwiftPackageReference "rollbar-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rollbar/rollbar-apple.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.3;
+			};
+		};
+		43703C9E2E3AF14D00D2168E /* XCRemoteSwiftPackageReference "Vortex" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Vortex.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		430210F42E3599C60085D398 /* RollbarNotifier */ = {
+		43703CA02E3AF20000D2168E /* RollbarNotifier */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 430210F62E3599C60085D398 /* XCRemoteSwiftPackageReference "rollbar-apple" */;
+			package = 43703C9C2E3AF04200D2168E /* XCRemoteSwiftPackageReference "rollbar-apple" */;
 			productName = RollbarNotifier;
 		};
-		430210FD2E3599CB0085D398 /* PostHog */ = {
+		43703CA22E3AF20A00D2168E /* AmplitudeSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4302110D2E3599D10085D398 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
-		};
-		430210FE2E3599CC0085D398 /* AmplitudeSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4302110E2E3599D20085D398 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			package = 43703C972E3AEFBE00D2168E /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
 			productName = AmplitudeSwift;
 		};
-		430210FF2E3599CD0085D398 /* Mixpanel */ = {
+		43703CA42E3AF21400D2168E /* Mixpanel */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4302110F2E3599D30085D398 /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
+			package = 43703C9A2E3AF00D00D2168E /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
 			productName = Mixpanel;
 		};
-		4302110002E3599D40085D398 /* Vortex */ = {
+		43703CA62E3AF21E00D2168E /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4302110102E3599D50085D398 /* XCRemoteSwiftPackageReference "Vortex" */;
+			package = 43703C9B2E3AF02200D2168E /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
+		43703CA82E3AF22800D2168E /* Vortex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43703C9E2E3AF14D00D2168E /* XCRemoteSwiftPackageReference "Vortex" */;
 			productName = Vortex;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		2B1234651234567890ABCDEF /* Habitual.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2B1234661234567890ABCDEF /* Habitual.xcdatamodel */,
-			);
-			currentVersion = 2B1234661234567890ABCDEF /* Habitual.xcdatamodel */;
-			path = Habitual.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
-	rootObject = 2B12344A1234567890ABCDEF /* Project object */;
+	rootObject = 435097972E3977C80066C813 /* Project object */;
 }

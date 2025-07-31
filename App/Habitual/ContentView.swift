@@ -72,7 +72,7 @@ struct ContentView: View {
                 alignment: .top
             )
         }
-        .onChange(of: selectedTab) { newValue in
+        .onChange(of: selectedTab) { oldValue, newValue in
             // Track tab changes
             let tabNames = ["habits", "statistics", "settings"]
             if newValue < tabNames.count {

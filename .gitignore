@@ -1,9 +1,8 @@
-worktrees/
+/worktrees/
+/.git/
+/logs/
+.DerivedData/
 .DS_Store
 .claude/settings.local.json
-.git/
-App/.Build
-App/.DerivedData
-*.xcuserstate
-/temp/
-/logs/
+xcschememanagement.plist
+**/xcuserdata/

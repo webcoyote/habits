@@ -48,5 +48,3 @@ for hook_file in "$HOOKS_DIR"/*; do
         echo "Installed hook: $hook_name"
     fi
 done
-
-echo "Hook installation complete"

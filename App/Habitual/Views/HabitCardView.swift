@@ -257,7 +257,7 @@ struct CompleteButton: View {
             }
             }
         }
-        .onChange(of: isAnimating) { newValue in
+        .onChange(of: isAnimating) { oldValue, newValue in
             if newValue {
                 // Start with a big pulse and glow
                 withAnimation(.easeOut(duration: 0.2)) {

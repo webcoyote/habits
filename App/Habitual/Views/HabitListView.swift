@@ -43,7 +43,7 @@ struct HabitListView: View {
                     viewModel.loadHabits(from: habitEntities, context: viewContext)
                     startAnimationTimer()
                 }
-                .onChange(of: habitEntities.count) { _ in
+                .onChange(of: habitEntities.count) {
                     viewModel.loadHabits(from: habitEntities, context: viewContext)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RefreshHabits"))) { _ in

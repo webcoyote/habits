@@ -1,13 +1,13 @@
 {
-  "originHash" : "0c8b2875fc7fe8741fb3af9112ddb4130c44c22e8a8b4b8aa1a39e0109a52496",
+  "originHash" : "add6c7baf8fb41950e50aa0491014fec0f8cd61c80004c42f44ebea2432c3d8b",
   "pins" : [
     {
       "identity" : "amplitude-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/amplitude/Amplitude-Swift",
+      "location" : "https://github.com/amplitude/Amplitude-Swift.git",
       "state" : {
-        "revision" : "86a2bc7383ff969193b63a4496403279adf0a01b",
-        "version" : "1.13.9"
+        "revision" : "8555a54f7d174451642859f844ebef032c2a488b",
+        "version" : "1.14.0"
       }
     },
     {
@@ -40,7 +40,7 @@
     {
       "identity" : "mixpanel-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mixpanel/mixpanel-swift",
+      "location" : "https://github.com/mixpanel/mixpanel-swift.git",
       "state" : {
         "revision" : "cf569f790c0ec9e9f94f25e56b7ba5762198d34a",
         "version" : "2.10.4"
@@ -49,16 +49,16 @@
     {
       "identity" : "posthog-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/PostHog/posthog-ios",
+      "location" : "https://github.com/PostHog/posthog-ios.git",
       "state" : {
-        "revision" : "1c2e98eb20aa9218be12a9fded58e22cc8451514",
-        "version" : "3.29.0"
+        "revision" : "6532c136877c44d7c96a351303122a5a7fc67c1a",
+        "version" : "3.30.0"
       }
     },
     {
       "identity" : "rollbar-apple",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/rollbar/rollbar-apple",
+      "location" : "https://github.com/rollbar/rollbar-apple.git",
       "state" : {
         "revision" : "2077a05788a740eea7d804c293c7d5313169b5ed",
         "version" : "3.3.3"
@@ -76,7 +76,7 @@
     {
       "identity" : "vortex",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/twostraws/Vortex",
+      "location" : "https://github.com/twostraws/Vortex.git",
       "state" : {
         "revision" : "26e036c4f04efcc019c95d43bfeffeaefbef3c99",
         "version" : "1.0.3"

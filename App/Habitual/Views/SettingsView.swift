@@ -315,7 +315,7 @@ struct SettingsView: View {
     private func requestAppReview() {
         AnalyticsManager.shared.track("rate_app_tapped")
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            SKStoreReviewController.requestReview(in: windowScene)
+            AppStore.requestReview(in: windowScene)
         }
     }
 
