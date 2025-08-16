@@ -1,1 +1,0 @@
-execute `scripts/run`
