@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to install git hooks from git-hooks directory to .git/hooks
-set -euo pipefail
+set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOKS_DIR="$SCRIPT_DIR/git-hooks"
 

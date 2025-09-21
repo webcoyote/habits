@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
 START_TIME=$(date +%s.%N)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."
@@ -18,10 +18,6 @@ git lfs install
 echo "Configuration xcode..."
 defaults write com.apple.dt.Xcode DerivedDataLocationStyle Custom
 defaults write com.apple.dt.Xcode IDECustomDerivedDataLocation ".DerivedData"
-
-# Make a logs directory that won't get deleted by git clean
-mkdir -p "logs"
-[[ -d "logs/.git" ]] || git init "logs" 1>/dev/null
 
 END_TIME=$(date +%s.%N)
 ELAPSED_TIME=$(echo "$END_TIME - $START_TIME" | bc --mathlib | xargs printf "%.2f\n")
