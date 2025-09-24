@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func setupRollbar() {
         let config = RollbarConfig.mutableConfig(
-            withAccessToken: Configuration.Analytics.rollbarAccessToken,
+            withAccessToken: Configuration.Analytics.rollbarReportingId,
             environment: Configuration.getEnvironment())
         config.loggingOptions.codeVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         config.loggingOptions.captureIp = RollbarCaptureIpType.anonymize
