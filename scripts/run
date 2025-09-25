@@ -14,7 +14,7 @@ open -a Simulator
 
 # Check if simulator is already booted, boot if needed
 SIMULATOR_STATE=$(xcrun simctl list devices | grep "$SIMULATOR_ID" | grep -o "(.*)" | tr -d "()")
-if [ "$SIMULATOR_STATE" != "Booted" ]; then
+if [[ "$SIMULATOR_STATE" != "Booted" ]]; then
     echo "🔄 Booting simulator"
     xcrun simctl boot "$SIMULATOR_ID" 2>/dev/null || true
     sleep 3

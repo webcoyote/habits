@@ -9,10 +9,6 @@ command -v direnv &>/dev/null || brew install direnv
 command -v git-lfs &>/dev/null || brew install git-lfs
 xcode-select -p &>/dev/null || xcode-select --install
 
-# Configurating tools
-git lfs install
-"$SCRIPT_DIR/install-git-hooks"
-
 # Set Xcode so that it writes derived data into the project directory.
 # It's unfortunate that this has to be set globally, but other methods didn't work
 echo "Configuration xcode..."

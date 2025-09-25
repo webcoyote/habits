@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Update the version number
 set -Eeuo pipefail
-START_TIME=$(date +%s.%N)
+trap 'echo "${BASH_SOURCE[0]}: line $LINENO: $BASH_COMMAND: exitcode $?"' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-PBXPROJ_PATH="$SCRIPT_DIR/../App/Habitual.xcodeproj/project.pbxproj"
+cd "$SCRIPT_DIR/.."
 
 # Function to display usage
 show_usage() {
@@ -39,13 +38,14 @@ if [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]]; then
 fi
 
 # Check the project file exists
-if [[ ! -f "$PBXPROJ_PATH" ]]; then
-  echo "ERROR: Cannot find project.pbxproj at $PBXPROJ_PATH"
+PBXPROJ_PATH="$(fd project.pbxproj | head -1)"
+if [[ -z "${PBXPROJ_PATH:-}" ]] || [[ ! -f "$PBXPROJ_PATH" ]]; then
+  echo "ERROR: Cannot find project.pbxproj"
   exit 1
 fi
 
 # Check for clean git workspace
-if ! git diff-index --quiet HEAD -- || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+if ! git diff-index --quiet HEAD -- || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
     echo "Error: Git workspace has uncommitted changes or untracked files."
     echo "Please commit or stash your changes before bumping the version."
     git status --short
@@ -102,7 +102,3 @@ echo "✓ Version bumped to $NEW_VERSION"
 echo "✓ Changes committed"
 echo "✓ Tag v$NEW_VERSION created"
 echo "✓ Changes pushed"
-
-END_TIME=$(date +%s.%N)
-ELAPSED_TIME=$(echo "$END_TIME - $START_TIME" | bc --mathlib | xargs printf "%.2f\n")
-echo "✅ Completed in $ELAPSED_TIME seconds!"
