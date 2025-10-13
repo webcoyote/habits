@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-START_TIME=$(date +%s.%N)
+trap 'echo "${BASH_SOURCE[0]}: line $LINENO: $BASH_COMMAND: exitcode $?"' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."
+START_TIME=$(date +%s.%N)
 
-echo "🚀 Testing app..."
+# shellcheck source=scripts/simulator
+[[ -n "${SIMULATOR_ID:-}" ]] || source "$SCRIPT_DIR/simulator"
+
+PROJECT_FILE="$(fd "xcodeproj$" | head -1)"
 xcodebuild \
     test \
-    -project App/Habitual.xcodeproj \
+    -project "$PROJECT_FILE" \
     -scheme App \
-    -destination "platform=iOS Simulator,arch=arm64,id=F57EC888-735B-4165-8842-985CE251390D" \
+    -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
     -quiet \
     "$@"
 
