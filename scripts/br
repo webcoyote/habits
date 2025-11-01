@@ -4,8 +4,7 @@ set -Eeuo pipefail
 trap 'echo "${BASH_SOURCE[0]}: line $LINENO: $BASH_COMMAND: exitcode $?"' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Set SIMULATOR_ID here to avoid doing it in both build and run
-# shellcheck source=scripts/simulator
-[[ -n "${SIMULATOR_ID:-}" ]] || source "$SCRIPT_DIR/simulator"
+# Set DEVICE_ID here to avoid doing it in both build and run
+DEVICE_ID=${DEVICE_ID:-$("$SCRIPT_DIR/get-device")}
 
 "$SCRIPT_DIR/build" && exec "$SCRIPT_DIR/run"
